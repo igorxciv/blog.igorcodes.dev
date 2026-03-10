@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "npm run lint:eslint && npm run lint:styles",
+    "lint:eslint": "eslint . --max-warnings=0",
+    "lint:styles": "stylelint \"app/**/*.css\" --max-warnings=0",
+    "lint:staged": "lint-staged",
+    "prepare": "husky"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
@@ -27,9 +31,22 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.1.6",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.3",
+    "stylelint": "^17.4.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-order": "^8.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "lint-staged": {
+    "*.{js,jsx,mjs,cjs,ts,tsx}": [
+      "eslint --max-warnings=0 --fix"
+    ],
+    "app/**/*.css": [
+      "stylelint --max-warnings=0 --fix"
+    ]
   }
 }

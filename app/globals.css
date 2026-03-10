@@ -2,9 +2,9 @@
 
 :root {
   --background: #f8f7f4;
-  --surface: #ffffff;
+  --surface: #fff;
   --foreground: #171717;
-  --muted: #666666;
+  --muted: #666;
   --border: #d8d7d3;
   --accent: #2553b8;
 }
