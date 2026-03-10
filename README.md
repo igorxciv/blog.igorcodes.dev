@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# blog.igorcodes.dev
 
-## Getting Started
+Blog-only Next.js App Router application powered by file-based MDX content.
 
-First, run the development server:
+## Overview
+
+- `app/page.tsx` redirects `/` to `/blog`.
+- Blog index is rendered at `/blog`.
+- Blog posts are rendered at `/blog/[...slug]` from files in `content/posts/**`.
+- Frontmatter is validated with `zod` in `lib/server/posts.ts`.
+- Draft posts (`published: false`) are visible in development and excluded in production.
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19 + TypeScript
+- MDX via `@next/mdx` + `next-mdx-remote/rsc`
+- Tailwind CSS v4 utility classes
+- ESLint + Stylelint + Husky + lint-staged
+
+## Project Structure
+
+```text
+.
+├─ app/
+│  ├─ blog/
+│  │  ├─ [...slug]/page.tsx
+│  │  ├─ loading.tsx
+│  │  └─ page.tsx
+│  ├─ globals.css
+│  ├─ layout.tsx
+│  └─ page.tsx
+├─ components/
+│  └─ mdx/
+│     └─ mdx-callout.tsx
+├─ content/
+│  └─ posts/
+│     └─ YYYY/MM/DD/*.mdx
+├─ lib/
+│  ├─ formatters/date.ts
+│  ├─ server/posts.ts
+│  ├─ styles/cn.ts
+│  └─ types/posts.ts
+├─ public/
+├─ mdx-components.tsx
+├─ next.config.ts
+└─ package.json
+```
+
+## Blog Content
+
+Add posts under `content/posts/**` with `.md` or `.mdx` extensions.
+
+Example path:
+
+```text
+content/posts/2026/02/05/hello-mdx.mdx
+```
+
+Supported frontmatter schema:
+
+```yaml
+title: "Required title"
+description: "Optional summary"
+date: "2026-02-05" # required, parseable date
+updated: "2026-02-07" # optional, parseable date
+topics: ["engineering", "nextjs"] # required, array or comma-separated string
+tags: ["mdx", "app-router"] # required, array or comma-separated string
+published: true # optional, defaults to true
+featured: true # optional
+readingTime: 4 # optional, positive integer
+coverImage: "/images/cover.png" # optional
+coverAlt: "Cover description" # optional
+```
+
+## MDX Setup
+
+- MDX support is configured in `next.config.ts` using `@next/mdx`.
+- `pageExtensions` includes `ts`, `tsx`, `md`, and `mdx`.
+- Custom MDX element mapping lives in `mdx-components.tsx`.
+- Reusable MDX UI components live in `components/mdx/`.
+
+## Scripts
+
+```bash
+npm run dev          # start local dev server
+npm run build        # create production build
+npm run start        # run production server
+npm run lint         # run ESLint + Stylelint
+npm run lint:eslint  # run ESLint only
+npm run lint:styles  # run Stylelint for app/**/*.css
+```
+
+## Local Development
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Start development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Open [http://localhost:3000](http://localhost:3000) (redirects to `/blog`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `NEXT_PUBLIC_SITE_URL` (optional): used by `app/layout.tsx` to set `metadataBase`.
+- Defaults to `http://localhost:3000` when unset.
 
-## Learn More
+## Notes
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- No testing framework is configured yet.
+- Do not commit build output (`.next/`) or secrets (`.env*`).
