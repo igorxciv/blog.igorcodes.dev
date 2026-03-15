@@ -7,7 +7,7 @@ Blog-only Next.js App Router application powered by file-based MDX content.
 - `app/page.tsx` redirects `/` to `/blog`.
 - Blog index is rendered at `/blog`.
 - Blog posts are rendered at `/blog/[...slug]` from files in `content/posts/**`.
-- Frontmatter is validated with `zod` in `lib/server/posts.ts`.
+- Frontmatter is validated with `zod` in `lib/server/posts/schema.ts`.
 - Draft posts (`published: false`) are visible in development and excluded in production.
 
 ## Tech Stack
@@ -39,6 +39,17 @@ Blog-only Next.js App Router application powered by file-based MDX content.
 ├─ lib/
 │  ├─ formatters/date.ts
 │  ├─ server/posts.ts
+│  ├─ server/posts/
+│  │  ├─ collections.ts
+│  │  ├─ constants.ts
+│  │  ├─ filesystem.ts
+│  │  ├─ mappers.ts
+│  │  ├─ options.ts
+│  │  ├─ parser.ts
+│  │  ├─ schema.ts
+│  │  ├─ service.ts
+│  │  ├─ slug.ts
+│  │  └─ types.ts
 │  ├─ styles/cn.ts
 │  └─ types/posts.ts
 ├─ public/
