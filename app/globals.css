@@ -38,6 +38,7 @@ body {
   font-family: var(--font-wotfard), system-ui, sans-serif;
   text-rendering: optimizelegibility;
   line-height: 1.5;
+  overflow-x: hidden;
 }
 
 a {
@@ -100,6 +101,7 @@ samp {
 
 .prose-blog {
   max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .prose-blog > :first-child {
@@ -118,6 +120,10 @@ samp {
 
 .prose-blog a:focus-visible {
   outline-offset: 4px;
+}
+
+.prose-blog :where(img, video, iframe) {
+  max-width: 100%;
 }
 
 .prose-blog :where(pre code) {
