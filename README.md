@@ -69,8 +69,6 @@ tags: ["mdx", "app-router"] # required, array or comma-separated string
 published: true # optional, defaults to true
 featured: true # optional
 readingTime: 4 # optional, positive integer
-coverImage: "/images/cover.png" # optional
-coverAlt: "Cover description" # optional
 ```
 
 ## MDX Setup

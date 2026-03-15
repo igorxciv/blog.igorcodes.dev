@@ -8,8 +8,6 @@ export type PostFrontmatter = {
   published: boolean;
   featured?: boolean;
   readingTime?: number;
-  coverImage?: string;
-  coverAlt?: string;
 };
 
 export type PostSummary = PostFrontmatter & {

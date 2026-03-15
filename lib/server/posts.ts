@@ -38,8 +38,6 @@ const frontmatterSchema = z.object({
   published: z.boolean().default(true),
   featured: z.boolean().optional(),
   readingTime: z.number().int().positive().optional(),
-  coverImage: z.string().optional(),
-  coverAlt: z.string().optional(),
 });
 
 type PostQueryOptions = {
@@ -135,8 +133,6 @@ function toPostSummary(post: PostContent): PostSummary {
     published: post.published,
     featured: post.featured,
     readingTime: post.readingTime,
-    coverImage: post.coverImage,
-    coverAlt: post.coverAlt,
   };
 }
 
@@ -167,11 +163,6 @@ export async function getPostBySlug(slug: string, options: PostQueryOptions = {}
   }
 
   return post;
-}
-
-export async function getAllTags(options: PostQueryOptions = {}): Promise<string[]> {
-  const posts = await getAllPosts(options);
-  return Array.from(new Set(posts.flatMap((post) => post.tags))).sort((a, b) => a.localeCompare(b));
 }
 
 export async function getAllTopics(options: PostQueryOptions = {}): Promise<string[]> {
