@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { CalendarDays, Clock3, FilePenLine, Hash, RefreshCw, Shapes } from "lucide-react";
-import { formatDate } from "@/lib/formatters/date";
+import { ArrowLeft, Hash } from "lucide-react";
+import { PostMeta, ReadingProgress } from "@/components/blog";
 import { getAllPosts, getPostBySlug } from "@/lib/server/posts";
 import { mdxComponents } from "@/mdx-components";
 
@@ -63,63 +64,50 @@ export default async function BlogPostPage({ params }: PostPageProps) {
   }
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-6 py-16">
-      <article className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-7 md:p-10">
-        <header className="space-y-4 border-b border-[var(--border)] pb-6">
-          <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
-            <span className="inline-flex items-center gap-1.5">
-              <CalendarDays aria-hidden="true" className="size-3.5" />
-              <time dateTime={post.date}>{formatDate(post.date)}</time>
-            </span>
-            {post.updated ? (
-              <span className="inline-flex items-center gap-1.5">
-                <RefreshCw aria-hidden="true" className="size-3.5" />
-                Updated {formatDate(post.updated)}
-              </span>
-            ) : null}
-            {post.readingTime ? (
-              <span className="inline-flex items-center gap-1.5">
-                <Clock3 aria-hidden="true" className="size-3.5" />
-                {post.readingTime} min read
-              </span>
-            ) : null}
-            {!post.published ? (
-              <span className="inline-flex items-center gap-1 rounded bg-amber-500/20 px-2 py-0.5 font-mono text-[11px] text-amber-700 dark:text-amber-300">
-                <FilePenLine aria-hidden="true" className="size-3.5" />
-                Draft
-              </span>
-            ) : null}
+    <>
+      <ReadingProgress />
+
+      <section className="fade-in mx-auto max-w-3xl">
+        <Link href="/blog" className="focus-ring mb-8 inline-flex items-center gap-2 text-sm text-[var(--foreground-soft)] transition hover:text-[var(--foreground)]">
+          <ArrowLeft aria-hidden="true" className="size-4" />
+          Back to articles
+        </Link>
+
+        <article>
+          <header className="mb-12">
+            <div className="mb-8 h-64 w-full overflow-hidden rounded-lg border border-[var(--border)] bg-[linear-gradient(180deg,#121212,#0f0f0f)]">
+              <div className="flex h-full w-full items-end p-6">
+                <span className="text-xs font-medium uppercase tracking-wide text-[var(--accent)]">{post.topics[0] ?? "Engineering note"}</span>
+              </div>
+            </div>
+
+            <p className="mb-4 text-xs font-medium uppercase tracking-wide text-[var(--accent)]">{post.topics[0] ?? "Engineering note"}</p>
+            <h1 className="mb-6 text-4xl leading-tight text-[var(--foreground)] md:text-5xl" style={{ fontWeight: 600 }}>
+              {post.title}
+            </h1>
+            {post.description ? <p className="max-w-2xl text-lg leading-relaxed text-[var(--foreground-soft)]">{post.description}</p> : null}
+
+            <PostMeta date={post.date} updated={post.updated} readingTime={post.readingTime} published={post.published} className="mt-6" />
+
+            <div className="mt-6 flex flex-wrap gap-2 text-xs">
+              {post.tags.map((tag) => (
+                <span key={tag} className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] px-2.5 py-1 text-[var(--muted)]">
+                  <Hash aria-hidden="true" className="size-3.5" />
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </header>
+
+          <div className="prose-blog max-w-none">
+            <MDXRemote source={post.body} components={mdxComponents} />
           </div>
 
-          <h1 className="text-4xl font-semibold leading-tight tracking-tight">{post.title}</h1>
-          {post.description ? <p className="text-lg text-[var(--muted)]">{post.description}</p> : null}
-
-          <div className="flex flex-wrap gap-2 text-xs">
-            {post.topics.map((topic) => (
-              <span
-                key={topic}
-                className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] px-2.5 py-1 text-[var(--muted)]"
-              >
-                <Shapes aria-hidden="true" className="size-3.5" />
-                {topic}
-              </span>
-            ))}
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] px-2.5 py-1 text-[var(--muted)]"
-              >
-                <Hash aria-hidden="true" className="size-3.5" />
-                {tag}
-              </span>
-            ))}
-          </div>
-        </header>
-
-        <div className="prose prose-neutral mt-8 max-w-none dark:prose-invert">
-          <MDXRemote source={post.body} components={mdxComponents} />
-        </div>
-      </article>
-    </main>
+          <footer className="mt-16 border-t border-[var(--border)] pt-8">
+            <p className="text-sm text-[var(--foreground-soft)]">End of note. Return to the archive for the next article.</p>
+          </footer>
+        </article>
+      </section>
+    </>
   );
 }
