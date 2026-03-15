@@ -14,35 +14,44 @@ export function PostCard({ post, featured = false, className, ...restProps }: Po
   const topicLabel = post.topics[0] ?? "General";
 
   return (
-    <article className={cn("group border-b border-[var(--border)] py-8 transition-colors hover:border-[var(--border-strong)]", className)} {...restProps}>
-      <div className="flex items-start justify-between gap-8">
+    <article className={cn("group border-b border-[var(--border)] py-6 transition-colors hover:border-[var(--border-strong)] sm:py-8 lg:py-10", className)} {...restProps}>
+      <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-8 lg:gap-10">
+        <div className={cn("overflow-hidden rounded-lg border border-[var(--border)] md:hidden", featured ? "h-40 w-full" : "h-32 w-full")}>
+          <div className="flex h-full w-full items-end bg-[linear-gradient(180deg,#121212,#0f0f0f)] p-4">
+            <div className="w-full">
+              <div className="h-px w-full bg-[var(--border-strong)]" />
+              <p className="mt-3 text-[10px] uppercase tracking-wide text-[var(--accent)]">{topicLabel}</p>
+            </div>
+          </div>
+        </div>
+
         <div className="flex-1">
-          <div className="mb-3 flex items-center gap-3">
-            <span className="text-xs font-medium uppercase tracking-wide text-[var(--accent)]">{topicLabel}</span>
+          <div className="mb-3 flex items-center gap-3 lg:mb-4">
+            <span className="text-xs font-medium uppercase tracking-wide text-[var(--accent)] lg:text-[0.82rem]">{topicLabel}</span>
             {featured ? (
-              <span className="inline-flex items-center gap-1.5 rounded bg-[rgb(0_217_255_/_0.1)] px-2 py-0.5 text-xs text-[var(--accent)]">
-                <Sparkles aria-hidden="true" className="size-3.5" />
+              <span className="inline-flex items-center gap-1.5 rounded bg-[rgb(0_217_255_/_0.1)] px-2 py-0.5 text-xs text-[var(--accent)] lg:px-2.5 lg:py-1 lg:text-[0.82rem]">
+                <Sparkles aria-hidden="true" className="size-3.5 lg:size-4" />
                 Featured
               </span>
             ) : null}
           </div>
 
-          <h2 className={cn("tracking-tight text-[var(--foreground)]", featured ? "text-2xl" : "text-xl")}>
-            <Link href={`/blog/${post.slug}`} className="focus-ring transition-colors hover:text-[var(--accent)]">
+          <h2 className={cn("tracking-tight text-[var(--foreground)]", featured ? "text-2xl sm:text-3xl lg:text-[2.55rem]" : "text-xl sm:text-2xl lg:text-[2rem]")}>
+            <Link href={`/blog/${post.slug}`} className="focus-ring inline-block py-1 transition-colors hover:text-[var(--accent)]">
               {post.title}
             </Link>
           </h2>
 
-          {post.description ? <p className="mt-3 max-w-2xl leading-relaxed text-[var(--foreground-soft)]">{post.description}</p> : null}
+          {post.description ? <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--foreground-soft)] sm:text-base lg:mt-4 lg:max-w-3xl lg:text-[1.08rem] lg:leading-8">{post.description}</p> : null}
 
-          <PostMeta date={post.date} readingTime={post.readingTime} published={post.published} className="mt-4" />
+          <PostMeta date={post.date} readingTime={post.readingTime} published={post.published} className="mt-4 lg:mt-5" />
         </div>
 
-        <div className={cn("hidden shrink-0 overflow-hidden rounded-lg border border-[var(--border)] md:block", featured ? "h-32 w-32" : "h-28 w-28")}>
-          <div className="flex h-full w-full items-end bg-[linear-gradient(180deg,#121212,#0f0f0f)] p-4">
+        <div className="hidden h-32 w-32 shrink-0 overflow-hidden rounded-lg border border-[var(--border)] md:block lg:h-40 lg:w-40 lg:rounded-xl">
+          <div className="flex h-full w-full items-end bg-[linear-gradient(180deg,#121212,#0f0f0f)] p-4 lg:p-5">
             <div className="w-full">
               <div className="h-px w-full bg-[var(--border-strong)]" />
-              <p className="mt-3 text-[10px] uppercase tracking-wide text-[var(--accent)]">{topicLabel}</p>
+              <p className="mt-3 text-[10px] uppercase tracking-wide text-[var(--accent)] lg:text-[0.72rem]">{topicLabel}</p>
             </div>
           </div>
         </div>

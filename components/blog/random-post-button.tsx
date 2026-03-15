@@ -24,9 +24,9 @@ export function RandomPostButton({ slugs }: RandomPostButtonProps) {
     <button
       type="button"
       onClick={goToRandomPost}
-      className="focus-ring inline-flex items-center gap-2 rounded-md bg-[var(--surface-strong)] px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--border-strong)]"
+      className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-md bg-[var(--surface-strong)] px-4 py-2 text-sm text-[var(--foreground)] transition-colors hover:bg-[var(--border-strong)] lg:min-h-12 lg:gap-2.5 lg:px-5 lg:text-[0.98rem]"
     >
-      <Dices aria-hidden="true" className="size-4" />
+      <Dices aria-hidden="true" className="size-4 lg:size-[1.05rem]" />
       Random article
     </button>
   );
