@@ -1,127 +1,132 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { CalendarDays, Clock3, FilePenLine, Hash, Star } from "lucide-react";
-import { formatDate } from "@/lib/formatters/date";
-import { getAllPosts } from "@/lib/server/posts";
-import { cn } from "@/lib/styles/cn";
+import { PostCard, RandomPostButton } from "@/components/blog";
+import { getAllPosts, getAllTopics } from "@/lib/server/posts";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Blog",
-    description: "Writing on software, product engineering, and the web.",
+    description: "Writing on software architecture, frontend engineering, AI systems, and technical thinking.",
     alternates: {
       canonical: "/blog",
     },
   };
 }
 
-export default async function BlogPage() {
-  const posts = await getAllPosts();
+type BlogPageProps = {
+  searchParams: Promise<{
+    topic?: string;
+  }>;
+};
+
+export default async function BlogPage({ searchParams }: BlogPageProps) {
+  const { topic } = await searchParams;
+  const [posts, topics] = await Promise.all([getAllPosts(), getAllTopics()]);
 
   if (posts.length === 0) {
     return (
-      <main className="mx-auto w-full max-w-4xl px-6 py-16">
-        <h1 className="text-4xl font-semibold tracking-tight">Blog</h1>
-        <p className="mt-4 max-w-2xl text-lg text-[var(--muted)]">
+      <section className="py-16">
+        <h1 className="text-4xl font-semibold text-[var(--foreground)]">Blog</h1>
+        <p className="mt-4 max-w-2xl text-lg text-[var(--foreground-soft)]">
           No posts are available yet. Add `.md` or `.mdx` files in `content/posts`.
         </p>
-      </main>
+      </section>
     );
   }
 
-  const featuredPost = posts.find((post) => post.featured) ?? posts[0];
-  const recentPosts = posts.filter((post) => post.slug !== featuredPost.slug);
+  const activeTopic = topic && topics.includes(topic) ? topic : null;
+  const filteredPosts = activeTopic ? posts.filter((post) => post.topics.includes(activeTopic)) : posts;
+  const featuredPosts = filteredPosts.filter((post) => post.featured);
+  const recentPosts = filteredPosts.filter((post) => !post.featured || activeTopic);
+  const topicChipClassName = "focus-ring inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm transition-colors";
+  const inactiveTopicChipStyle = {
+    backgroundColor: "var(--surface-strong)",
+    borderColor: "var(--border)",
+    color: "var(--foreground)",
+  } as const;
+  const activeTopicChipStyle = {
+    backgroundColor: "var(--surface-strong)",
+    borderColor: "var(--accent)",
+    color: "var(--foreground)",
+    boxShadow: "inset 0 0 0 1px rgb(0 217 255 / 0.24)",
+  } as const;
 
   return (
-    <main className="mx-auto w-full max-w-4xl px-6 py-16">
-      <header className="space-y-3">
-        <p className="font-mono text-sm uppercase tracking-wide text-[var(--muted)]">Blog</p>
-        <h1 className="text-4xl font-semibold tracking-tight">Notes and articles</h1>
-        <p className="max-w-2xl text-lg text-[var(--muted)]">
-          A focused, MDX-first blog with static routing and schema-validated frontmatter.
+    <section className="fade-in">
+      <header className="mb-16">
+        <h1 className="mb-4 text-4xl text-[var(--foreground)]" style={{ fontWeight: 600 }}>
+          Engineering Notes
+        </h1>
+        <p className="mb-6 max-w-2xl text-lg leading-relaxed text-[var(--foreground-soft)]">
+          A collection of thoughts on software architecture, frontend engineering, AI systems, and technical thinking.
+          Written for developers who care about craft.
         </p>
+        <RandomPostButton slugs={posts.map((post) => post.slug)} />
       </header>
 
-      <section className="mt-12">
-        <h2 className="inline-flex items-center gap-2 font-mono text-sm uppercase tracking-wide text-[var(--muted)]">
-          <Star aria-hidden="true" className="size-4" />
-          Featured
+      <section className="mb-12" aria-labelledby="topic-filter-heading">
+        <h2 id="topic-filter-heading" className="mb-4 text-sm font-medium uppercase tracking-wide text-[var(--muted)]">
+          Filter by topic
         </h2>
-        <article className="mt-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 shadow-sm">
-          <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
-            <span className="inline-flex items-center gap-1.5">
-              <CalendarDays aria-hidden="true" className="size-4" />
-              <time dateTime={featuredPost.date}>{formatDate(featuredPost.date)}</time>
-            </span>
-            {featuredPost.readingTime ? (
-              <span className="inline-flex items-center gap-1.5">
-                <Clock3 aria-hidden="true" className="size-4" />
-                {featuredPost.readingTime} min read
-              </span>
-            ) : null}
-            {!featuredPost.published ? (
-              <span className="inline-flex items-center gap-1 rounded bg-amber-500/20 px-2 py-0.5 font-mono text-xs text-amber-700 dark:text-amber-300">
-                <FilePenLine aria-hidden="true" className="size-3.5" />
-                Draft
-              </span>
-            ) : null}
-          </div>
-          <h3 className="mt-3 text-2xl font-semibold tracking-tight">
-            <Link className="hover:underline" href={`/blog/${featuredPost.slug}`}>
-              {featuredPost.title}
-            </Link>
-          </h3>
-          {featuredPost.description ? (
-            <p className="mt-3 text-base text-[var(--muted)]">{featuredPost.description}</p>
-          ) : null}
-          <div className="mt-5 flex flex-wrap gap-2">
-            {featuredPost.tags.map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] px-2.5 py-1 text-xs text-[var(--muted)]"
-              >
-                <Hash aria-hidden="true" className="size-3.5" />
-                {tag}
-              </span>
-            ))}
-          </div>
-        </article>
-      </section>
-
-      <section className="mt-12">
-        <h2 className="font-mono text-sm uppercase tracking-wide text-[var(--muted)]">Recent</h2>
-        <ul className="mt-4 space-y-4">
-          {recentPosts.map((post) => (
-            <li
-              key={post.slug}
-              className={cn("rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4", "transition-colors hover:bg-black/[0.015] dark:hover:bg-white/[0.03]")}
+        <ul className="flex flex-wrap gap-2" aria-label="Topics">
+          <li>
+            <Link
+              href="/blog"
+              aria-current={activeTopic === null ? "page" : undefined}
+              className={topicChipClassName}
+              style={activeTopic === null ? activeTopicChipStyle : inactiveTopicChipStyle}
             >
-              <Link href={`/blog/${post.slug}`} className="block">
-                <h3 className="text-lg font-semibold tracking-tight">{post.title}</h3>
-                {post.description ? <p className="mt-2 text-sm text-[var(--muted)]">{post.description}</p> : null}
-                <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-[var(--muted)]">
-                  <span className="inline-flex items-center gap-1.5">
-                    <CalendarDays aria-hidden="true" className="size-3.5" />
-                    <time dateTime={post.date}>{formatDate(post.date)}</time>
-                  </span>
-                  {post.readingTime ? (
-                    <span className="inline-flex items-center gap-1.5">
-                      <Clock3 aria-hidden="true" className="size-3.5" />
-                      {post.readingTime} min read
-                    </span>
-                  ) : null}
-                  {!post.published ? (
-                    <span className="inline-flex items-center gap-1 rounded bg-amber-500/20 px-2 py-0.5 font-mono text-[11px] text-amber-700 dark:text-amber-300">
-                      <FilePenLine aria-hidden="true" className="size-3.5" />
-                      Draft
-                    </span>
-                  ) : null}
-                </div>
+              {activeTopic === null ? <span aria-hidden="true" className="size-2 rounded-full bg-[var(--accent)]" /> : null}
+              All articles
+            </Link>
+          </li>
+          {topics.map((item) => (
+            <li key={item}>
+              <Link
+                href={`/blog?topic=${encodeURIComponent(item)}`}
+                aria-current={activeTopic === item ? "page" : undefined}
+                className={topicChipClassName}
+                style={activeTopic === item ? activeTopicChipStyle : inactiveTopicChipStyle}
+              >
+                {activeTopic === item ? <span aria-hidden="true" className="size-2 rounded-full bg-[var(--accent)]" /> : null}
+                {item}
               </Link>
             </li>
           ))}
         </ul>
       </section>
-    </main>
+
+      {!activeTopic && featuredPosts.length > 0 ? (
+        <section className="mb-12">
+          <h2 className="mb-6 text-sm uppercase tracking-wide text-[var(--muted)]">Featured</h2>
+          <div>
+            {featuredPosts.map((post) => (
+              <PostCard key={post.slug} post={post} featured />
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <section>
+        <h2 className="mb-6 text-sm uppercase tracking-wide text-[var(--muted)]">
+          {activeTopic ? activeTopic : "Recent Articles"}
+        </h2>
+        <div>
+          {recentPosts.map((post) => (
+            <PostCard key={post.slug} post={post} />
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-16 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-8" aria-labelledby="stay-updated-heading">
+        <h2 id="stay-updated-heading" className="mb-3 text-xl text-[var(--foreground)]">
+          Stay Updated
+        </h2>
+        <p className="mb-6 text-[var(--foreground-soft)]">
+          New writing is published here first. The email subscription flow is not live yet, so the archive remains the canonical way to follow updates.
+        </p>
+        <p className="text-sm text-[var(--muted)]">Bookmark this page or use the topic filters above to check for new posts.</p>
+      </section>
+    </section>
   );
 }
