@@ -116,7 +116,10 @@ export function NotFoundPage() {
               <span className="size-2.5 rounded-full bg-[#27c93f]" />
             </span>
 
-            <span className="ml-1 inline-flex items-center gap-1.5 text-xs text-[#707070]" aria-hidden="true">
+            <span
+              className="ml-1 inline-flex items-center gap-1.5 text-xs text-[var(--foreground-soft)]"
+              aria-hidden="true"
+            >
               <Terminal className="size-3.5" />
               terminal
             </span>
@@ -130,7 +133,7 @@ export function NotFoundPage() {
                 className="ml-0.5 inline-block h-4 w-2 translate-y-0.5 bg-current motion-safe:animate-[fm-cursor-blink_820ms_steps(1)_infinite]"
               />
             </p>
-            <p className="mt-2 text-[0.86rem] leading-6 text-[#8a8a8a]">
+            <p className="mt-2 text-[0.86rem] leading-6 text-[var(--foreground-soft)]">
               Error: ENOENT: no such file or directory.
             </p>
             <p className="mt-2 text-[0.86rem] leading-6 text-[#ff5f56]">
@@ -172,32 +175,21 @@ export function NotFoundPage() {
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
             href="/blog"
-            className="focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-transparent bg-[var(--accent)] px-4 py-2 font-mono text-[0.96rem] font-medium text-black transition hover:-translate-y-px hover:bg-[var(--accent-strong)] active:translate-y-0 active:scale-[0.98]"
+            className="focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[rgb(0_217_255_/_0.35)] bg-[rgb(0_217_255_/_0.1)] px-4 py-2 font-mono text-[0.96rem] font-medium text-[var(--foreground)] transition hover:-translate-y-px hover:border-[var(--accent)] hover:bg-[rgb(0_217_255_/_0.16)] active:translate-y-0 active:scale-[0.98]"
           >
-            <House aria-hidden="true" className="size-4" />
-            Back to Home
+            <House aria-hidden="true" className="size-4 text-[var(--accent)]" />
+            Back to Blog Home
           </Link>
           <button
             type="button"
             onClick={handleBackClick}
-            className="focus-ring inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-transparent px-4 py-2 font-mono text-[0.96rem] font-medium text-[var(--foreground)] transition hover:-translate-y-px hover:border-[var(--accent)] hover:bg-[rgb(0_217_255_/_0.08)] active:translate-y-0 active:scale-[0.98]"
+            className="focus-ring inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#4a4a4a] bg-transparent px-4 py-2 font-mono text-[0.96rem] font-medium text-[var(--foreground)] transition hover:-translate-y-px hover:border-[var(--accent)] hover:bg-[rgb(0_217_255_/_0.08)] hover:text-[var(--foreground)] active:translate-y-0 active:scale-[0.98]"
           >
             <ArrowLeft aria-hidden="true" className="size-4" />
             Go Back
           </button>
         </div>
 
-        <nav aria-label="Suggested destinations" className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-[var(--foreground-soft)]">
-          <Link href="/blog" className="focus-ring rounded-sm transition hover:text-[var(--foreground)]">
-            Home
-          </Link>
-          <Link href="/blog#articles" className="focus-ring rounded-sm transition hover:text-[var(--foreground)]">
-            Articles
-          </Link>
-          <Link href="/rss.xml" className="focus-ring rounded-sm transition hover:text-[var(--foreground)]">
-            RSS
-          </Link>
-        </nav>
       </div>
     </section>
   );

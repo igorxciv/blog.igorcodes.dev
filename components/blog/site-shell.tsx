@@ -29,11 +29,6 @@ export function SiteShell({ children }: SiteShellProps) {
             </span>
           </Link>
 
-          <nav aria-label="Primary" className="flex items-center gap-3 text-sm text-[var(--foreground-soft)] sm:gap-6 lg:text-[0.95rem]">
-            <Link href="/blog" className="focus-ring inline-flex min-h-11 items-center transition hover:text-[var(--foreground)]">
-              Articles
-            </Link>
-          </nav>
         </div>
       </header>
 
