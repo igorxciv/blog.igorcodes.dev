@@ -104,7 +104,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
 
         <article>
           <header className="mb-10 sm:mb-12 lg:mb-14">
-            <div className="mb-6 h-44 w-full overflow-hidden rounded-lg border border-[var(--border)] bg-[linear-gradient(180deg,#121212,#0f0f0f)] sm:mb-8 sm:h-56 md:h-64 lg:mb-10 lg:h-72 lg:rounded-xl">
+            <div className="mb-6 h-44 w-full overflow-hidden rounded-lg border border-[var(--border)] bg-[linear-gradient(180deg,var(--surface-raised),var(--surface-inset))] sm:mb-8 sm:h-56 md:h-64 lg:mb-10 lg:h-72 lg:rounded-xl">
               <div className="flex h-full w-full items-end p-4 sm:p-6 lg:p-8">
                 <span className="text-xs font-medium uppercase tracking-wide text-[var(--accent)] lg:text-[0.82rem]">{post.topics[0] ?? "Engineering note"}</span>
               </div>
