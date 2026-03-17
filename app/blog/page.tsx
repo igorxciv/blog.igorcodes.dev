@@ -157,16 +157,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           ))}
         </div>
       </section>
-
-      <section className="mt-12 rounded-lg border border-[var(--border)] bg-[var(--surface)] p-5 sm:mt-16 sm:p-8 lg:mt-20 lg:rounded-xl lg:p-10" aria-labelledby="stay-updated-heading">
-        <h2 id="stay-updated-heading" className="mb-3 text-xl text-[var(--foreground)] lg:mb-4 lg:text-[1.7rem]">
-          Stay Updated
-        </h2>
-        <p className="mb-5 text-sm leading-relaxed text-[var(--foreground-soft)] sm:mb-6 sm:text-base lg:mb-7 lg:max-w-3xl lg:text-[1.05rem] lg:leading-8">
-          New writing is published here first. The email subscription flow is not live yet, so the archive remains the canonical way to follow updates.
-        </p>
-        <p className="text-sm text-[var(--muted)] lg:text-[0.98rem]">Bookmark this page or use the topic filters above to check for new posts.</p>
-      </section>
     </section>
   );
 }
