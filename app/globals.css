@@ -154,7 +154,7 @@ body :where(
   blockquote
 ) {
   transition-duration: var(--fm-motion-theme);
-  transition-property: background-color, color, border-color, box-shadow;
+  transition-property: background-color, border-color, box-shadow;
   transition-timing-function: var(--fm-ease-standard);
 }
 
@@ -380,5 +380,28 @@ samp {
   .theme-toggle:hover,
   .theme-toggle:active {
     transform: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .theme-toggle {
+    border-color: ButtonText;
+    background: ButtonFace;
+    box-shadow: none;
+    color: ButtonText;
+  }
+
+  .theme-toggle:hover {
+    border-color: Highlight;
+    box-shadow: none;
+  }
+
+  .theme-toggle:focus-visible {
+    outline-color: Highlight;
+  }
+
+  .theme-toggle-icon-sun,
+  .theme-toggle-icon-moon {
+    color: ButtonText;
   }
 }

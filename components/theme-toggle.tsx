@@ -51,7 +51,8 @@ function getInitialTheme(): Theme {
 }
 
 export function ThemeToggle() {
-  const statusId = useId();
+  const labelId = useId();
+  const descriptionId = useId();
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
 
   useEffect(() => {
@@ -85,18 +86,21 @@ export function ThemeToggle() {
   }
 
   const isDarkTheme = theme === "dark";
-  const statusText = isDarkTheme
-    ? "Dark theme active. Activate to switch to light theme."
-    : "Light theme active. Activate to switch to dark theme.";
 
   return (
     <div className="theme-toggle-wrap">
+      <span id={labelId} className="sr-only">
+        Dark theme
+      </span>
+      <span id={descriptionId} className="sr-only">
+        Switch between light and dark color themes.
+      </span>
       <button
         type="button"
         role="switch"
-        aria-label="Toggle theme"
+        aria-labelledby={labelId}
         aria-checked={isDarkTheme}
-        aria-describedby={statusId}
+        aria-describedby={descriptionId}
         className="theme-toggle"
         suppressHydrationWarning
         onClick={toggleTheme}
@@ -108,9 +112,6 @@ export function ThemeToggle() {
           <Moon className="size-6" strokeWidth={2.1} />
         </span>
       </button>
-      <span id={statusId} className="sr-only" suppressHydrationWarning>
-        {statusText}
-      </span>
     </div>
   );
 }
