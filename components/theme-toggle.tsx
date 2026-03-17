@@ -9,6 +9,11 @@ import {
   type Theme,
 } from "@/lib/theme";
 
+const THEME_TRANSITION_ATTRIBUTE = "data-theme-transition";
+const THEME_TRANSITION_DURATION_MS = 320;
+
+let themeTransitionTimeout: number | null = null;
+
 function readStoredTheme(): Theme | null {
   const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
   return storedTheme === "light" || storedTheme === "dark" ? storedTheme : null;
@@ -33,8 +38,35 @@ function updateThemeColorMeta(theme: Theme) {
   document.head.appendChild(createdMeta);
 }
 
-function applyTheme(theme: Theme) {
+function setThemeTransition(animate: boolean) {
   const root = document.documentElement;
+
+  if (!animate) {
+    root.removeAttribute(THEME_TRANSITION_ATTRIBUTE);
+
+    if (themeTransitionTimeout !== null) {
+      window.clearTimeout(themeTransitionTimeout);
+      themeTransitionTimeout = null;
+    }
+
+    return;
+  }
+
+  root.setAttribute(THEME_TRANSITION_ATTRIBUTE, "true");
+
+  if (themeTransitionTimeout !== null) {
+    window.clearTimeout(themeTransitionTimeout);
+  }
+
+  themeTransitionTimeout = window.setTimeout(() => {
+    root.removeAttribute(THEME_TRANSITION_ATTRIBUTE);
+    themeTransitionTimeout = null;
+  }, THEME_TRANSITION_DURATION_MS);
+}
+
+function applyTheme(theme: Theme, animate = false) {
+  const root = document.documentElement;
+  setThemeTransition(animate);
   root.dataset.theme = theme;
   root.style.colorScheme = theme;
   updateThemeColorMeta(theme);
@@ -80,7 +112,7 @@ export function ThemeToggle() {
       document.documentElement.dataset.theme === "light" ? "light" : "dark";
     const nextTheme = currentTheme === "dark" ? "light" : "dark";
 
-    applyTheme(nextTheme);
+    applyTheme(nextTheme, true);
     window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
     setTheme(nextTheme);
   }
