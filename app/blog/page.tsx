@@ -2,22 +2,52 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { PostCard, RandomPostButton } from "@/components/blog";
 import { getAllPosts, getAllTopics } from "@/lib/server/posts";
-
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Blog",
-    description: "Writing on software architecture, frontend engineering, AI systems, and technical thinking.",
-    alternates: {
-      canonical: "/blog",
-    },
-  };
-}
+import { buildBlogJsonLd, buildCollectionPageJsonLd } from "@/lib/seo";
+import { siteConfig } from "@/lib/site";
 
 type BlogPageProps = {
   searchParams: Promise<{
     topic?: string;
   }>;
 };
+
+export async function generateMetadata({ searchParams }: BlogPageProps): Promise<Metadata> {
+  const { topic } = await searchParams;
+  const topics = await getAllTopics();
+  const activeTopic = topic && topics.includes(topic) ? topic : null;
+
+  return {
+    title: "Blog",
+    description: "Writing on software architecture, frontend engineering, AI systems, and technical thinking.",
+    alternates: {
+      canonical: "/blog",
+    },
+    keywords: ["engineering blog", "software architecture", "frontend engineering", "AI systems"],
+    openGraph: {
+      type: "website",
+      url: "/blog",
+      siteName: siteConfig.name,
+      title: activeTopic ? `${activeTopic} articles` : "Blog",
+      description: activeTopic
+        ? `Browse articles about ${activeTopic} on ${siteConfig.name}.`
+        : "Writing on software architecture, frontend engineering, AI systems, and technical thinking.",
+      locale: siteConfig.locale,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: activeTopic ? `${activeTopic} articles` : "Blog",
+      description: activeTopic
+        ? `Browse articles about ${activeTopic} on ${siteConfig.name}.`
+        : "Writing on software architecture, frontend engineering, AI systems, and technical thinking.",
+    },
+    robots: activeTopic
+      ? {
+          index: false,
+          follow: true,
+        }
+      : undefined,
+  };
+}
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const { topic } = await searchParams;
@@ -38,6 +68,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const filteredPosts = activeTopic ? posts.filter((post) => post.topics.includes(activeTopic)) : posts;
   const featuredPosts = filteredPosts.filter((post) => post.featured);
   const recentPosts = filteredPosts.filter((post) => !post.featured || activeTopic);
+  const blogJsonLd = buildBlogJsonLd(posts);
+  const collectionPageJsonLd = buildCollectionPageJsonLd(filteredPosts);
   const topicChipClassName = "focus-ring inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm transition-colors";
   const inactiveTopicChipStyle = {
     backgroundColor: "var(--surface-strong)",
@@ -53,6 +85,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
   return (
     <section className="fade-in">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }}
+      />
       <header className="mb-12 sm:mb-16 lg:mb-20">
         <h1 className="mb-4 text-3xl text-[var(--foreground)] sm:text-4xl lg:mb-5 lg:text-[3.4rem]" style={{ fontWeight: 600 }}>
           Engineering Notes

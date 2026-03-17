@@ -5,6 +5,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { ArrowLeft, Hash } from "lucide-react";
 import { PostMeta, ReadingProgress } from "@/components/blog";
 import { getAllPosts, getPostBySlug } from "@/lib/server/posts";
+import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo";
+import { siteConfig } from "@/lib/site";
 import { mdxComponents } from "@/mdx-components";
 
 type PostPageProps = {
@@ -31,26 +33,42 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
   const description = post.description ?? "Read this blog post.";
   const canonicalPath = `/blog/${post.slug}`;
+  const socialImagePath = `/api/og?slug=${encodeURIComponent(post.slug)}`;
 
   return {
     title: post.title,
     description,
+    keywords: [...post.topics, ...post.tags],
+    authors: [{ name: siteConfig.author.name, url: siteConfig.url }],
     alternates: {
       canonical: canonicalPath,
     },
     openGraph: {
       type: "article",
       url: canonicalPath,
+      siteName: siteConfig.name,
       title: post.title,
       description,
+      locale: siteConfig.locale,
+      images: [
+        {
+          url: socialImagePath,
+          width: 1200,
+          height: 630,
+          alt: `${post.title} social preview`,
+        },
+      ],
       publishedTime: post.date,
       modifiedTime: post.updated ?? post.date,
+      authors: [siteConfig.author.name],
+      section: post.topics[0],
       tags: post.tags,
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: post.title,
       description,
+      images: [socialImagePath],
     },
   };
 }
@@ -63,9 +81,20 @@ export default async function BlogPostPage({ params }: PostPageProps) {
     notFound();
   }
 
+  const articleJsonLd = buildArticleJsonLd(post);
+  const breadcrumbJsonLd = buildBreadcrumbJsonLd(post);
+
   return (
     <>
       <ReadingProgress />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       <section className="fade-in mx-auto max-w-3xl lg:max-w-4xl">
         <Link href="/blog" className="focus-ring mb-6 inline-flex min-h-11 items-center gap-2 text-sm text-[var(--foreground-soft)] transition hover:text-[var(--foreground)] sm:mb-8 lg:mb-10 lg:gap-2.5 lg:text-[0.95rem]">
@@ -81,7 +110,15 @@ export default async function BlogPostPage({ params }: PostPageProps) {
               </div>
             </div>
 
-            <p className="mb-4 text-xs font-medium uppercase tracking-wide text-[var(--accent)] lg:mb-5 lg:text-[0.82rem]">{post.topics[0] ?? "Engineering note"}</p>
+            <p className="mb-4 text-xs font-medium uppercase tracking-wide text-[var(--accent)] lg:mb-5 lg:text-[0.82rem]">
+              {post.topics[0] ? (
+                <Link href={`/blog?topic=${encodeURIComponent(post.topics[0])}`} className="focus-ring rounded-sm">
+                  {post.topics[0]}
+                </Link>
+              ) : (
+                "Engineering note"
+              )}
+            </p>
             <h1 className="mb-5 text-3xl leading-tight text-[var(--foreground)] sm:mb-6 sm:text-4xl md:text-5xl lg:text-[4rem]" style={{ fontWeight: 600 }}>
               {post.title}
             </h1>
@@ -104,7 +141,9 @@ export default async function BlogPostPage({ params }: PostPageProps) {
           </div>
 
           <footer className="mt-12 border-t border-[var(--border)] pt-8 sm:mt-16 lg:mt-20 lg:pt-10">
-            <p className="text-sm text-[var(--foreground-soft)] lg:text-[0.98rem]">End of note. Return to the archive for the next article.</p>
+            <p className="text-sm text-[var(--foreground-soft)] lg:text-[0.98rem]">
+              End of note. Return to the <Link href="/blog" className="focus-ring rounded-sm text-[var(--foreground)]">archive</Link> for the next article.
+            </p>
           </footer>
         </article>
       </section>
