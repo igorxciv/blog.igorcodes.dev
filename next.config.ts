@@ -7,6 +7,9 @@ const withMDX = createMDX({
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
 };
 
 export default withMDX(nextConfig);

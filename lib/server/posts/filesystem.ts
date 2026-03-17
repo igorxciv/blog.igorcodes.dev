@@ -1,7 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { POST_EXTENSIONS, POSTS_DIRECTORY } from "@/lib/server/posts/constants";
-import { normalizeSlug } from "@/lib/server/posts/slug";
 
 export async function discoverPostFiles(directory: string = POSTS_DIRECTORY): Promise<string[]> {
   try {
@@ -26,23 +25,6 @@ export async function discoverPostFiles(directory: string = POSTS_DIRECTORY): Pr
   } catch {
     return [];
   }
-}
-
-export async function resolvePostFilePath(slug: string): Promise<string | null> {
-  const normalizedSlug = normalizeSlug(slug);
-
-  for (const extension of POST_EXTENSIONS) {
-    const candidate = path.join(POSTS_DIRECTORY, `${normalizedSlug}${extension}`);
-
-    try {
-      await fs.access(candidate);
-      return candidate;
-    } catch {
-      // Keep checking alternate extensions.
-    }
-  }
-
-  return null;
 }
 
 export async function readPostSource(filePath: string) {

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
-import { SiteShell } from "@/components/blog";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { SiteShell } from "@/components/blog/site-shell";
+import { ThemeToggleLazy } from "@/components/theme-toggle-lazy";
 import { DARK_THEME_COLOR, LIGHT_THEME_COLOR, THEME_STORAGE_KEY } from "@/lib/theme";
 import { dankMono, wotfard } from "./fonts";
 import { buildPersonJsonLd, buildWebsiteJsonLd } from "@/lib/seo";
@@ -108,7 +108,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
         <SiteShell>{children}</SiteShell>
-        <ThemeToggle />
+        <ThemeToggleLazy />
       </body>
     </html>
   );
