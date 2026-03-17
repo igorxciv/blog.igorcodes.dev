@@ -12,6 +12,13 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
+  alternates: {
+    canonical: "/blog",
+    types: {
+      "application/rss+xml": "/rss.xml",
+      "application/feed+json": "/feed.json",
+    },
+  },
   applicationName: siteConfig.name,
   category: "technology",
   authors: [{ name: siteConfig.author.name, url: siteConfig.url }],
