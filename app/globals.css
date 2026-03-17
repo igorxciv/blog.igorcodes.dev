@@ -272,6 +272,11 @@ samp {
   color: inherit;
 }
 
+.content-visibility-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 28rem;
+}
+
 .theme-toggle-wrap {
   position: fixed;
   inset-block-end: clamp(1rem, 3vw, 1.5rem);
@@ -315,6 +320,10 @@ samp {
 .theme-toggle:focus-visible {
   outline: 3px solid var(--fm-theme-button-focus-ring);
   outline-offset: 4px;
+}
+
+.theme-toggle-placeholder {
+  pointer-events: none;
 }
 
 .theme-toggle-icon {

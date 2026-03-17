@@ -18,7 +18,7 @@ export function PostCard({ post, featured = false, className, ...restProps }: Po
     <article
       className={twMerge(
         clsx(
-          "group border-b border-[var(--border)] py-6 transition-colors hover:border-[var(--border-strong)] sm:py-8 lg:py-10",
+          "content-visibility-card group border-b border-[var(--border)] py-6 transition-colors hover:border-[var(--border-strong)] sm:py-8 lg:py-10",
           className
         )
       )}

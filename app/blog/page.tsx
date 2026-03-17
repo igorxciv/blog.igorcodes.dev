@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { PostCard, RandomPostButton } from "@/components/blog";
+import { PostCard } from "@/components/blog/post-card";
+import { RandomPostButton } from "@/components/blog/random-post-button";
 import { getAllPosts, getAllTopics } from "@/lib/server/posts";
 import { buildBlogJsonLd, buildCollectionPageJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
@@ -101,7 +102,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           A collection of thoughts on software architecture, frontend engineering, AI systems, and technical thinking.
           Written for developers who care about craft.
         </p>
-        <RandomPostButton slugs={posts.map((post) => post.slug)} />
+        <RandomPostButton />
       </header>
 
       <section className="mb-10 sm:mb-12 lg:mb-14" aria-labelledby="topic-filter-heading">
