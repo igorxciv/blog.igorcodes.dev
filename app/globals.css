@@ -63,6 +63,7 @@
   --header-backdrop: rgb(10 10 10 / 0.84);
 
   color-scheme: dark;
+  interpolate-size: allow-keywords;
 }
 
 :root[data-theme="light"] {
@@ -108,21 +109,22 @@ html,
 body {
   margin: 0;
   padding: 0;
-  min-height: 100%;
-  scroll-behavior: smooth;
+  min-block-size: 100%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-wotfard), system-ui, sans-serif;
-  text-rendering: optimizelegibility;
   line-height: 1.5;
   overflow-x: hidden;
+  accent-color: var(--accent);
+  font-synthesis: none;
+  text-size-adjust: 100%;
 }
 
-body,
-body :where(
+:root[data-theme-transition] body,
+:root[data-theme-transition] body :where(
   a,
   button,
   div,
@@ -156,6 +158,13 @@ body :where(
   transition-duration: var(--fm-motion-theme);
   transition-property: background-color, border-color, box-shadow;
   transition-timing-function: var(--fm-ease-standard);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+    scrollbar-gutter: stable both-edges;
+  }
 }
 
 a {
@@ -210,8 +219,8 @@ samp {
 
 .skip-link {
   position: fixed;
-  top: 1rem;
-  left: 1rem;
+  inset-block-start: 1rem;
+  inset-inline-start: 1rem;
   z-index: 60;
   transform: translateY(-200%);
 }
@@ -244,6 +253,14 @@ samp {
   outline-offset: 4px;
 }
 
+.prose-blog :where(h1, h2, h3, h4, h5, h6) {
+  text-wrap: balance;
+}
+
+.prose-blog :where(p, li, blockquote, figcaption) {
+  text-wrap: pretty;
+}
+
 .prose-blog :where(img, video, iframe) {
   max-width: 100%;
 }
@@ -257,8 +274,8 @@ samp {
 
 .theme-toggle-wrap {
   position: fixed;
-  right: clamp(1rem, 3vw, 1.5rem);
-  bottom: clamp(1rem, 3vw, 1.5rem);
+  inset-block-end: clamp(1rem, 3vw, 1.5rem);
+  inset-inline-end: clamp(1rem, 3vw, 1.5rem);
   z-index: 70;
 }
 
@@ -360,8 +377,7 @@ samp {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html,
-  body {
+  html {
     scroll-behavior: auto;
   }
 
