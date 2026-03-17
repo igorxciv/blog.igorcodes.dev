@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { CircleCheck, Info, TriangleAlert } from "lucide-react";
-import { cn } from "@/lib/styles/cn";
+import { clsx } from "clsx";
 
 type CalloutProps = {
   children: ReactNode;
@@ -26,14 +26,14 @@ export function Callout({ children, title, type = "note" }: CalloutProps) {
   const Icon = iconByType[type];
 
   return (
-    <aside className={cn("my-6 rounded-lg border px-4 py-3", stylesByType[type])}>
+    <aside className={clsx("my-6 rounded-lg border px-4 py-3", stylesByType[type])}>
       {title ? (
         <p className="m-0 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide">
           <Icon aria-hidden="true" className="size-3.5" />
           {title}
         </p>
       ) : null}
-      <div className={cn(title ? "mt-2" : "", "text-sm leading-7")}>{children}</div>
+      <div className={clsx("text-sm leading-7", { "mt-2": title })}>{children}</div>
     </aside>
   );
 }

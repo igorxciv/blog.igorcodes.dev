@@ -1,8 +1,9 @@
 import type { ComponentPropsWithoutRef } from "react";
 import type { MDXComponents } from "mdx/types";
+import { clsx } from "clsx";
 import Image from "next/image";
+import { twMerge } from "tailwind-merge";
 import { Callout } from "@/components/mdx/mdx-callout";
-import { cn } from "@/lib/styles/cn";
 
 export const mdxComponents: MDXComponents = {
   h1: (props: ComponentPropsWithoutRef<"h1">) => <h1 className="mt-8 text-3xl text-[var(--foreground)] sm:text-4xl md:text-5xl lg:text-[3.9rem]" style={{ fontWeight: 600 }} {...props} />,
@@ -47,7 +48,7 @@ export const mdxComponents: MDXComponents = {
             title={caption ?? undefined}
             fill
             sizes="(min-width: 1024px) 768px, 100vw"
-            className={cn("object-cover", className)}
+            className={twMerge(clsx("object-cover", className))}
           />
         </div>
         {caption ? <figcaption className="mt-3 text-sm leading-relaxed text-[var(--foreground-soft)] lg:mt-4 lg:text-[0.98rem]">{caption}</figcaption> : null}

@@ -104,11 +104,11 @@ export function NotFoundPage() {
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(rgb(0_217_255_/_0.16)_1px,transparent_1px),linear-gradient(90deg,rgb(0_217_255_/_0.16)_1px,transparent_1px)] bg-[size:50px_50px] opacity-[0.055]"
+        className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(var(--accent-soft-strong)_1px,transparent_1px),linear-gradient(90deg,var(--accent-soft-strong)_1px,transparent_1px)] bg-[size:50px_50px] opacity-[0.4]"
       />
 
       <div className="relative z-10 w-full max-w-[44rem]">
-        <div className="overflow-hidden rounded-xl border border-[var(--border-strong)] bg-linear-to-b from-[rgb(18_18_18)] to-[rgb(15_15_15)] motion-safe:animate-[fade-in_420ms_ease-out_both]">
+        <div className="overflow-hidden rounded-xl border border-[var(--border-strong)] bg-[linear-gradient(180deg,var(--surface-raised),var(--surface-inset))] motion-safe:animate-[fade-in_420ms_ease-out_both]">
           <div className="flex min-h-11 items-center gap-3 border-b border-[var(--border-strong)] bg-[var(--surface-strong)] px-4 py-3">
             <span className="inline-flex items-center gap-1.5" aria-hidden="true">
               <span className="size-2.5 rounded-full bg-[#ff5f56]" />
@@ -175,7 +175,7 @@ export function NotFoundPage() {
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
             href="/blog"
-            className="focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[rgb(0_217_255_/_0.35)] bg-[rgb(0_217_255_/_0.1)] px-4 py-2 font-mono text-[0.96rem] font-medium text-[var(--foreground)] transition hover:-translate-y-px hover:border-[var(--accent)] hover:bg-[rgb(0_217_255_/_0.16)] active:translate-y-0 active:scale-[0.98]"
+            className="focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[var(--accent-line)] bg-[var(--accent-soft)] px-4 py-2 font-mono text-[0.96rem] font-medium text-[var(--foreground)] transition hover:-translate-y-px hover:border-[var(--accent)] hover:bg-[var(--accent-soft-strong)] active:translate-y-0 active:scale-[0.98]"
           >
             <House aria-hidden="true" className="size-4 text-[var(--accent)]" />
             Back to Blog Home
@@ -183,7 +183,7 @@ export function NotFoundPage() {
           <button
             type="button"
             onClick={handleBackClick}
-            className="focus-ring inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[#4a4a4a] bg-transparent px-4 py-2 font-mono text-[0.96rem] font-medium text-[var(--foreground)] transition hover:-translate-y-px hover:border-[var(--accent)] hover:bg-[rgb(0_217_255_/_0.08)] hover:text-[var(--foreground)] active:translate-y-0 active:scale-[0.98]"
+            className="focus-ring inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-transparent px-4 py-2 font-mono text-[0.96rem] font-medium text-[var(--foreground)] transition hover:-translate-y-px hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--foreground)] active:translate-y-0 active:scale-[0.98]"
           >
             <ArrowLeft aria-hidden="true" className="size-4" />
             Go Back

@@ -41,7 +41,7 @@ export function FeedLinks({ compact = false }: FeedLinksProps) {
               href={link.href}
               aria-label={link.label}
               title={link.label}
-              className="focus-ring inline-flex size-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground-soft)] transition hover:border-[rgb(0_217_255_/_0.35)] hover:text-[var(--accent)]"
+              className="focus-ring inline-flex size-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground-soft)] transition hover:border-[var(--accent-line)] hover:text-[var(--accent)]"
             >
               <Icon aria-hidden="true" className="size-4" />
               <span className="sr-only">{link.label}</span>
@@ -61,10 +61,10 @@ export function FeedLinks({ compact = false }: FeedLinksProps) {
           <Link
             key={link.href}
             href={link.href}
-            className="focus-ring group flex min-h-11 items-center justify-between gap-4 rounded-xl border border-[var(--border)] bg-[rgb(255_255_255_/_0.015)] px-4 py-3 transition hover:border-[rgb(0_217_255_/_0.35)] hover:bg-[rgb(0_217_255_/_0.045)]"
+            className="focus-ring group flex min-h-11 items-center justify-between gap-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 transition hover:border-[var(--accent-line)] hover:bg-[var(--accent-soft)]"
           >
             <span className="flex min-w-0 items-center gap-3">
-              <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-[rgb(0_217_255_/_0.1)] text-[var(--accent)]">
+              <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
                 <Icon aria-hidden="true" className="size-4" />
               </span>
               <span className="min-w-0">

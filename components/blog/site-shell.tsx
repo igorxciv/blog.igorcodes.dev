@@ -17,10 +17,10 @@ export function SiteShell({ children }: SiteShellProps) {
         Skip to main content
       </a>
 
-      <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[rgb(10_10_10_/_0.84)] backdrop-blur-sm">
+      <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--header-backdrop)] backdrop-blur-sm">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 lg:px-8 lg:py-6">
           <Link href="/blog" className="focus-ring inline-flex min-h-11 items-center gap-3 text-current transition hover:text-[var(--accent)] lg:gap-4">
-            <span className="inline-flex size-8 items-center justify-center rounded-md bg-[rgb(0_217_255_/_0.1)] text-[var(--accent)] lg:size-9 lg:rounded-lg">
+            <span className="inline-flex size-8 items-center justify-center rounded-md bg-[var(--accent-soft)] text-[var(--accent)] lg:size-9 lg:rounded-lg">
               <BookOpenText aria-hidden="true" className="size-5 lg:size-[1.35rem]" />
             </span>
             <span>

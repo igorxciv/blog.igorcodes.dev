@@ -80,7 +80,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     backgroundColor: "var(--surface-strong)",
     borderColor: "var(--accent)",
     color: "var(--foreground)",
-    boxShadow: "inset 0 0 0 1px rgb(0 217 255 / 0.24)",
+    boxShadow: "inset 0 0 0 1px var(--accent-line)",
   } as const;
 
   return (
