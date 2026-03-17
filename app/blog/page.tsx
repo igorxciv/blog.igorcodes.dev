@@ -1,7 +1,7 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { PostCard } from "@/components/blog/post-card";
+import { PostListSection } from "@/components/blog/post-list-section";
 import { RandomPostButton } from "@/components/blog/random-post-button";
+import { TopicFilter } from "@/components/blog/topic-filter";
 import { getAllPosts, getAllTopics } from "@/lib/server/posts";
 import { buildBlogJsonLd, buildCollectionPageJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
@@ -12,6 +12,9 @@ type BlogPageProps = {
   }>;
 };
 
+const BLOG_DESCRIPTION =
+  "Writing on software architecture, frontend engineering, AI systems, and technical thinking.";
+
 export async function generateMetadata({ searchParams }: BlogPageProps): Promise<Metadata> {
   const { topic } = await searchParams;
   const topics = await getAllTopics();
@@ -19,7 +22,7 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
 
   return {
     title: "Blog",
-    description: "Writing on software architecture, frontend engineering, AI systems, and technical thinking.",
+    description: BLOG_DESCRIPTION,
     alternates: {
       canonical: "/blog",
     },
@@ -31,7 +34,7 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
       title: activeTopic ? `${activeTopic} articles` : "Blog",
       description: activeTopic
         ? `Browse articles about ${activeTopic} on ${siteConfig.name}.`
-        : "Writing on software architecture, frontend engineering, AI systems, and technical thinking.",
+        : BLOG_DESCRIPTION,
       locale: siteConfig.locale,
     },
     twitter: {
@@ -39,7 +42,7 @@ export async function generateMetadata({ searchParams }: BlogPageProps): Promise
       title: activeTopic ? `${activeTopic} articles` : "Blog",
       description: activeTopic
         ? `Browse articles about ${activeTopic} on ${siteConfig.name}.`
-        : "Writing on software architecture, frontend engineering, AI systems, and technical thinking.",
+        : BLOG_DESCRIPTION,
     },
     robots: activeTopic
       ? {
@@ -71,18 +74,6 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const recentPosts = filteredPosts.filter((post) => !post.featured || activeTopic);
   const blogJsonLd = buildBlogJsonLd(posts);
   const collectionPageJsonLd = buildCollectionPageJsonLd(filteredPosts);
-  const topicChipClassName = "focus-ring inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm transition-colors";
-  const inactiveTopicChipStyle = {
-    backgroundColor: "var(--surface-strong)",
-    borderColor: "var(--border)",
-    color: "var(--foreground)",
-  } as const;
-  const activeTopicChipStyle = {
-    backgroundColor: "var(--surface-strong)",
-    borderColor: "var(--accent)",
-    color: "var(--foreground)",
-    boxShadow: "inset 0 0 0 1px var(--accent-line)",
-  } as const;
 
   return (
     <section className="fade-in">
@@ -99,65 +90,16 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           Engineering Notes
         </h1>
         <p className="mb-6 max-w-2xl text-base leading-relaxed text-[var(--foreground-soft)] sm:text-lg lg:mb-8 lg:max-w-3xl lg:text-[1.22rem] lg:leading-9">
-          A collection of thoughts on software architecture, frontend engineering, AI systems, and technical thinking.
-          Written for developers who care about craft.
+          A collection of thoughts on software architecture, frontend engineering, AI systems, and
+          technical thinking. Written for developers who care about craft.
         </p>
         <RandomPostButton />
       </header>
 
-      <section className="mb-10 sm:mb-12 lg:mb-14" aria-labelledby="topic-filter-heading">
-        <h2 id="topic-filter-heading" className="mb-4 text-sm font-medium uppercase tracking-wide text-[var(--muted)] lg:mb-5 lg:text-[0.82rem]">
-          Filter by topic
-        </h2>
-        <ul className="flex flex-wrap gap-2" aria-label="Topics">
-          <li>
-            <Link
-              href="/blog"
-              aria-current={activeTopic === null ? "page" : undefined}
-              className={`${topicChipClassName} min-h-11 px-3 sm:px-4 lg:min-h-12 lg:px-5 lg:text-[0.95rem]`}
-              style={activeTopic === null ? activeTopicChipStyle : inactiveTopicChipStyle}
-            >
-              {activeTopic === null ? <span aria-hidden="true" className="size-2 rounded-full bg-[var(--accent)]" /> : null}
-              All articles
-            </Link>
-          </li>
-          {topics.map((item) => (
-            <li key={item}>
-              <Link
-                href={`/blog?topic=${encodeURIComponent(item)}`}
-                aria-current={activeTopic === item ? "page" : undefined}
-                className={`${topicChipClassName} min-h-11 px-3 sm:px-4 lg:min-h-12 lg:px-5 lg:text-[0.95rem]`}
-                style={activeTopic === item ? activeTopicChipStyle : inactiveTopicChipStyle}
-              >
-                {activeTopic === item ? <span aria-hidden="true" className="size-2 rounded-full bg-[var(--accent)]" /> : null}
-                {item}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <TopicFilter activeTopic={activeTopic} topics={topics} />
 
-      {!activeTopic && featuredPosts.length > 0 ? (
-        <section className="mb-10 sm:mb-12 lg:mb-14">
-          <h2 className="mb-6 text-sm uppercase tracking-wide text-[var(--muted)] lg:mb-7 lg:text-[0.82rem]">Featured</h2>
-          <div>
-            {featuredPosts.map((post) => (
-              <PostCard key={post.slug} post={post} featured />
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      <section>
-        <h2 className="mb-6 text-sm uppercase tracking-wide text-[var(--muted)] lg:mb-7 lg:text-[0.82rem]">
-          {activeTopic ? activeTopic : "Recent Articles"}
-        </h2>
-        <div>
-          {recentPosts.map((post) => (
-            <PostCard key={post.slug} post={post} />
-          ))}
-        </div>
-      </section>
+      {!activeTopic ? <PostListSection featured posts={featuredPosts} title="Featured" /> : null}
+      <PostListSection posts={recentPosts} title={activeTopic ?? "Recent Articles"} />
     </section>
   );
 }
