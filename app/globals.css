@@ -145,6 +145,18 @@ samp {
   }
 }
 
+@keyframes fm-cursor-blink {
+  0%,
+  55% {
+    opacity: 1;
+  }
+
+  56%,
+  100% {
+    opacity: 0;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html,
   body {

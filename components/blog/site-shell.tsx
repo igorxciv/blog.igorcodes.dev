@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { BookOpenText } from "lucide-react";
+import { FeedLinks } from "./feed-links";
 
 type SiteShellProps = {
   children: ReactNode;
@@ -42,9 +43,9 @@ export function SiteShell({ children }: SiteShellProps) {
         </main>
 
         <footer className="mt-16 border-t border-[var(--border)] pt-8 sm:mt-20 sm:pt-10 md:mt-24 md:pt-12">
-          <div className="flex flex-col gap-2 text-sm text-[var(--muted)] sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 lg:text-[0.95rem]">
+          <div className="flex flex-col gap-3 text-sm text-[var(--muted)] sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 lg:text-[0.95rem]">
             <p>© 2026 blog.igorcodes.dev. Building in public.</p>
-            <p>Minimal notes, clear thinking.</p>
+            <FeedLinks compact />
           </div>
         </footer>
       </div>
