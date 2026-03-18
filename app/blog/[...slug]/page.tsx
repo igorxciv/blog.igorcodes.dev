@@ -98,7 +98,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
       />
 
       <section className="fade-in mx-auto max-w-3xl lg:max-w-4xl">
-        <Link href="/blog" className="focus-ring mb-6 inline-flex min-h-11 items-center gap-2 text-sm text-[var(--foreground-soft)] transition hover:text-[var(--foreground)] sm:mb-8 lg:mb-10 lg:gap-2.5 lg:text-[0.95rem]">
+        <Link href="/blog" className="focus-ring mb-6 inline-flex min-h-11 items-center gap-2 text-sm text-(--foreground-soft) transition hover:text-(--foreground) sm:mb-8 lg:mb-10 lg:gap-2.5 lg:text-[0.95rem]">
           <ArrowLeft aria-hidden="true" className="size-4 lg:size-[1.05rem]" />
           Back to articles
         </Link>
@@ -110,9 +110,9 @@ export default async function BlogPostPage({ params }: PostPageProps) {
             <MDXRemote source={post.body} components={mdxComponents} />
           </div>
 
-          <footer className="mt-12 border-t border-[var(--border)] pt-8 sm:mt-16 lg:mt-20 lg:pt-10">
-            <p className="text-sm text-[var(--foreground-soft)] lg:text-[0.98rem]">
-              End of note. Return to the <Link href="/blog" className="focus-ring rounded-sm text-[var(--foreground)]">archive</Link> for the next article.
+          <footer className="mt-12 border-t border-(--border) pt-8 sm:mt-16 lg:mt-20 lg:pt-10">
+            <p className="text-sm text-(--foreground-soft) lg:text-[0.98rem]">
+              End of note. Return to the <Link href="/blog" className="focus-ring rounded-sm text-(--foreground)">archive</Link> for the next article.
             </p>
           </footer>
         </article>

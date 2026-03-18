@@ -41,7 +41,7 @@ export function FeedLinks({ compact = false }: FeedLinksProps) {
               href={link.href}
               aria-label={link.label}
               title={link.label}
-              className="focus-ring inline-flex size-10 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground-soft)] transition hover:border-[var(--accent-line)] hover:text-[var(--accent)]"
+              className="focus-ring inline-flex size-10 items-center justify-center rounded-full border border-(--border) bg-(--surface) text-(--foreground-soft) transition hover:border-(--accent-line) hover:text-(--accent)"
             >
               <Icon aria-hidden="true" className="size-4" />
               <span className="sr-only">{link.label}</span>
@@ -61,18 +61,18 @@ export function FeedLinks({ compact = false }: FeedLinksProps) {
           <Link
             key={link.href}
             href={link.href}
-            className="focus-ring group flex min-h-11 items-center justify-between gap-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 transition hover:border-[var(--accent-line)] hover:bg-[var(--accent-soft)]"
+            className="focus-ring group flex min-h-11 items-center justify-between gap-4 rounded-xl border border-(--border) bg-(--surface) px-4 py-3 transition hover:border-(--accent-line) hover:bg-(--accent-soft)"
           >
             <span className="flex min-w-0 items-center gap-3">
-              <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-[var(--accent-soft)] text-[var(--accent)]">
+              <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-(--accent-soft) text-(--accent)">
                 <Icon aria-hidden="true" className="size-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-medium text-[var(--foreground)] lg:text-[0.98rem]">{link.label}</span>
-                <span className="block text-sm text-[var(--foreground-soft)]">{link.description}</span>
+                <span className="block text-sm font-medium text-(--foreground) lg:text-[0.98rem]">{link.label}</span>
+                <span className="block text-sm text-(--foreground-soft)">{link.description}</span>
               </span>
             </span>
-            <span className="text-xs uppercase tracking-[0.18em] text-[var(--muted)] transition group-hover:text-[var(--accent)]">
+            <span className="text-xs uppercase tracking-[0.18em] text-(--muted) transition group-hover:text-(--accent)">
               Open
             </span>
           </Link>

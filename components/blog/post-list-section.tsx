@@ -18,7 +18,7 @@ export function PostListSection({
 
   return (
     <section className={featured ? "mb-10 sm:mb-12 lg:mb-14" : undefined}>
-      <h2 className="mb-6 text-sm uppercase tracking-wide text-[var(--muted)] lg:mb-7 lg:text-[0.82rem]">
+      <h2 className="mb-6 text-sm uppercase tracking-wide text-(--muted) lg:mb-7 lg:text-[0.82rem]">
         {title}
       </h2>
       <div>

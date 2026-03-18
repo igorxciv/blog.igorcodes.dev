@@ -16,7 +16,7 @@ export function PostMeta({ date, readingTime, updated, published = true, classNa
     <div
       className={twMerge(
         clsx(
-          "flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-[var(--muted)] lg:gap-x-5 lg:text-[0.82rem]",
+          "flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-(--muted) lg:gap-x-5 lg:text-[0.82rem]",
           className
         )
       )}
@@ -38,7 +38,7 @@ export function PostMeta({ date, readingTime, updated, published = true, classNa
         </span>
       ) : null}
       {!published ? (
-        <span className="inline-flex items-center gap-1.5 rounded bg-[var(--accent-soft)] px-2 py-0.5 text-[var(--accent)] lg:px-2.5 lg:py-1">
+        <span className="inline-flex items-center gap-1.5 rounded bg-(--accent-soft) px-2 py-0.5 text-(--accent) lg:px-2.5 lg:py-1">
           <FilePenLine aria-hidden="true" className="size-3.5 lg:size-4" />
           Draft
         </span>

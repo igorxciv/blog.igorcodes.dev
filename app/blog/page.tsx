@@ -60,8 +60,8 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   if (posts.length === 0) {
     return (
       <section className="py-12 sm:py-16 lg:py-20">
-        <h1 className="text-3xl font-semibold text-[var(--foreground)] sm:text-4xl lg:text-5xl">Blog</h1>
-        <p className="mt-4 max-w-2xl text-base text-[var(--foreground-soft)] sm:text-lg lg:max-w-3xl lg:text-[1.2rem]">
+        <h1 className="text-3xl font-semibold text-(--foreground) sm:text-4xl lg:text-5xl">Blog</h1>
+        <p className="mt-4 max-w-2xl text-base text-(--foreground-soft) sm:text-lg lg:max-w-3xl lg:text-[1.2rem]">
           No posts are available yet. Add `.md` or `.mdx` files in `content/posts`.
         </p>
       </section>
@@ -86,10 +86,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageJsonLd) }}
       />
       <header className="mb-12 sm:mb-16 lg:mb-20">
-        <h1 className="mb-4 text-3xl text-[var(--foreground)] sm:text-4xl lg:mb-5 lg:text-[3.4rem]" style={{ fontWeight: 600 }}>
+        <h1 className="mb-4 text-3xl text-(--foreground) sm:text-4xl lg:mb-5 lg:text-[3.4rem]" style={{ fontWeight: 600 }}>
           Engineering Notes
         </h1>
-        <p className="mb-6 max-w-2xl text-base leading-relaxed text-[var(--foreground-soft)] sm:text-lg lg:mb-8 lg:max-w-3xl lg:text-[1.22rem] lg:leading-9">
+        <p className="mb-6 max-w-2xl text-base leading-relaxed text-(--foreground-soft) sm:text-lg lg:mb-8 lg:max-w-3xl lg:text-[1.22rem] lg:leading-9">
           A collection of thoughts on software architecture, frontend engineering, AI systems, and
           technical thinking. Written for developers who care about craft.
         </p>
