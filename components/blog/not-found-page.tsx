@@ -104,12 +104,12 @@ export function NotFoundPage() {
     >
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(var(--accent-soft-strong)_1px,transparent_1px),linear-gradient(90deg,var(--accent-soft-strong)_1px,transparent_1px)] bg-[size:50px_50px] opacity-[0.4]"
+        className="pointer-events-none absolute inset-0 z-0 bg-[linear-gradient(var(--accent-soft-strong)_1px,transparent_1px),linear-gradient(90deg,var(--accent-soft-strong)_1px,transparent_1px)] bg-size-[50px_50px] opacity-[0.4]"
       />
 
-      <div className="relative z-10 w-full max-w-[44rem]">
-        <div className="overflow-hidden rounded-xl border border-[var(--border-strong)] bg-[linear-gradient(180deg,var(--surface-raised),var(--surface-inset))] motion-safe:animate-[fade-in_420ms_ease-out_both]">
-          <div className="flex min-h-11 items-center gap-3 border-b border-[var(--border-strong)] bg-[var(--surface-strong)] px-4 py-3">
+      <div className="relative z-10 w-full max-w-176">
+        <div className="overflow-hidden rounded-xl border border-(--border-strong) bg-[linear-gradient(180deg,var(--surface-raised),var(--surface-inset))] motion-safe:animate-[fade-in_420ms_ease-out_both]">
+          <div className="flex min-h-11 items-center gap-3 border-b border-(--border-strong) bg-(--surface-strong) px-4 py-3">
             <span className="inline-flex items-center gap-1.5" aria-hidden="true">
               <span className="size-2.5 rounded-full bg-[#ff5f56]" />
               <span className="size-2.5 rounded-full bg-[#ffbd2e]" />
@@ -117,7 +117,7 @@ export function NotFoundPage() {
             </span>
 
             <span
-              className="ml-1 inline-flex items-center gap-1.5 text-xs text-[var(--foreground-soft)]"
+              className="ml-1 inline-flex items-center gap-1.5 text-xs text-(--foreground-soft)"
               aria-hidden="true"
             >
               <Terminal className="size-3.5" />
@@ -125,15 +125,15 @@ export function NotFoundPage() {
             </span>
           </div>
 
-          <div className="px-[1.15rem] pt-[1.15rem] pb-[1.25rem] font-mono">
-            <p className="m-0 text-[0.95rem] leading-[1.55] text-[var(--accent)]">
+          <div className="px-[1.15rem] pt-[1.15rem] pb-5 font-mono">
+            <p className="m-0 text-[0.95rem] leading-[1.55] text-(--accent)">
               <span ref={commandRef}>{FULL_COMMAND}</span>
               <span
                 aria-hidden="true"
                 className="ml-0.5 inline-block h-4 w-2 translate-y-0.5 bg-current motion-safe:animate-[fm-cursor-blink_820ms_steps(1)_infinite]"
               />
             </p>
-            <p className="mt-2 text-[0.86rem] leading-6 text-[var(--foreground-soft)]">
+            <p className="mt-2 text-[0.86rem] leading-6 text-(--foreground-soft)">
               Error: ENOENT: no such file or directory.
             </p>
             <p className="mt-2 text-[0.86rem] leading-6 text-[#ff5f56]">
@@ -148,7 +148,7 @@ export function NotFoundPage() {
         >
           <span
             ref={codeShadowRef}
-            className="absolute inset-0 inline-block min-w-[3ch] text-center text-[var(--accent)] opacity-[0.22] blur-[6px]"
+            className="absolute inset-0 inline-block min-w-[3ch] text-center text-(--accent) opacity-[0.22] blur-[6px]"
           >
             {STATIC_CODE}
           </span>
@@ -166,7 +166,7 @@ export function NotFoundPage() {
           </h1>
           <p
             id="page-not-found-description"
-            className="mx-auto mt-3 max-w-[35rem] text-pretty text-[clamp(1rem,3.8vw,1.12rem)] leading-[1.5] font-light text-[var(--muted)]"
+            className="mx-auto mt-3 max-w-140 text-pretty text-[clamp(1rem,3.8vw,1.12rem)] leading-normal font-light text-(--muted)"
           >
             The page you&apos;re looking for doesn&apos;t exist, was moved, or the URL is incorrect.
           </p>
@@ -175,15 +175,15 @@ export function NotFoundPage() {
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link
             href="/blog"
-            className="focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-[var(--accent-line)] bg-[var(--accent-soft)] px-4 py-2 font-mono text-[0.96rem] font-medium text-[var(--foreground)] transition hover:-translate-y-px hover:border-[var(--accent)] hover:bg-[var(--accent-soft-strong)] active:translate-y-0 active:scale-[0.98]"
+            className="focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-(--accent-line) bg-(--accent-soft) px-4 py-2 font-mono text-[0.96rem] font-medium text-(--foreground) transition hover:-translate-y-px hover:border-(--accent) hover:bg-(--accent-soft-strong) active:translate-y-0 active:scale-[0.98]"
           >
-            <House aria-hidden="true" className="size-4 text-[var(--accent)]" />
+            <House aria-hidden="true" className="size-4 text-(--accent)" />
             Back to Blog Home
           </Link>
           <button
             type="button"
             onClick={handleBackClick}
-            className="focus-ring inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-transparent px-4 py-2 font-mono text-[0.96rem] font-medium text-[var(--foreground)] transition hover:-translate-y-px hover:border-[var(--accent)] hover:bg-[var(--accent-soft)] hover:text-[var(--foreground)] active:translate-y-0 active:scale-[0.98]"
+            className="focus-ring inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-(--border-strong) bg-transparent px-4 py-2 font-mono text-[0.96rem] font-medium text-(--foreground) transition hover:-translate-y-px hover:border-(--accent) hover:bg-(--accent-soft) hover:text-(--foreground) active:translate-y-0 active:scale-[0.98]"
           >
             <ArrowLeft aria-hidden="true" className="size-4" />
             Go Back

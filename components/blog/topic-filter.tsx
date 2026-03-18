@@ -38,7 +38,7 @@ function TopicFilterLink({
       style={isActive ? activeTopicChipStyle : inactiveTopicChipStyle}
     >
       {isActive ? (
-        <span aria-hidden="true" className="size-2 rounded-full bg-[var(--accent)]" />
+        <span aria-hidden="true" className="size-2 rounded-full bg-(--accent)" />
       ) : null}
       {label}
     </Link>
@@ -50,7 +50,7 @@ export function TopicFilter({ activeTopic, topics }: TopicFilterProps) {
     <section className="mb-10 sm:mb-12 lg:mb-14" aria-labelledby="topic-filter-heading">
       <h2
         id="topic-filter-heading"
-        className="mb-4 text-sm font-medium uppercase tracking-wide text-[var(--muted)] lg:mb-5 lg:text-[0.82rem]"
+        className="mb-4 text-sm font-medium uppercase tracking-wide text-(--muted) lg:mb-5 lg:text-[0.82rem]"
       >
         Filter by topic
       </h2>
