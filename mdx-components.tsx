@@ -99,12 +99,25 @@ export const mdxComponents: MDXComponents = {
       </figure>
     );
   },
-  a: ({ href, ...props }: ComponentPropsWithoutRef<"a">) => {
+  a: ({ href, className, style, ...props }: ComponentPropsWithoutRef<"a">) => {
     return (
       <a
         href={href}
-        className="focus-ring rounded-[2px] text-(--accent) underline decoration-[rgb(0_217_255/0.55)] underline-offset-3 transition hover:text-(--accent-strong) hover:decoration-(--accent-strong)"
         {...props}
+        className={twMerge(
+          clsx(
+            "focus-ring rounded-[2px] font-semibold text-(--accent) underline decoration-2 underline-offset-4 transition hover:text-(--accent-strong)",
+            className,
+          ),
+        )}
+        style={{
+          color: "var(--accent)",
+          textDecorationLine: "underline",
+          textDecorationColor: "var(--accent)",
+          textDecorationThickness: "2px",
+          textUnderlineOffset: "0.18em",
+          ...style,
+        }}
       />
     );
   },
