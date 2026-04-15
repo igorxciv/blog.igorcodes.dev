@@ -254,7 +254,33 @@ samp {
   color: var(--foreground);
 }
 
+.prose-blog a {
+  color: color-mix(in srgb, var(--accent) 92%, white 8%);
+  font-weight: 600;
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 78%, transparent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  text-decoration-skip-ink: auto;
+  transition:
+    color var(--fm-motion-fast) var(--fm-ease-standard),
+    background-color var(--fm-motion-fast) var(--fm-ease-standard),
+    text-decoration-color var(--fm-motion-fast) var(--fm-ease-standard);
+}
+
+.prose-blog a:visited {
+  color: color-mix(in srgb, var(--accent) 62%, var(--muted-strong) 38%);
+  text-decoration-color: currentcolor;
+}
+
+.prose-blog a:hover {
+  color: var(--accent-strong);
+  background-color: color-mix(in srgb, var(--accent-soft) 78%, transparent);
+  text-decoration-color: currentcolor;
+}
+
 .prose-blog a:focus-visible {
+  background-color: color-mix(in srgb, var(--accent-soft) 82%, transparent);
   outline-offset: 4px;
 }
 
