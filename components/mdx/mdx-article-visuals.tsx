@@ -193,29 +193,16 @@ export function PromptBlock({ content }: PromptBlockProps) {
   const normalizedContent = content.trim();
   const lines = normalizedContent.split("\n").filter(Boolean);
   const eyebrow = lines.length > 1 ? "Prompt Set" : "Prompt";
-  const title = "Reasoning-first ask";
 
   return (
     <figure className="my-8 lg:my-10">
-      <div className="overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface-raised)_94%,transparent),color-mix(in_srgb,var(--surface-inset)_98%,transparent))] shadow-[var(--fm-shadow-elevated)]">
-        <div className="flex items-center justify-between gap-4 border-b border-(--border) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_52%,transparent),transparent)] px-4 py-3 sm:px-5">
-          <div className="min-w-0">
-            <p className="m-0 text-[0.7rem] uppercase tracking-[0.24em] text-(--foreground-soft)">{eyebrow}</p>
-            <p className="mt-1 text-sm text-(--foreground) sm:text-[0.96rem]" style={{ fontWeight: 600 }}>
-              {title}
-            </p>
-          </div>
-          <div className="flex items-center gap-1.5" aria-hidden="true">
-            <span className="size-2 rounded-full bg-(--accent)" />
-            <span className="size-2 rounded-full bg-(--border-strong)" />
-            <span className="size-2 rounded-full bg-(--border)" />
-          </div>
+      <div className="overflow-hidden rounded-[1.8rem] border border-(--accent-line) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_32%,transparent),color-mix(in_srgb,var(--surface-raised)_98%,transparent))] shadow-[var(--fm-shadow-elevated)]">
+        <div className="border-b border-(--border) px-5 py-3 sm:px-6">
+          <p className="m-0 text-[0.72rem] uppercase tracking-[0.24em] text-(--foreground-soft)">
+            {eyebrow}
+          </p>
         </div>
-        <div className="relative px-5 py-5 sm:px-6 sm:py-6">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-5 left-0 w-px bg-[linear-gradient(180deg,transparent,var(--accent),transparent)] sm:inset-y-6"
-          />
+        <div className="px-5 py-5 sm:px-6 sm:py-6">
           <pre className="m-0 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.98rem] leading-8 text-(--foreground) sm:text-[1.02rem] sm:leading-9">
             {normalizedContent}
           </pre>
