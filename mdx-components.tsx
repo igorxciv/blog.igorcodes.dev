@@ -3,6 +3,13 @@ import type { MDXComponents } from "mdx/types";
 import { clsx } from "clsx";
 import Image from "next/image";
 import { twMerge } from "tailwind-merge";
+import {
+  ImagePlaceholder,
+  InlineKicker,
+  ProcessFlow,
+  VisualCard,
+  VisualGrid,
+} from "@/components/mdx/mdx-article-visuals";
 import { Callout } from "@/components/mdx/mdx-callout";
 
 export const mdxComponents: MDXComponents = {
@@ -65,6 +72,11 @@ export const mdxComponents: MDXComponents = {
     );
   },
   Callout,
+  ImagePlaceholder,
+  InlineKicker,
+  ProcessFlow,
+  VisualCard,
+  VisualGrid,
 };
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
