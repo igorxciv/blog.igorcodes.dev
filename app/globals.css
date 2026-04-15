@@ -61,6 +61,8 @@
   --accent-soft-strong: var(--fm-accent-soft-strong);
   --accent-line: var(--fm-accent-line);
   --header-backdrop: rgb(10 10 10 / 0.84);
+  --selection-bg: #dff8ff;
+  --selection-fg: #081317;
 
   color-scheme: dark;
   interpolate-size: allow-keywords;
@@ -97,6 +99,8 @@
   --fm-theme-button-focus-ring: #005f75;
   --fm-focus-ring: rgb(var(--fm-accent-rgb) / 0.34);
   --header-backdrop: rgb(255 250 242 / 0.84);
+  --selection-bg: #7fd9e8;
+  --selection-fg: #0f1a1d;
 
   color-scheme: light;
 }
@@ -187,8 +191,9 @@ samp {
 }
 
 ::selection {
-  background: rgb(var(--fm-accent-rgb) / 0.22);
-  color: var(--fm-bg);
+  background-color: var(--selection-bg);
+  color: var(--selection-fg);
+  text-shadow: none;
 }
 
 .fade-in {
