@@ -1,4 +1,5 @@
-import type { ComponentPropsWithoutRef } from "react";
+import type { ComponentPropsWithoutRef, ReactNode, ReactElement } from "react";
+import { isValidElement } from "react";
 import type { MDXComponents } from "mdx/types";
 import { clsx } from "clsx";
 import Image from "next/image";
@@ -7,10 +8,27 @@ import {
   ImagePlaceholder,
   InlineKicker,
   ProcessFlow,
+  PromptBlock,
   VisualCard,
   VisualGrid,
+  WorkflowStepsBlock,
 } from "@/components/mdx/mdx-article-visuals";
 import { Callout } from "@/components/mdx/mdx-callout";
+
+function getTextFenceContent(children: ReactNode) {
+  if (!isValidElement(children)) {
+    return null;
+  }
+
+  const codeElement = children as ReactElement<{ className?: string; children?: ReactNode }>;
+  const language = codeElement.props.className ?? "";
+
+  if (!language.includes("language-text") || typeof codeElement.props.children !== "string") {
+    return null;
+  }
+
+  return codeElement.props.children;
+}
 
 export const mdxComponents: MDXComponents = {
   h1: (props: ComponentPropsWithoutRef<"h1">) => <h1 className="mt-8 text-3xl text-(--foreground) sm:text-4xl md:text-5xl lg:text-[3.9rem]" style={{ fontWeight: 600 }} {...props} />,
@@ -26,9 +44,28 @@ export const mdxComponents: MDXComponents = {
   code: (props: ComponentPropsWithoutRef<"code">) => (
     <code className="rounded border border-(--border) bg-(--surface) px-1.5 py-0.5 font-mono text-[0.9em] text-(--accent)" {...props} />
   ),
-  pre: (props: ComponentPropsWithoutRef<"pre">) => (
-    <pre className="mb-6 overflow-x-auto rounded-lg border border-(--border) bg-(--surface) p-3 text-sm text-[#a8a8a8] sm:p-4 lg:mb-7 lg:rounded-xl lg:p-5 lg:text-[0.98rem]" {...props} />
-  ),
+  pre: ({ children, ...props }: ComponentPropsWithoutRef<"pre">) => {
+    const promptContent = getTextFenceContent(children);
+
+    if (promptContent) {
+      const normalizedContent = promptContent.trim();
+
+      if (normalizedContent.includes("->")) {
+        return <WorkflowStepsBlock content={normalizedContent} />;
+      }
+
+      return <PromptBlock content={normalizedContent} />;
+    }
+
+    return (
+      <pre
+        className="mb-6 overflow-x-auto rounded-lg border border-(--border) bg-(--surface) p-3 text-sm text-[#a8a8a8] sm:p-4 lg:mb-7 lg:rounded-xl lg:p-5 lg:text-[0.98rem]"
+        {...props}
+      >
+        {children}
+      </pre>
+    );
+  },
   table: (props: ComponentPropsWithoutRef<"table">) => (
     <div className="my-6 overflow-x-auto lg:my-7">
       <table className="w-full border-collapse text-left text-(--foreground-soft) lg:text-[1.02rem]" {...props} />

@@ -26,6 +26,24 @@ type ImagePlaceholderProps = {
   orientation?: "landscape" | "portrait" | "square";
 };
 
+type PromptBlockProps = {
+  content: string;
+};
+
+type WorkflowStepsBlockProps = {
+  content: string;
+};
+
+const panelBaseClassName =
+  "rounded-[2rem] border px-5 py-5 shadow-[var(--fm-shadow-elevated)] lg:px-6 lg:py-6";
+
+const eyebrowClassName =
+  "mb-3 text-[0.72rem] uppercase tracking-[0.22em] text-(--foreground-soft)";
+
+const titleClassName = "mb-3 text-lg text-(--foreground) sm:text-xl";
+
+const bodyClassName = "text-sm leading-7 text-(--foreground-soft) sm:text-[0.98rem]";
+
 export function VisualGrid({ children, columns = 2 }: VisualGridProps) {
   return (
     <div
@@ -54,21 +72,15 @@ export function VisualCard({
   return (
     <section
       className={clsx(
-        "rounded-3xl border px-5 py-5 shadow-[var(--fm-shadow-elevated)]",
+        panelBaseClassName,
         cardToneStyles[tone],
       )}
     >
-      {eyebrow ? (
-        <p className="mb-3 text-xs uppercase tracking-[0.22em] text-(--foreground-soft)">
-          {eyebrow}
-        </p>
-      ) : null}
-      <h3 className="mb-3 text-lg text-(--foreground) sm:text-xl" style={{ fontWeight: 600 }}>
+      {eyebrow ? <p className={eyebrowClassName}>{eyebrow}</p> : null}
+      <h3 className={titleClassName} style={{ fontWeight: 600 }}>
         {title}
       </h3>
-      <div className="text-sm leading-7 text-(--foreground-soft) sm:text-[0.98rem]">
-        {children}
-      </div>
+      <div className={clsx(bodyClassName, "[&_p:last-child]:mb-0")}>{children}</div>
     </section>
   );
 }
@@ -88,7 +100,7 @@ function FlowTrack({
         <div key={`${variant}-${item}`} className="flex items-center gap-3">
           <div
             className={clsx(
-              "min-w-0 flex-1 rounded-2xl border px-4 py-3 text-sm leading-6 sm:text-[0.95rem]",
+              "min-w-0 flex-1 rounded-[1.35rem] border px-4 py-3 text-sm leading-6 sm:text-[0.95rem]",
               variant === "primary"
                 ? "border-(--accent-line) bg-(--accent-soft) text-(--foreground)"
                 : "border-(--border) bg-(--surface) text-(--foreground-soft)",
@@ -120,14 +132,20 @@ export function ProcessFlow({
   mutedSteps,
 }: ProcessFlowProps) {
   return (
-    <section className="my-8 rounded-[2rem] border border-(--border) bg-(--surface-raised) p-5 lg:my-10 lg:p-6">
-      <h3 className="mb-4 text-lg text-(--foreground) sm:text-xl" style={{ fontWeight: 600 }}>
+    <section
+      className={clsx(
+        "my-8 bg-(--surface-raised) lg:my-10",
+        panelBaseClassName,
+        "border-(--border)",
+      )}
+    >
+      <h3 className={clsx(titleClassName, "mb-4")} style={{ fontWeight: 600 }}>
         {title}
       </h3>
       <FlowTrack items={steps} variant="primary" />
       {mutedSteps && mutedSteps.length > 0 ? (
         <>
-          <p className="mb-3 mt-5 text-xs uppercase tracking-[0.22em] text-(--foreground-soft)">
+          <p className={clsx(eyebrowClassName, "mb-3 mt-5")}>
             What gets skipped in delegation mode
           </p>
           <FlowTrack items={mutedSteps} variant="muted" />
@@ -152,21 +170,95 @@ export function ImagePlaceholder({
     <figure className="my-8 lg:my-10">
       <div
         className={clsx(
-          "flex items-center justify-center rounded-[2rem] border border-dashed border-(--accent-line) bg-linear-to-br from-(--accent-soft) to-(--surface-raised) p-6",
+          "flex items-center justify-center rounded-[2rem] border border-dashed border-(--accent-line) bg-linear-to-br from-(--accent-soft) to-(--surface-raised) px-6 py-6 shadow-[var(--fm-shadow-elevated)] lg:px-8 lg:py-8",
           aspectStyles[orientation],
         )}
       >
         <div className="max-w-lg text-center">
           <ImageIcon aria-hidden="true" className="mx-auto mb-4 size-8 text-(--accent)" />
-          <p className="text-xs uppercase tracking-[0.22em] text-(--foreground-soft)">
-            Image Placeholder
-          </p>
-          <h3 className="mt-3 text-xl text-(--foreground)" style={{ fontWeight: 600 }}>
+          <p className={eyebrowClassName}>Image Placeholder</p>
+          <h3 className={clsx(titleClassName, "mt-3")} style={{ fontWeight: 600 }}>
             {title}
           </h3>
-          <p className="mt-3 text-sm leading-7 text-(--foreground-soft) sm:text-[0.98rem]">
+          <p className={clsx(bodyClassName, "mx-auto mt-3 max-w-xl")}>
             {description}
           </p>
+        </div>
+      </div>
+    </figure>
+  );
+}
+
+export function PromptBlock({ content }: PromptBlockProps) {
+  const normalizedContent = content.trim();
+  const lines = normalizedContent.split("\n").filter(Boolean);
+  const eyebrow = lines.length > 1 ? "Prompt Set" : "Prompt";
+  const title = "Reasoning-first ask";
+
+  return (
+    <figure className="my-8 lg:my-10">
+      <div className="overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface-raised)_94%,transparent),color-mix(in_srgb,var(--surface-inset)_98%,transparent))] shadow-[var(--fm-shadow-elevated)]">
+        <div className="flex items-center justify-between gap-4 border-b border-(--border) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_52%,transparent),transparent)] px-4 py-3 sm:px-5">
+          <div className="min-w-0">
+            <p className="m-0 text-[0.7rem] uppercase tracking-[0.24em] text-(--foreground-soft)">{eyebrow}</p>
+            <p className="mt-1 text-sm text-(--foreground) sm:text-[0.96rem]" style={{ fontWeight: 600 }}>
+              {title}
+            </p>
+          </div>
+          <div className="flex items-center gap-1.5" aria-hidden="true">
+            <span className="size-2 rounded-full bg-(--accent)" />
+            <span className="size-2 rounded-full bg-(--border-strong)" />
+            <span className="size-2 rounded-full bg-(--border)" />
+          </div>
+        </div>
+        <div className="relative px-5 py-5 sm:px-6 sm:py-6">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-5 left-0 w-px bg-[linear-gradient(180deg,transparent,var(--accent),transparent)] sm:inset-y-6"
+          />
+          <pre className="m-0 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.98rem] leading-8 text-(--foreground) sm:text-[1.02rem] sm:leading-9">
+            {normalizedContent}
+          </pre>
+        </div>
+      </div>
+    </figure>
+  );
+}
+
+export function WorkflowStepsBlock({ content }: WorkflowStepsBlockProps) {
+  const normalizedContent = content.trim();
+  const steps = normalizedContent
+    .split("->")
+    .map((step) => step.trim())
+    .filter(Boolean);
+
+  return (
+    <figure className="my-8 lg:my-10">
+      <div className="overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface-raised)_96%,transparent),color-mix(in_srgb,var(--surface-inset)_100%,transparent))] shadow-[var(--fm-shadow-elevated)]">
+        <div className="border-b border-(--border) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_42%,transparent),transparent)] px-4 py-3 sm:px-5">
+          <p className="m-0 text-[0.7rem] uppercase tracking-[0.24em] text-(--foreground-soft)">Workflow</p>
+          <p className="mt-1 text-sm text-(--foreground) sm:text-[0.96rem]" style={{ fontWeight: 600 }}>
+            Compressed loop
+          </p>
+        </div>
+        <div className="px-4 py-4 sm:px-5 sm:py-5">
+          <div className="grid gap-3 md:grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
+            {steps.map((step, index) => (
+              <div key={`${index}-${step}`} className="flex items-center gap-3">
+                <div className="min-w-0 flex-1 rounded-[1.25rem] border border-(--accent-line) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_74%,transparent),color-mix(in_srgb,var(--surface-raised)_96%,transparent))] px-4 py-3 shadow-[0_8px_22px_color-mix(in_srgb,var(--fm-shadow-glow)_16%,transparent)]">
+                  <p className="m-0 text-[0.68rem] uppercase tracking-[0.2em] text-(--foreground-soft)">
+                    {String(index + 1).padStart(2, "0")}
+                  </p>
+                  <p className="mt-1 text-sm leading-6 text-(--foreground) sm:text-[0.96rem]" style={{ fontWeight: 600 }}>
+                    {step}
+                  </p>
+                </div>
+                {index < steps.length - 1 ? (
+                  <ArrowRight aria-hidden="true" className="hidden size-4 shrink-0 text-(--accent) md:block" />
+                ) : null}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </figure>

@@ -9,11 +9,9 @@ type CalloutProps = {
 };
 
 const stylesByType: Record<NonNullable<CalloutProps["type"]>, string> = {
-  note: "border-blue-300/60 bg-blue-500/10 text-blue-950 dark:border-blue-300/40 dark:text-blue-100",
-  warning:
-    "border-amber-300/70 bg-amber-500/15 text-amber-950 dark:border-amber-300/50 dark:text-amber-100",
-  success:
-    "border-emerald-300/60 bg-emerald-500/10 text-emerald-950 dark:border-emerald-300/40 dark:text-emerald-100",
+  note: "border-(--accent-line) bg-(--accent-soft) text-(--foreground)",
+  warning: "border-amber-500/35 bg-amber-500/10 text-(--foreground)",
+  success: "border-emerald-500/30 bg-emerald-500/10 text-(--foreground)",
 };
 
 const iconByType = {
@@ -26,14 +24,27 @@ export function Callout({ children, title, type = "note" }: CalloutProps) {
   const Icon = iconByType[type];
 
   return (
-    <aside className={clsx("my-6 rounded-lg border px-4 py-3", stylesByType[type])}>
+    <aside
+      className={clsx(
+        "my-8 rounded-[2rem] border px-5 py-5 shadow-[var(--fm-shadow-elevated)] lg:my-10 lg:px-6 lg:py-6",
+        stylesByType[type],
+      )}
+    >
       {title ? (
-        <p className="m-0 inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide">
-          <Icon aria-hidden="true" className="size-3.5" />
+        <p className="m-0 inline-flex items-center gap-2 font-mono text-[0.72rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
+          <Icon aria-hidden="true" className="size-4 text-current" />
           {title}
         </p>
       ) : null}
-      <div className={clsx("text-sm leading-7", { "mt-2": title })}>{children}</div>
+      <div
+        className={clsx(
+          "text-sm leading-7 text-(--foreground-soft) sm:text-[0.98rem]",
+          "[&_a]:text-(--accent) [&_a]:underline [&_a]:decoration-(--accent-line) [&_p:last-child]:mb-0",
+          { "mt-3": title },
+        )}
+      >
+        {children}
+      </div>
     </aside>
   );
 }
