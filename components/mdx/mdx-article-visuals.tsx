@@ -26,6 +26,13 @@ type ImagePlaceholderProps = {
   orientation?: "landscape" | "portrait" | "square";
 };
 
+type TableBlockProps = {
+  children: ReactNode;
+  title?: string;
+  description?: string;
+  footer?: string;
+};
+
 type PromptBlockProps = {
   content: string;
 };
@@ -185,6 +192,60 @@ export function ImagePlaceholder({
           </p>
         </div>
       </div>
+    </figure>
+  );
+}
+
+export function TableBlock({
+  children,
+  title,
+  description,
+  footer,
+}: TableBlockProps) {
+  return (
+    <figure className="my-8 lg:my-10">
+      {title ? (
+        <h3
+          className="m-0 max-w-5xl text-[1.85rem] leading-tight text-(--foreground) sm:text-3xl lg:text-[2.35rem]"
+          style={{ fontWeight: 600 }}
+        >
+          {title}
+        </h3>
+      ) : null}
+      {description ? (
+        <p className="mb-6 mt-4 max-w-4xl text-[0.98rem] leading-8 text-(--foreground-soft) sm:text-base lg:mb-7 lg:text-[1.12rem] lg:leading-9">
+          {description}
+        </p>
+      ) : null}
+
+      <div
+        className={clsx(
+          "overflow-hidden rounded-[1.8rem] border border-(--border-strong)",
+          "bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface-raised)_96%,transparent),color-mix(in_srgb,var(--surface)_100%,transparent))]",
+          "shadow-[0_10px_24px_rgb(0_0_0_/_0.18)]",
+          "[&_table]:m-0 [&_table]:w-full [&_table]:border-collapse [&_table]:text-left",
+          "[&_thead_th]:border-b [&_thead_th]:border-(--border-strong) [&_thead_th]:px-5 [&_thead_th]:py-4 [&_thead_th]:align-top [&_thead_th]:text-[0.76rem] [&_thead_th]:uppercase [&_thead_th]:tracking-[0.2em] [&_thead_th]:text-(--foreground-soft) lg:[&_thead_th]:px-6",
+          "[&_thead_th]:font-semibold",
+          "[&_thead_th:nth-child(2)]:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_14%,transparent),transparent)]",
+          "[&_thead_th:nth-child(3)]:bg-[linear-gradient(180deg,color-mix(in_srgb,rgba(245,158,11,0.08)_72%,transparent),transparent)]",
+          "[&_tbody_td]:border-t [&_tbody_td]:border-(--border) [&_tbody_td]:px-5 [&_tbody_td]:py-4 [&_tbody_td]:align-top [&_tbody_td]:text-[0.98rem] [&_tbody_td]:leading-8 lg:[&_tbody_td]:px-6 lg:[&_tbody_td]:py-5 lg:[&_tbody_td]:text-[1.08rem] lg:[&_tbody_td]:leading-9",
+          "[&_tbody_td:first-child]:text-(--foreground) [&_tbody_td:first-child]:font-semibold",
+          "[&_tbody_td:not(:first-child)]:text-(--foreground-soft)",
+          "[&_thead_th:not(:last-child)]:border-r [&_thead_th:not(:last-child)]:border-(--border)",
+          "[&_tbody_td:not(:last-child)]:border-r [&_tbody_td:not(:last-child)]:border-(--border)",
+          "[&_tbody_td:first-child]:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface-inset)_68%,transparent),transparent)]",
+          "[&_tbody_td:nth-child(2)]:bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_10%,transparent),transparent)]",
+          "[&_tbody_td:nth-child(3)]:bg-[linear-gradient(180deg,color-mix(in_srgb,rgba(245,158,11,0.05)_68%,transparent),transparent)]",
+        )}
+      >
+        <div className="overflow-x-auto">{children}</div>
+      </div>
+
+      {footer ? (
+        <figcaption className="mt-5 max-w-5xl text-[0.98rem] leading-8 text-(--foreground-soft) sm:text-base lg:mt-6 lg:text-[1.12rem] lg:leading-9">
+          {footer}
+        </figcaption>
+      ) : null}
     </figure>
   );
 }

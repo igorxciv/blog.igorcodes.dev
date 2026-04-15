@@ -9,6 +9,7 @@ import {
   InlineKicker,
   ProcessFlow,
   PromptBlock,
+  TableBlock,
   VisualCard,
   VisualGrid,
   WorkflowStepsBlock,
@@ -67,14 +68,21 @@ export const mdxComponents: MDXComponents = {
     );
   },
   table: (props: ComponentPropsWithoutRef<"table">) => (
-    <div className="my-6 overflow-x-auto lg:my-7">
-      <table className="w-full border-collapse text-left text-(--foreground-soft) lg:text-[1.02rem]" {...props} />
+    <div className="my-8 overflow-x-auto lg:my-10">
+      <div className="overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface-raised)_96%,transparent),color-mix(in_srgb,var(--surface)_100%,transparent))] shadow-[0_10px_24px_rgb(0_0_0_/_0.18)]">
+        <table className="w-full border-collapse text-left text-(--foreground-soft) lg:text-[1.02rem]" {...props} />
+      </div>
     </div>
   ),
   th: ({ scope, ...props }: ComponentPropsWithoutRef<"th">) => (
-    <th scope={scope ?? "col"} className="border border-(--border) px-3 py-2 font-semibold text-(--foreground) lg:px-4 lg:py-3" {...props} />
+    <th
+      scope={scope ?? "col"}
+      className="border-b border-(--border-strong) px-5 py-4 align-top text-[0.76rem] uppercase tracking-[0.2em] text-(--foreground-soft) lg:px-6 lg:py-4"
+      style={{ fontWeight: 600 }}
+      {...props}
+    />
   ),
-  td: (props: ComponentPropsWithoutRef<"td">) => <td className="border border-(--border) px-3 py-2 lg:px-4 lg:py-3" {...props} />,
+  td: (props: ComponentPropsWithoutRef<"td">) => <td className="border-t border-(--border) px-5 py-4 align-top text-[0.98rem] leading-8 lg:px-6 lg:py-5 lg:text-[1.08rem] lg:leading-9" {...props} />,
   img: ({ className, alt, src, title }: ComponentPropsWithoutRef<"img">) => {
     if (typeof src !== "string") {
       return null;
@@ -127,6 +135,7 @@ export const mdxComponents: MDXComponents = {
   ProcessFlow,
   VisualCard,
   VisualGrid,
+  TableBlock,
 };
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
