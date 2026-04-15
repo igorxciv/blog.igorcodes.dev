@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 
 const withMDX = createMDX({
   extension: /\.(md|mdx)$/,
+  options: {
+    remarkPlugins: ["remark-gfm"],
+  },
 });
 
 const nextConfig: NextConfig = {
