@@ -8,7 +8,7 @@ import { ReadingProgress } from "@/components/blog/reading-progress";
 import { getAllPosts, getPostBySlug } from "@/lib/server/posts";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
-import { mdxComponents } from "@/mdx-components";
+import { createPostMdxComponents } from "@/mdx-components";
 
 type PostPageProps = {
   params: Promise<{ slug: string[] }>;
@@ -84,6 +84,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
 
   const articleJsonLd = buildArticleJsonLd(post);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(post);
+  const postMdxComponents = createPostMdxComponents(post.slug);
 
   return (
     <>
@@ -107,7 +108,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
           <PostPageHeader post={post} />
 
           <div className="prose-blog max-w-none">
-            <MDXRemote source={post.body} components={mdxComponents} />
+            <MDXRemote source={post.body} components={postMdxComponents} />
           </div>
 
           <footer className="mt-12 border-t border-(--border) pt-8 sm:mt-16 lg:mt-20 lg:pt-10">

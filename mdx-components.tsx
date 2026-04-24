@@ -15,6 +15,7 @@ import {
   WorkflowStepsBlock,
 } from "@/components/mdx/mdx-article-visuals";
 import { Callout } from "@/components/mdx/mdx-callout";
+import { createPostImageComponent } from "@/components/mdx/post-image";
 
 function getTextFenceContent(children: ReactNode) {
   if (!isValidElement(children)) {
@@ -142,5 +143,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...mdxComponents,
     ...components,
+  };
+}
+
+export function createPostMdxComponents(postSlug: string): MDXComponents {
+  return {
+    ...mdxComponents,
+    PostImage: createPostImageComponent(postSlug),
   };
 }
