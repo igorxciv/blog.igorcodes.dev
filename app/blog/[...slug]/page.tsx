@@ -5,7 +5,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { ArrowLeft } from "lucide-react";
 import { PostPageHeader } from "@/components/blog/post-page-header";
 import { ReadingProgress } from "@/components/blog/reading-progress";
-import { getAllPosts, getPostBySlug } from "@/lib/server/posts";
+import { RelatedPosts } from "@/components/blog/related-posts";
+import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/server/posts";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import { createPostMdxComponents } from "@/mdx-components";
@@ -85,6 +86,8 @@ export default async function BlogPostPage({ params }: PostPageProps) {
   const articleJsonLd = buildArticleJsonLd(post);
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(post);
   const postMdxComponents = createPostMdxComponents(post.slug);
+  const posts = await getAllPosts();
+  const relatedPosts = getRelatedPosts(post, posts);
 
   return (
     <>
@@ -111,11 +114,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
             <MDXRemote source={post.body} components={postMdxComponents} />
           </div>
 
-          <footer className="mt-12 border-t border-(--border) pt-8 sm:mt-16 lg:mt-20 lg:pt-10">
-            <p className="text-sm text-(--foreground-soft) lg:text-[0.98rem]">
-              End of note. Return to the <Link href="/blog" className="focus-ring rounded-sm text-(--foreground)">archive</Link> for the next article.
-            </p>
-          </footer>
+          <RelatedPosts posts={relatedPosts} />
         </article>
       </section>
     </>
