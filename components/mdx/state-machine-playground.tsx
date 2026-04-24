@@ -63,10 +63,12 @@ export function StateMachinePlayground() {
 
     if (!nextField) {
       setCompletedFields([]);
+      setTurns(1);
       return;
     }
 
     setCompletedFields((current) => [...current, nextField.key]);
+    setTurns((current) => clamp(current + 1, 1, 12));
   }
 
   return (
@@ -208,7 +210,10 @@ export function StateMachinePlayground() {
             </button>
             <button
               type="button"
-              onClick={() => setCompletedFields(["goal"])}
+              onClick={() => {
+                setCompletedFields(["goal"]);
+                setTurns(6);
+              }}
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-(--border) bg-(--surface) px-4 text-sm text-(--foreground-soft) transition hover:text-(--foreground)"
             >
               <Shuffle aria-hidden="true" className="size-4" />
