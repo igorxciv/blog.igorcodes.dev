@@ -16,6 +16,7 @@ import {
 } from "@/components/mdx/mdx-article-visuals";
 import { Callout } from "@/components/mdx/mdx-callout";
 import { createPostImageComponent } from "@/components/mdx/post-image";
+import { StateMachinePlayground } from "@/components/mdx/state-machine-playground";
 
 function getTextFenceContent(children: ReactNode) {
   if (!isValidElement(children)) {
@@ -137,6 +138,7 @@ export const mdxComponents: MDXComponents = {
   VisualCard,
   VisualGrid,
   TableBlock,
+  StateMachinePlayground,
 };
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -150,5 +152,6 @@ export function createPostMdxComponents(postSlug: string): MDXComponents {
   return {
     ...mdxComponents,
     PostImage: createPostImageComponent(postSlug),
+    StateMachinePlayground,
   };
 }
