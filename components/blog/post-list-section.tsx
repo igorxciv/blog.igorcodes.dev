@@ -21,7 +21,7 @@ export function PostListSection({
       <h2 className="mb-6 text-sm uppercase tracking-wide text-(--muted) lg:mb-7 lg:text-[0.82rem]">
         {title}
       </h2>
-      <div>
+      <div className="[&>article:last-child]:border-b-0">
         {posts.map((post) => (
           <PostCard key={post.slug} post={post} featured={featured} />
         ))}
