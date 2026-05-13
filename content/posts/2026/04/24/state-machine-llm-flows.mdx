@@ -115,18 +115,8 @@ Once that boundary exists, the whole flow becomes easier to reason about. The ba
 
 <ProcessFlow
   title="The new loop"
-  steps={[
-    "Backend reads current state",
-    "User message updates known facts",
-    "LLM receives state plus latest input",
-    "LLM returns a structured next turn",
-    "Backend validates and persists",
-  ]}
-  mutedSteps={[
-    "Reread entire transcript",
-    "Guess what is already known",
-    "Patch another prompt rule",
-  ]}
+  steps="Backend reads current state | User message updates known facts | LLM receives state plus latest input | LLM returns a structured next turn | Backend validates and persists"
+  mutedSteps="Reread entire transcript | Guess what is already known | Patch another prompt rule"
 />
 
 ## Why this made the product feel calmer
@@ -170,7 +160,7 @@ But the more interesting win was predictability.
 
 When the model had to infer state from a transcript, correctness depended on interpretation. When the backend passed explicit state, the model no longer needed to rediscover the plot every time.
 
-<VisualGrid columns={3}>
+<VisualGrid columns="3">
   <VisualCard eyebrow="Before" title="Correct progression" tone="warning">
     About 76% of flows moved through the right steps without repeats or skips.
   </VisualCard>

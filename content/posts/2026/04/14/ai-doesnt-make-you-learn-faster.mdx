@@ -49,7 +49,7 @@ The headline result is not “AI is bad.” The more useful takeaway is narrower
 
 In the study summary, AI users ended up with roughly lower comprehension while seeing little meaningful time benefit in the specific learning task. That is the important tension. If speed stays mostly flat while understanding drops, then AI is not functioning as a learning accelerator there. It is functioning as a shortcut around formation of the underlying mental model.
 
-<VisualGrid columns={2}>
+<VisualGrid columns="2">
   <VisualCard eyebrow="Observed Pattern" title="Output improved more than understanding" tone="accent">
     The assistant helped people get to an answer, but that did not reliably translate into stronger recall, debugging ability, or conceptual grasp afterward.
   </VisualCard>
@@ -66,18 +66,8 @@ Learning usually requires a loop like this:
 
 <ProcessFlow
   title="The loop that usually builds skill"
-  steps={[
-    "Encounter a problem you cannot yet solve fluently",
-    "Form a hypothesis or attempt a solution",
-    "Observe mismatch, error, or failure",
-    "Debug the mismatch and update your model",
-    "Reuse that model on the next problem",
-  ]}
-  mutedSteps={[
-    "Prompt for a solution",
-    "Paste the output",
-    "Move on without building causal understanding",
-  ]}
+  steps="Encounter a problem you cannot yet solve fluently | Form a hypothesis or attempt a solution | Observe mismatch, error, or failure | Debug the mismatch and update your model | Reuse that model on the next problem"
+  mutedSteps="Prompt for a solution | Paste the output | Move on without building causal understanding"
 />
 
 If AI handles the hypothesis generation, the failure analysis, and the patching strategy before you have done those steps yourself, then it is not merely assisting execution. It is stepping directly into the part of the loop that creates durable knowledge.
@@ -88,7 +78,7 @@ That is why the experience can feel productive while still leaving you strangely
 
 The right conclusion is not “never use AI.” The better conclusion is that different usage modes create different educational outcomes.
 
-<VisualGrid columns={2}>
+<VisualGrid columns="2">
   <VisualCard eyebrow="Weak Mode" title="Full delegation" tone="warning">
     “Write this for me” is efficient when your goal is shipping a known pattern, but risky when your goal is understanding a new one. You get an answer while bypassing the reasoning path.
   </VisualCard>

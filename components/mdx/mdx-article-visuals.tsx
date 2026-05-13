@@ -4,7 +4,7 @@ import { ArrowRight, Image as ImageIcon } from "lucide-react";
 
 type VisualGridProps = {
   children: ReactNode;
-  columns?: 2 | 3;
+  columns?: 2 | 3 | "2" | "3";
 };
 
 type VisualCardProps = {
@@ -16,8 +16,8 @@ type VisualCardProps = {
 
 type ProcessFlowProps = {
   title?: string;
-  steps: string[];
-  mutedSteps?: string[];
+  steps?: string[] | string;
+  mutedSteps?: string[] | string;
 };
 
 type ImagePlaceholderProps = {
@@ -52,11 +52,13 @@ const titleClassName = "mb-3 text-lg text-(--foreground) sm:text-xl";
 const bodyClassName = "text-sm leading-7 text-(--foreground-soft) sm:text-[0.98rem]";
 
 export function VisualGrid({ children, columns = 2 }: VisualGridProps) {
+  const columnCount = Number(columns);
+
   return (
     <div
       className={clsx(
         "my-8 grid gap-4 lg:my-10",
-        columns === 3 ? "md:grid-cols-3" : "md:grid-cols-2",
+        columnCount === 3 ? "md:grid-cols-3" : "md:grid-cols-2",
       )}
     >
       {children}
@@ -92,14 +94,29 @@ export function VisualCard({
   );
 }
 
+function normalizeFlowItems(items?: string[] | string) {
+  if (Array.isArray(items)) {
+    return items;
+  }
+
+  if (!items) {
+    return [];
+  }
+
+  return items
+    .split("|")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
 function FlowTrack({
   items,
   variant,
 }: {
-  items?: string[];
+  items?: string[] | string;
   variant: "primary" | "muted";
 }) {
-  const safeItems = items ?? [];
+  const safeItems = normalizeFlowItems(items);
 
   return (
     <div className="grid gap-3 md:grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
@@ -150,7 +167,7 @@ export function ProcessFlow({
         {title}
       </h3>
       <FlowTrack items={steps} variant="primary" />
-      {mutedSteps && mutedSteps.length > 0 ? (
+      {normalizeFlowItems(mutedSteps).length > 0 ? (
         <>
           <p className={clsx(eyebrowClassName, "mb-3 mt-5")}>
             What gets skipped in delegation mode

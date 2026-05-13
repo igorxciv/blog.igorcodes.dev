@@ -76,11 +76,7 @@ The most useful format I know is boring:
 
 <ProcessFlow
   title="A decision-ready technical debt proposal"
-  steps={[
-    "Problem: name the technical issue in one sentence",
-    "Impact: connect it to users, business, delivery, or team health",
-    "Proposal: ask for a specific investment with scope and validation",
-  ]}
+  steps="Problem: name the technical issue in one sentence | Impact: connect it to users, business, delivery, or team health | Proposal: ask for a specific investment with scope and validation"
 />
 
 That is it.
@@ -113,7 +109,7 @@ We stop at “the architecture is bad.” But bad architecture is not the impact
 
 Impact explains what the technical issue does to users, the business, or the team. It is stronger when it is concrete:
 
-<VisualGrid columns={2}>
+<VisualGrid columns="2">
   <VisualCard eyebrow="Delivery" title="Make time visible" tone="accent">
     “Last quarter this added about six weeks of extra work across three billing-related changes.”
   </VisualCard>
