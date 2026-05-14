@@ -117,15 +117,60 @@ function FlowTrack({
   variant: "primary" | "muted";
 }) {
   const safeItems = normalizeFlowItems(items);
+  const useTimeline = safeItems.length > 4;
+  const isPrimary = variant === "primary";
+
+  if (useTimeline) {
+    return (
+      <ol className="grid gap-5 pl-12 sm:pl-16">
+        {safeItems.map((item, index) => (
+          <li
+            key={`${variant}-${item}`}
+            className={clsx(
+              "relative",
+              index < safeItems.length - 1
+                ? "after:absolute after:-bottom-[calc(50%-0.5rem)] after:left-[-2rem] after:top-[calc(50%+1.5rem)] after:w-px sm:after:left-[-2.75rem] sm:after:top-[calc(50%+1.75rem)]"
+                : null,
+              index < safeItems.length - 1 && isPrimary
+                ? "after:bg-(--accent-line)"
+                : "after:bg-(--border-strong)",
+            )}
+          >
+            <span
+              className={clsx(
+                "absolute -left-12 top-1/2 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border font-mono text-[0.68rem] tracking-[0.12em] sm:-left-16 sm:size-10",
+                isPrimary
+                  ? "border-(--accent-line) bg-(--surface-raised) text-(--accent)"
+                  : "border-(--border-strong) bg-(--surface-raised) text-(--foreground-soft)",
+              )}
+              aria-hidden="true"
+            >
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <div
+              className={clsx(
+                "flex min-h-20 items-center rounded-[1.35rem] border px-4 py-3 text-sm leading-6 sm:min-h-24 sm:px-5 sm:py-4 sm:text-[0.98rem] sm:leading-7",
+                isPrimary
+                  ? "border-(--accent-line) bg-[linear-gradient(135deg,color-mix(in_srgb,var(--accent-soft)_84%,transparent),color-mix(in_srgb,var(--surface-raised)_92%,transparent))] text-(--foreground)"
+                  : "border-(--border) bg-(--surface) text-(--foreground-soft)",
+              )}
+            >
+              {item}
+            </div>
+          </li>
+        ))}
+      </ol>
+    );
+  }
 
   return (
-    <div className="grid gap-3 md:grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
+    <div className="grid gap-3 md:grid-cols-[repeat(auto-fit,minmax(13rem,1fr))]">
       {safeItems.map((item, index) => (
-        <div key={`${variant}-${item}`} className="flex items-center gap-3">
+        <div key={`${variant}-${item}`} className="flex min-w-0 items-stretch gap-3">
           <div
             className={clsx(
               "min-w-0 flex-1 rounded-[1.35rem] border px-4 py-3 text-sm leading-6 sm:text-[0.95rem]",
-              variant === "primary"
+              isPrimary
                 ? "border-(--accent-line) bg-(--accent-soft) text-(--foreground)"
                 : "border-(--border) bg-(--surface) text-(--foreground-soft)",
             )}
@@ -139,8 +184,8 @@ function FlowTrack({
             <ArrowRight
               aria-hidden="true"
               className={clsx(
-                "hidden size-4 shrink-0 md:block",
-                variant === "primary" ? "text-(--accent)" : "text-(--foreground-soft)",
+                "hidden size-4 shrink-0 self-center md:block",
+                isPrimary ? "text-(--accent)" : "text-(--foreground-soft)",
               )}
             />
           ) : null}
