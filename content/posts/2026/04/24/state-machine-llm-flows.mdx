@@ -1,6 +1,6 @@
 ---
 title: "I Stopped Asking the LLM to Remember Everything"
-description: "A practical story about replacing full-history prompting with a small state machine for faster, calmer, more predictable LLM conversations."
+description: "A practical story about replacing full-history prompting with explicit state for faster, calmer, more predictable LLM conversations."
 date: "2026-04-24"
 topics:
   - ai
@@ -13,24 +13,36 @@ tags:
   - ux
 published: true
 featured: true
-readingTime: 7
+readingTime: 8
 ---
 
 <Callout title="Context" type="note">
-  This came from a real migration: an LLM-powered conversation that collected a few structured inputs from users. The first version sent the whole chat history on every turn and hoped the prompt would keep the experience tidy. It worked until it very much did not.
+  This came from a real migration in an LLM-powered conversation flow. The first version sent the whole chat history on every turn and hoped the prompt would keep the experience tidy. It worked for the prototype. Then the product became real enough to expose the cost.
 </Callout>
 
-The first version felt reasonable.
+The first version looked reasonable.
 
-We had a short conversational flow. The user answered a few questions. The model decided what to ask next. At the end, the backend needed a clean little bundle of structured data.
+We had a conversational flow that collected a few structured inputs from a user. Ask a question, get an answer, ask the next question, and eventually send a clean payload to the backend.
 
-So we did the obvious thing: send the full conversation to the model every time, add instructions like “ask one question at a time,” and trust the model to infer where we were.
+Nothing exotic.
 
-For a while, this was fine.
+So we did the obvious prototype thing: send the whole conversation to the LLM on every turn and tell it what to do.
 
-Then the conversation got longer. The prompt got longer. The model got less consistent. The UX started doing that painful thing where it looked smart for three turns and then asked the user something they had already answered.
+Something like:
 
-That was the moment the design flaw became obvious:
+```text
+Here is the full chat history.
+Ask one question at a time.
+Do not repeat yourself.
+Collect these fields.
+When everything is ready, return the final result.
+```
+
+For a demo, this was fine.
+
+Then the flow got longer. The prompt got longer. User answers got messier. The model started asking questions that had already been answered. Sometimes it skipped ahead. Sometimes it treated vague text as complete data. Sometimes a tiny copy change made behavior worse for no obvious reason.
+
+That was the moment the real problem became clear:
 
 > We were asking the model to be both the conversational layer and the source of truth.
 
@@ -38,29 +50,45 @@ Those should not be the same job.
 
 <StateMachinePlayground />
 
-## The cute prototype became prompt soup
+## The prototype became prompt soup
 
-The early implementation was simple:
+The first architecture was beautifully simple:
 
 ```text
 User -> LLM with full transcript -> LLM infers state -> response
 ```
 
-Every request included the full chat, the same instructions, and a growing pile of contextual crumbs. The model had to reread the conversation, decide which fields were already collected, interpret the newest message, choose the next field, and phrase the next question nicely.
+This is attractive because there is almost no plumbing. The model reads everything and decides what comes next.
 
-That is too much responsibility hiding inside a prompt.
+The problem is hidden inside “decides what comes next.”
 
-At first, the problems looked unrelated:
+On every request, the model had to:
+
+- reread the full transcript
+- figure out which fields were already collected
+- interpret the latest user message
+- decide whether the answer was good enough
+- choose the next field
+- avoid repeating questions
+- keep the tone friendly
+- know when the flow was complete
+
+That is a lot of responsibility for a pile of text.
+
+At first, the failures looked unrelated:
 
 - responses got slower
-- occasional requests timed out
+- requests sometimes timed out
 - the assistant repeated questions
-- steps were skipped
-- validation edge cases kept leaking into the prompt
+- required fields were skipped
+- validation rules kept leaking into the prompt
+- small prompt edits changed behavior in weird ways
 
-But they had the same root cause. The model was reconstructing state from text every turn.
+But most of them had the same root cause.
 
-That meant every new instruction became another patch on top of an already fuzzy system:
+The model was reconstructing state from prose every turn.
+
+So every bug became another instruction:
 
 ```text
 Ask one question at a time.
@@ -69,65 +97,99 @@ Skip fields the user already answered.
 Validate the new answer.
 If the answer is ambiguous, ask a follow-up.
 Do not mark the flow complete too early.
-Actually, also preserve a friendly tone.
+Keep the tone friendly.
+Also handle users who answer two fields at once.
+Also do not lose previous answers.
+Also please be normal.
 ```
 
-This is how prompts turn into policy junk drawers. Every bug adds a sentence. Every sentence adds a new edge case. Soon, nobody can say with confidence what the system will do.
+This is how prompts become policy junk drawers.
 
-## The better split: model decides what to say, system decides what is true
+Every production issue adds a sentence. Every sentence interacts with the previous sentences. After a while, nobody really knows what controls behavior anymore. You just hope the prompt is large and stern enough to keep the model in line.
 
-The migration was not magical. It was mostly a responsibility cleanup.
+That is not a great operating model.
 
-Instead of sending the model the whole transcript and asking it to infer reality, we started sending explicit state:
+## The better split: the model talks, the system knows
+
+The migration was not a deep AI breakthrough. It was mostly a responsibility cleanup.
+
+Instead of asking the model to infer the current state from the entire transcript, we started passing state explicitly.
+
+A simplified request looked like this:
 
 ```json
 {
-  "user_input": "example user message",
+  "user_input": "We want this for internal platform users, probably next quarter.",
   "state": {
     "goal": "launch a cleaner onboarding flow",
     "audience": null,
-    "timeline": null
+    "timeline": null,
+    "success_criteria": null
   }
 }
 ```
 
-And we asked for structured output:
+The model returned structured output:
 
 ```json
 {
-  "message": "Who is this flow for?",
+  "message": "Got it. What would success look like for those internal platform users?",
   "is_ready": false,
-  "suggestions": ["Founders", "Internal platform users"],
-  "next_field": "audience",
-  "state": {
-    "goal": "launch a cleaner onboarding flow",
-    "audience": null,
-    "timeline": null
+  "suggestions": ["Fewer support tickets", "Faster first setup", "Higher activation"],
+  "next_field": "success_criteria",
+  "state_patch": {
+    "audience": "internal platform users",
+    "timeline": "next quarter"
   }
 }
 ```
 
-The important line is this:
+Then the backend validated the patch and persisted the canonical state.
 
-> The model decides what to ask next. The system decides what is true.
+The important boundary was this:
 
-Once that boundary exists, the whole flow becomes easier to reason about. The backend owns validation, persistence, and the canonical state. The model owns the human part: wording, helpful suggestions, and graceful recovery when the user says something messy.
+> The model can suggest what changed. The system decides what is true.
+
+That boundary made the flow much easier to reason about.
+
+The backend owned:
+
+- validation
+- persistence
+- allowed transitions
+- completion criteria
+- canonical state
+- retries and logging
+
+The model owned:
+
+- natural language
+- helpful suggestions
+- follow-up questions
+- handling messy user input
+- making the conversation feel less like a tax form
+
+This is a better division of labor.
+
+The model is good at fuzzy language. Deterministic code is better at known facts, allowed transitions, and persistence.
 
 <ProcessFlow
   title="The new loop"
-  steps="Backend reads current state | User message updates known facts | LLM receives state plus latest input | LLM returns a structured next turn | Backend validates and persists"
+  steps="Backend reads current state | User sends a message | LLM receives state plus latest input | LLM returns a structured next turn | Backend validates the patch | Backend persists canonical state"
   mutedSteps="Reread entire transcript | Guess what is already known | Patch another prompt rule"
 />
 
-## Why this made the product feel calmer
+## Why explicit state made the product feel calmer
 
-The most obvious win was speed. The payload stopped growing with every turn.
+The first win was speed.
 
-Instead of repeatedly sending the transcript, we sent the latest user input plus a compact state object. In this flow, average tokens per request dropped from roughly 2,100 to roughly 600. The largest requests went from 5,000+ tokens to around 1,100.
+Full-history prompting gets heavier as the conversation grows. This is obvious in hindsight, which is the most annoying kind of obvious.
 
-That translated directly into latency:
+In this flow, sending explicit state instead of the full transcript reduced the average request from roughly 2,100 tokens to roughly 600. The largest requests went from 5,000+ tokens to around 1,100.
 
-<TableBlock footer="The exact numbers are less important than the shape: full-history prompting got heavier as the conversation grew; explicit state stayed bounded.">
+That had a direct effect on latency.
+
+<TableBlock footer="The exact numbers matter less than the shape. Full-history prompting grows with the conversation. Explicit state stays bounded.">
   <table>
     <thead>
       <tr>
@@ -156,9 +218,32 @@ That translated directly into latency:
   </table>
 </TableBlock>
 
-But the more interesting win was predictability.
+The bigger win was predictability.
 
-When the model had to infer state from a transcript, correctness depended on interpretation. When the backend passed explicit state, the model no longer needed to rediscover the plot every time.
+When the model inferred state from a transcript, correctness depended on interpretation. If the user answered two things in one sentence, the model might catch both. Or not. If the prompt had a confusing instruction, the model might over-prioritize it. Or ignore it.
+
+With explicit state, the model did not need to rediscover the plot every time.
+
+It already knew:
+
+```json
+{
+  "goal": "launch a cleaner onboarding flow",
+  "audience": "internal platform users",
+  "timeline": "next quarter",
+  "success_criteria": null
+}
+```
+
+So the next step became boring:
+
+```text
+Ask for success_criteria.
+```
+
+Boring is good here.
+
+The user does not care that your prompt is clever. They care that the assistant does not forget what they said thirty seconds ago.
 
 <VisualGrid columns="3">
   <VisualCard eyebrow="Before" title="Correct progression" tone="warning">
@@ -172,48 +257,86 @@ When the model had to infer state from a transcript, correctness depended on int
   </VisualCard>
 </VisualGrid>
 
-The user does not care that your prompt is clever. They care that the assistant does not forget what they just said.
+## The architecture became more boring, which was the point
 
-## The architecture became boring in the best way
-
-The old flow looked elegant in a diagram and chaotic in production:
+The old flow looked elegant in a diagram:
 
 ```text
-User -> LLM (full history) -> LLM infers state -> response
+User -> LLM(full history) -> response
 ```
 
-The new flow is slightly more mechanical, but much easier to operate:
+It also made the LLM responsible for too much:
 
 ```text
-User -> Backend updates state -> LLM(state + input) -> structured response -> Backend validates -> persist
+LLM = parser + state manager + validator + router + copywriter + database-ish memory
 ```
 
-That one extra backend step is the difference between “the model probably knows” and “the system knows.”
+That is convenient until something breaks.
 
-And once the system knows, you get normal engineering tools back:
+The new flow was slightly more mechanical:
+
+```text
+User -> Backend loads state -> LLM(state + input) -> structured response -> Backend validates -> persist -> response
+```
+
+This adds backend work, but it gives you normal engineering tools back:
 
 - schema validation
 - deterministic transitions
-- logs that explain what changed
 - smaller prompts
-- easier retries
-- safer UI states
+- better logs
+- safer retries
+- clearer UI states
+- easier debugging
 
-The model still matters. It is just no longer the database, the reducer, the validator, and the copywriter all at once.
+Instead of asking, “Why did the model ask that?” you can inspect the state and transition:
 
-## A small rule I now trust
+```json
+{
+  "previous_state": {
+    "goal": "launch a cleaner onboarding flow",
+    "audience": null,
+    "timeline": null,
+    "success_criteria": null
+  },
+  "state_patch": {
+    "audience": "internal platform users",
+    "timeline": "next quarter"
+  },
+  "next_field": "success_criteria"
+}
+```
 
-If an LLM flow has required fields, completion criteria, validation, or branching, I do not want the model to infer the canonical state from prose.
+That is not glamorous. It is useful.
 
-I want a state object.
+The model still matters. It just stops being the database, reducer, validator, and copywriter at the same time.
 
-That state object can be tiny. It can be boring. It can be three nullable fields and a next step. The point is not ceremony. The point is ownership.
+## When I would use this pattern
 
-<VisualCard eyebrow="Design heuristic" title="Make ambiguity the model's job, not truth" tone="accent">
+I do not think every LLM interaction needs a state machine.
+
+If the user is asking open-ended questions, brainstorming, summarizing text, or exploring ideas, full conversation history may be completely fine.
+
+The state approach becomes more valuable when the product has structure hiding under the conversation.
+
+I would reach for it when the flow has:
+
+- required fields
+- completion criteria
+- branching logic
+- validation rules
+- retries
+- progress indicators
+- handoff to a backend process
+- user-facing consequences if the data is wrong
+
+In other words, if the conversation looks casual but the business logic is strict, do not make the model infer the strict part from prose.
+
+Give it state.
+
+<VisualCard eyebrow="Design heuristic" title="Make ambiguity the model’s job, not truth" tone="accent">
   Let the model handle fuzzy language, tone, suggestions, and recovery. Let deterministic code handle known facts, allowed transitions, readiness, and persistence.
 </VisualCard>
-
-This is especially useful when the product needs to feel conversational but the business logic needs to be strict.
 
 The model can say:
 
@@ -228,18 +351,115 @@ The system should know:
 }
 ```
 
-That combination is the sweet spot. Friendly on the surface. Boring underneath.
+That combination is the sweet spot.
 
-## The lesson
+Friendly on the surface. Boring underneath.
 
-The migration was not really from prompts to state machines. It was from vibes to boundaries.
+## The trade-off
 
-Full-history prompting made the model reconstruct the past before it could decide the future. Explicit state let the backend carry the past, while the model focused on the next useful sentence.
+This approach is not free.
 
-That cut latency roughly in half, reduced failures dramatically, and made the conversation feel more stable.
+You have to design the state shape. You need validation. You need to decide how strict transitions should be. You need to handle cases where the model returns a bad patch or the user answers out of order.
 
-The big lesson is simple:
+So yes, full-history prompting is cheaper at the start.
 
-> Stop asking the model to infer state. Start providing it explicitly.
+For a prototype, I would still consider starting there. It helps you learn what users say, what fields matter, and where the flow feels awkward.
+
+But once the flow becomes important, the cheap version gets expensive.
+
+<TableBlock footer="The question is not which approach is more elegant. The question is where you want the complexity to live.">
+  <table>
+    <thead>
+      <tr>
+        <th>Approach</th>
+        <th>Benefit</th>
+        <th>Cost</th>
+        <th>Best when</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Full-history prompt</td>
+        <td>Fast to prototype, little plumbing</td>
+        <td>Growing tokens, fuzzy state, harder debugging</td>
+        <td>The flow is short, exploratory, or low-risk</td>
+      </tr>
+      <tr>
+        <td>Explicit state</td>
+        <td>Predictable, bounded, easier to validate</td>
+        <td>More backend design and transition logic</td>
+        <td>The flow collects structured data or affects real product behavior</td>
+      </tr>
+    </tbody>
+  </table>
+</TableBlock>
+
+The hidden cost of full-history prompting is that complexity does not disappear. It moves into the prompt, where it is harder to test and harder to reason about.
+
+## What this means in practice
+
+The rule I now trust is simple:
+
+> If an LLM flow has required fields, do not ask the model to infer the canonical state from chat history.
+
+Use a state object.
+
+It can be tiny. Three nullable fields and a `next_field` value can be enough. The point is not ceremony. The point is ownership.
+
+A practical implementation can look like this:
+
+```ts
+type FlowState = {
+  goal: string | null;
+  audience: string | null;
+  timeline: string | null;
+  successCriteria: string | null;
+};
+
+type ModelResponse = {
+  message: string;
+  nextField: keyof FlowState | null;
+  isReady: boolean;
+  statePatch: Partial<FlowState>;
+};
+```
+
+Then the backend decides what to accept:
+
+```ts
+function applyPatch(state: FlowState, patch: Partial<FlowState>): FlowState {
+  const cleanedPatch = removeInvalidValues(patch);
+
+  return {
+    ...state,
+    ...cleanedPatch,
+  };
+}
+```
+
+The exact implementation depends on the product. You might use a real state machine library, a reducer, a schema validator, or plain code.
+
+The important part is the boundary:
+
+- the model proposes
+- the backend validates
+- the system persists
+- the UI renders from known state
+
+That is much easier to operate than “the answer is somewhere in the transcript, good luck.”
+
+## Final thought
+
+The migration was not really from prompts to state machines.
+
+It was from vibes to boundaries.
+
+Full-history prompting made the model reconstruct the past before it could decide the future. Explicit state let the backend carry the past while the model focused on the next useful sentence.
+
+The result was faster, more predictable, and easier to debug.
+
+The bigger lesson is simple:
+
+> Stop asking the model to remember everything. Tell it what the system already knows.
 
 Your prompt gets shorter. Your flow gets calmer. Your users stop answering the same question twice.

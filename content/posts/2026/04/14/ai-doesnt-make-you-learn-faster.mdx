@@ -1,6 +1,6 @@
 ---
 title: "AI Doesn’t Make You Learn Faster. It Changes What You Learn."
-description: "Anthropic’s research points to a useful distinction: AI can improve output while weakening skill formation when you are still learning the domain."
+description: "AI can help you finish work faster, but it can also remove the practice that builds real engineering judgment."
 date: "2026-04-14"
 topics:
   - ai
@@ -13,22 +13,30 @@ tags:
   - developer-tools
 published: true
 featured: true
-readingTime: 8
+readingTime: 9
 ---
 
 <Callout title="Context" type="note">
-  This article is based on Anthropic’s research article, [AI assistance and coding skill acquisition](https://www.anthropic.com/research/AI-assistance-coding-skills), and focuses on one practical question: what happens when AI enters the learning loop before understanding does?
+  This post is based on Anthropic’s research article, [AI assistance and coding skill acquisition](https://www.anthropic.com/research/AI-assistance-coding-skills). I am not trying to summarize the whole paper. I am more interested in the practical question: what happens when AI helps you complete a task before you understand the task?
 </Callout>
 
-There is a seductive idea floating around engineering culture right now:
+There is a small trap in the way we talk about AI and programming.
 
-> If AI helps me write code faster, it must also help me learn faster.
+We say things like:
 
-That sounds plausible. It is also incomplete.
+> AI helps me code faster, so it helps me learn faster.
 
-The more precise interpretation of the research is this: AI often improves <em>performance</em>, but performance and learning are not the same system. When you are operating in a domain you already understand, the model can multiply your throughput. When you are operating in a domain you do <em>not</em> understand yet, the model can quietly replace the exact cognitive work that would have built that understanding in the first place.
+Sometimes that is true. But not always.
 
-This is the distinction that matters. AI does not simply change speed. It changes <strong>where the effort lives</strong>, and that changes what you end up learning.
+Finishing a task and learning from a task are related, but they are not the same thing. This sounds obvious when you say it slowly. It becomes less obvious when a model gives you a working answer in 10 seconds and your brain gets a tiny productivity cookie.
+
+If you already know the domain, AI can be a very good accelerator. It can remove boilerplate, remind you of an API, generate boring tests, or help you compare two implementations.
+
+But if you are still learning the domain, AI can also remove the exact friction that would have created understanding.
+
+That is the uncomfortable part.
+
+AI does not only change how quickly you finish the work. It changes which parts of the work you still do yourself. And that changes what you actually learn.
 
 <PostImage
   name="learning-loop"
@@ -37,184 +45,350 @@ This is the distinction that matters. AI does not simply change speed. It change
   priority
 />
 
-## What Anthropic’s study actually points at
+## The research points to a useful distinction
 
-Anthropic looked at developers working with an unfamiliar async Python library. One group could use AI assistance. Another group could not. After the task, participants were evaluated on conceptual understanding, code reading, and debugging ability.
+Anthropic studied developers working with an unfamiliar async Python library. Some participants had AI assistance. Some did not. Afterward, researchers looked at things like understanding, code reading, and debugging ability.
 
-If you want the original source, read Anthropic’s research directly: [AI assistance and coding skill acquisition](https://www.anthropic.com/research/AI-assistance-coding-skills).
+The lazy takeaway would be “AI is bad for learning.” I do not think that is the right conclusion.
 
-The headline result is not “AI is bad.” The more useful takeaway is narrower and sharper:
+The more useful takeaway is this:
 
-> AI-assisted participants could produce results, but they tended to build weaker understanding of the new material.
+> AI can help you produce an answer without helping you build the mental model behind the answer.
 
-In the study summary, AI users ended up with roughly lower comprehension while seeing little meaningful time benefit in the specific learning task. That is the important tension. If speed stays mostly flat while understanding drops, then AI is not functioning as a learning accelerator there. It is functioning as a shortcut around formation of the underlying mental model.
+That distinction matters.
+
+In the study, AI-assisted participants could get through the task, but they tended to show weaker understanding afterward. In that specific setup, the time savings also were not strong enough to make the trade-off obviously worth it.
+
+I would not overgeneralize this into every possible learning situation. One study is not the whole universe. But the pattern feels familiar if you have used AI while learning a new stack.
+
+You can get something running.
+
+You can feel productive.
+
+You can even ship the change.
+
+But later, when the code breaks in a slightly different way, you may realize you never really learned why it worked.
 
 <VisualGrid columns="2">
-  <VisualCard eyebrow="Observed Pattern" title="Output improved more than understanding" tone="accent">
-    The assistant helped people get to an answer, but that did not reliably translate into stronger recall, debugging ability, or conceptual grasp afterward.
+  <VisualCard eyebrow="Observed Pattern" title="Output and understanding can split" tone="accent">
+    The assistant can help you reach working code without reliably improving recall, debugging ability, or conceptual understanding afterward.
   </VisualCard>
-  <VisualCard eyebrow="Why It Matters" title="Skill formation depends on cognitive friction">
-    The expensive part of learning is not typing code. It is predicting, failing, revising, and compressing those experiences into a mental model you can reuse later.
+  <VisualCard eyebrow="Why It Matters" title="Skill needs useful friction">
+    The expensive part of learning is not typing code. It is predicting, failing, debugging, and turning those experiences into a model you can reuse.
   </VisualCard>
 </VisualGrid>
 
-## The mechanism is more important than the headline
+## The hidden cost is skipped reps
 
-The most valuable part of the research is not the percentage difference. It is the mechanism behind it.
+When people defend AI for learning, they often talk about access.
 
-Learning usually requires a loop like this:
+Access is real. A beginner can ask questions they were previously too embarrassed to ask. A developer can get an explanation at 11 PM without waiting for a coworker. A model can show three examples faster than documentation sometimes can.
+
+That is useful.
+
+But access to answers is not the whole learning process.
+
+A lot of engineering skill is built in the annoying middle:
 
 <ProcessFlow
   title="The loop that usually builds skill"
-  steps="Encounter a problem you cannot yet solve fluently | Form a hypothesis or attempt a solution | Observe mismatch, error, or failure | Debug the mismatch and update your model | Reuse that model on the next problem"
-  mutedSteps="Prompt for a solution | Paste the output | Move on without building causal understanding"
+  steps="See a problem you cannot solve fluently | Make a guess | Write an imperfect version | Hit an error or confusing result | Debug the mismatch | Update your mental model | Try again on the next problem"
+  mutedSteps="Ask for the solution | Paste the answer | Move on before the model forms"
 />
 
-If AI handles the hypothesis generation, the failure analysis, and the patching strategy before you have done those steps yourself, then it is not merely assisting execution. It is stepping directly into the part of the loop that creates durable knowledge.
+That loop is slow. It is also where the useful reps happen.
 
-That is why the experience can feel productive while still leaving you strangely hollow on the next similar problem. The code ran, but the abstraction never fully formed.
+You learn what the API actually expects. You learn which errors matter and which ones are noise. You learn what an abstraction hides. You learn what “async” means when your code behaves differently than your mental picture.
 
-## Not all AI usage hurts learning in the same way
+If AI enters too early, it can remove the wrong friction.
 
-The right conclusion is not “never use AI.” The better conclusion is that different usage modes create different educational outcomes.
+Removing boilerplate is good.
 
-<VisualGrid columns="2">
-  <VisualCard eyebrow="Weak Mode" title="Full delegation" tone="warning">
-    “Write this for me” is efficient when your goal is shipping a known pattern, but risky when your goal is understanding a new one. You get an answer while bypassing the reasoning path.
-  </VisualCard>
-  <VisualCard eyebrow="Weak Mode" title="Debug proxy mode" tone="warning">
-    Run the code, hit an error, ask the model, paste the fix, repeat. This feels iterative, but it often prevents you from forming and testing your own hypotheses.
-  </VisualCard>
-  <VisualCard eyebrow="Stronger Mode" title="Concept-first questioning" tone="accent">
-    Ask why a pattern works, which invariants matter, what trade-offs exist, and where the approach breaks. This keeps the model in a teaching role rather than a replacement role.
-  </VisualCard>
-  <VisualCard eyebrow="Stronger Mode" title="Generate, then deconstruct" tone="accent">
-    Let the model produce an example, then walk it line by line, rename things, remove pieces, and rebuild parts from scratch. The artifact becomes study material instead of the final answer.
-  </VisualCard>
-</VisualGrid>
+Removing repetitive syntax lookup is usually fine.
 
-The difference between these modes is simple: in one case, the model takes over cognition; in the other, it supplies material that you still have to metabolize.
+Removing the part where you form a hypothesis, test it, and understand why it failed is more dangerous.
 
-## Why the damage compounds
+For example, imagine you are learning a new framework feature. You ask the model to implement it. The code works.
 
-One missed concept rarely feels catastrophic. That is part of the problem.
+Nice.
 
-Software learning is layered. If you skip understanding at one level, the next level becomes more fragile. Then the next. Eventually you are able to produce systems that look competent from the outside but become difficult to reason about when something subtle breaks.
+But did you learn:
 
-That creates a dangerous illusion:
+- which lines are required and which lines are just style?
+- what assumptions the implementation makes?
+- how to debug it when the next case is slightly different?
+- what the framework is doing underneath?
+- when not to use this pattern?
 
-> The system appears to work, so it feels like understanding must be there somewhere.
+If the answer is no, the model did not really teach you the feature. It built a temporary bridge over the part you did not understand.
 
-But debugging is where the truth shows up. The moment the situation stops matching the training examples and generated snippets, you need your own model again. If it was never built, progress slows down precisely when expertise is required.
+Sometimes that is fine. Deadlines exist. Production bugs do not care about your learning journey.
 
-<PostImage
-  name="knowledge-gaps"
-  alt="Editorial placeholder for a layered diagram where missing foundational blocks destabilize the higher layers."
-  caption="Replace this placeholder with the final illustration for the compounding-knowledge-gaps section."
-/>
+But if the goal is skill formation, skipped reps are not free.
 
-## Performance and learning are different curves
+## Performance is not learning
 
-This is the distinction I think engineering teams need to internalize more explicitly.
+This is the distinction I wish more engineers made explicit.
 
-<TableBlock footer="When people argue past each other on this topic, they are often mixing these two situations together.">
+Performance means you completed the task.
+
+Learning means you changed your future ability.
+
+Those two things can happen together. They often do. But they do not have to.
+
+A calculator improves arithmetic performance. It does not automatically make you better at arithmetic. Google Maps helps you reach a restaurant. It does not automatically make you understand the city.
+
+AI can work the same way.
+
+If I use it in a domain I already understand, it can speed me up with a relatively low downside. I can inspect the output. I can smell weird code. I can reject a bad abstraction. I can ask better follow-up questions because I know what matters.
+
+If I use it in a domain where I do not have judgment yet, I may confuse this state:
+
+```text
+The code runs.
+```
+
+with this state:
+
+```text
+I understand the code.
+```
+
+Those are not the same.
+
+<TableBlock footer="A lot of arguments about AI and learning get messy because people mix these two situations together.">
   <table>
     <thead>
       <tr>
         <th>Situation</th>
-        <th>What AI is likely to improve</th>
-        <th>What AI can quietly weaken</th>
+        <th>What AI can improve</th>
+        <th>What AI can weaken</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>You already know the domain</td>
-        <td>Throughput, recall, boilerplate elimination, iteration speed</td>
-        <td>Very little, if you can evaluate the output critically</td>
+        <td>Throughput, boilerplate removal, recall, iteration speed</td>
+        <td>Usually less, because you can evaluate the output</td>
       </tr>
       <tr>
-        <td>You are learning a new domain</td>
-        <td>Getting to something that works</td>
+        <td>You are learning the domain</td>
+        <td>Getting to a working answer faster</td>
         <td>Mental model formation, debugging intuition, independent reasoning</td>
       </tr>
     </tbody>
   </table>
 </TableBlock>
 
-The senior engineer using AI in a familiar stack and the junior developer using AI to enter an unfamiliar one are not running the same experiment.
+A senior engineer using AI in a familiar stack and a beginner using AI to enter an unfamiliar stack are not doing the same activity.
 
-## A practical way to use AI without outsourcing your brain
+One is accelerating execution.
 
-If the goal is learning rather than immediate output, I would use a stricter operating model.
+The other may be outsourcing practice.
 
-### 1. Make first contact manually
+## The “paste and pray” loop
 
-For the first problem in a new area, struggle a little. Read the docs. Write the wrong thing. Observe the error. That friction is not overhead. It is the raw material of understanding.
+The dangerous workflow is not asking AI for help. That is normal now.
 
-### 2. Ask for explanation before implementation
-
-Instead of saying:
+The dangerous workflow is this:
 
 ```text
-Implement this pattern for me.
+run code
+see error
+ask AI
+paste fix
+run again
+see another error
+ask AI
+paste fix
 ```
 
-start with questions like:
+This feels like debugging, but often it is not.
+
+Real debugging requires a hypothesis.
+
+You think:
 
 ```text
-Why does this approach work?
+I believe this error happens because this value is undefined at this boundary.
+```
+
+Then you inspect the value. Maybe you are wrong. Good. Now you update your model.
+
+In the paste-and-pray loop, the model does most of that work. You become the person moving text between the editor and the chat window.
+
+Again, I am not judging this as a survival tactic. If production is broken, fix the thing. Use the model, search Stack Overflow, read logs, ask a coworker, sacrifice a keyboard if needed.
+
+But as a default learning loop, it is weak.
+
+You may solve today’s error and still be helpless when the same class of error appears tomorrow with different wording.
+
+## Not all AI usage is the same
+
+I do not think the answer is “avoid AI while learning.” That is unrealistic and probably not useful.
+
+The better question is:
+
+> What role is AI playing in the learning loop?
+
+<VisualGrid columns="2">
+  <VisualCard eyebrow="Weak Mode" title="Full delegation" tone="warning">
+    “Write this for me” can be efficient when you already know the pattern. It is risky when the pattern itself is what you need to learn.
+  </VisualCard>
+  <VisualCard eyebrow="Weak Mode" title="Debug proxy mode" tone="warning">
+    You send every error to the model and paste every fix. The task moves forward, but your debugging muscle does not get many reps.
+  </VisualCard>
+  <VisualCard eyebrow="Stronger Mode" title="Concept-first questioning" tone="accent">
+    Ask why the pattern works, what assumptions it makes, what invariants matter, and where it breaks.
+  </VisualCard>
+  <VisualCard eyebrow="Stronger Mode" title="Generate, then deconstruct" tone="accent">
+    Let the model produce an example, then take it apart. Rename things, delete pieces, rewrite sections, and explain it back in your own words.
+  </VisualCard>
+</VisualGrid>
+
+The difference is not whether AI is present.
+
+The difference is whether you still do the model-building work.
+
+## How I would use AI when learning something new
+
+If I am learning a new library, architecture pattern, or language feature, I would use AI with constraints.
+
+Not because constraints are fun. They are not. But without them, the tool naturally pulls you toward the fastest answer, not the deepest understanding.
+
+### 1. Try the first version manually
+
+For the first pass, read the docs. Write the awkward version. Let the error message punch you in the face a little.
+
+That friction is not wasted time. It gives you hooks.
+
+When AI later explains the better approach, you have something to compare it against. Without that first attempt, the explanation can sound clear while still not sticking.
+
+### 2. Ask for concepts before code
+
+Instead of starting with:
+
+```text
+Implement this for me.
+```
+
+try:
+
+```text
+Explain the simplest version of this pattern.
+What problem does it solve?
 What assumptions does it make?
-What is the simplest version of this idea?
-Where does it break?
+Where does it usually break?
+Give me a small example, but do not optimize it yet.
 ```
 
-Those prompts preserve ownership of the reasoning process.
+This changes the model from a code vending machine into something closer to a tutor.
 
-### 3. Treat generated code as a draft to interrogate
+Still verify it. Models can be confidently wrong. But the direction is better.
 
-Use AI output the way you would use a worked example from a textbook. Ask what each line depends on. Remove a piece and see what fails. Rewrite it in smaller terms. Rename things until the logic becomes obvious.
+### 3. Force yourself to predict
 
-### 4. Watch for the “paste-and-pray” loop
+Before running generated code, ask yourself what should happen.
 
-If your workflow looks like this, you should assume learning has stalled:
+Before reading the model’s explanation, guess the cause of the bug.
+
+Before accepting a fix, write down why you think it works.
+
+This sounds small, but prediction is a big part of learning. If you never predict, you never test your own model.
+
+### 4. Rewrite the important part without looking
+
+After AI gives you an implementation, close the chat and rebuild the important part yourself.
+
+You do not need to memorize every line. That is not the point.
+
+The point is to check whether the structure is now in your head or still only in the chat transcript.
+
+### 5. Use AI to challenge your explanation
+
+A better prompt is often:
 
 ```text
-run -> error -> ask AI -> paste -> rerun
+Here is my explanation of how this works. What am I missing?
 ```
 
-That loop may still be useful for shipping under pressure, but it is a poor default for skill acquisition.
+or:
 
-### 5. Add deliberate cognitive load
+```text
+Ask me three debugging questions about this code. Do not give me the answer immediately.
+```
 
-If the task feels frictionless while the domain is still new, you should be suspicious. Real learning has texture. It asks you to remember, compare, explain, and predict. Some amount of difficulty is evidence that the right system is engaged.
+This keeps you active. The model becomes a sparring partner instead of a designated hitter.
 
-<VisualCard eyebrow="Practical Heuristic" title="Use AI like a sparring partner, not a designated hitter" tone="accent">
-  When learning, the model should pressure-test your thinking, expose blind spots, and provide examples. It should not take all the reps for you.
+<VisualCard eyebrow="Practical Heuristic" title="Do not outsource the reps you actually need" tone="accent">
+  If the domain is new, use AI to explain, compare, quiz, and critique. Be careful when it starts doing all the guessing, debugging, and rebuilding for you.
 </VisualCard>
 
-## What this means for engineering culture
+## Why this matters for teams
 
-I think we are moving toward a sharper distinction between two kinds of developers:
+This is not only an individual problem.
 
-- Developers who can evaluate, reshape, and challenge AI output.
-- Developers who can only request output and accept it.
+Teams will feel it too.
 
-Those are not equivalent capabilities. The first group compounds skill. The second group compounds dependency.
+If junior engineers use AI mostly to produce answers, they may ship more code while building weaker foundations. That can look fine for a while. Pull requests still appear. Tickets still move. Demos still work.
 
-That is not a moral judgment. It is a training outcome.
+The problem shows up later:
 
-If we care about long-term engineering quality, then “AI literacy” cannot just mean prompt fluency. It has to include model skepticism, debugging depth, architectural taste, and the ability to keep thinking when the assistant is silent or wrong.
+- code review becomes harder because the author cannot explain the trade-off
+- debugging takes longer because the mental model is missing
+- incidents are scarier because the generated code is now production code
+- design discussions become shallow because people know the answer shape, not the reasoning
 
-## Bottom line
+The hidden cost is not “AI writes bad code.” Sometimes it writes decent code.
 
-AI is not a direct shortcut to understanding.
+The hidden cost is that the engineer may not know why the code is decent, where it is fragile, or how to change it safely.
 
-It is better thought of as a multiplier on existing competence and a potential substitute for cognition when used carelessly. That is why it can be both incredibly useful and quietly corrosive at the same time.
+That changes mentoring.
 
-The question is not whether you use AI.
+Code review cannot only ask:
 
-The question is <strong>which part of the learning loop you are handing away</strong>.
+- Does this work?
+- Are tests passing?
+- Is the style okay?
 
-If you give away the typing, that is usually fine.
+It also has to ask:
 
-If you give away the model-building, you should expect weaker understanding on the other side.
+- Can the engineer explain the trade-off?
+- Do they understand the failure mode?
+- Can they debug the generated code without immediately asking the model again?
+- Can they simplify it?
+- Can they tell when the model invented something?
+
+AI literacy is not just prompt fluency. Prompt fluency is useful, but it is not enough.
+
+The more important skill is judgment.
+
+## What this means in practice
+
+I would not treat AI as either a miracle tutor or learning poison. Both takes are too simple.
+
+I would treat it as a tool that changes the learning environment.
+
+That means:
+
+- Use AI aggressively for work you already understand and can evaluate.
+- Use AI carefully when the goal is to build a new mental model.
+- Do not confuse working output with skill acquisition.
+- Watch for workflows where the model does all the hypothesis generation.
+- In teams, review understanding, not only code.
+
+The uncomfortable part is that good learning often feels slower than AI-assisted output.
+
+But that slowness is not always waste. Sometimes it is the work.
+
+## Final thought
+
+AI can make you faster at producing software.
+
+It does not automatically make you faster at becoming the kind of engineer who understands software.
+
+That depends on which parts of the loop you keep for yourself.
+
+If you give away typing, fine.
+
+If you give away debugging, prediction, and model-building too early, do not be surprised when the working code leaves no skill behind.
