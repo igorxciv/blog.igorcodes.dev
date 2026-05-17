@@ -8,6 +8,9 @@ import { dankMono, wotfard } from "./fonts";
 import { buildPersonJsonLd, buildWebsiteJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
+const UMAMI_WEBSITE_ID = "0aa17cc2-4dda-408c-8211-b361b76dfa91";
+const UMAMI_SCRIPT_URL = "https://cloud.umami.is/script.js";
+
 const themeInitScript = `
   (() => {
     const storageKey = ${JSON.stringify(THEME_STORAGE_KEY)};
@@ -99,6 +102,13 @@ export default function RootLayout({
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInitScript}
         </Script>
+        <Script
+          src={UMAMI_SCRIPT_URL}
+          data-website-id={UMAMI_WEBSITE_ID}
+          data-domains={siteConfig.domain}
+          data-do-not-track="true"
+          strategy="afterInteractive"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
