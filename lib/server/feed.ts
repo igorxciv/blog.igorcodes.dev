@@ -61,7 +61,12 @@ export async function getFeedManifest(): Promise<FeedManifest> {
     jsonUrl: toAbsoluteUrl("/feed.json"),
     description: siteConfig.description,
     language: toRssLanguage(siteConfig.locale),
-    updatedAt: items[0]?.modifiedAt ?? new Date().toISOString(),
+    updatedAt:
+      items.length > 0
+        ? new Date(
+            Math.max(...items.map((item) => +new Date(item.modifiedAt))),
+          ).toISOString()
+        : new Date().toISOString(),
     items,
   };
 }
@@ -82,7 +87,6 @@ export async function buildJsonFeed() {
       url: item.url,
       title: item.title,
       summary: item.summary,
-      content_text: item.summary,
       content_html: item.contentHtml || item.summary,
       date_published: item.publishedAt,
       date_modified: item.modifiedAt,

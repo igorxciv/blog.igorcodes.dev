@@ -8,9 +8,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     {
       url: toAbsoluteUrl("/blog"),
-      lastModified: posts[0]
-        ? new Date(posts[0].updated ?? posts[0].date)
-        : new Date(),
+      lastModified:
+        posts.length > 0
+          ? new Date(
+              Math.max(
+                ...posts.map((post) => +new Date(post.updated ?? post.date)),
+              ),
+            )
+          : new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },
