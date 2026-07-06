@@ -10,6 +10,10 @@ const dateStringSchema = z
 
 const arrayFromStringOrArraySchema = z.preprocess(
   (value) => {
+    if (value == null) {
+      return [];
+    }
+
     if (Array.isArray(value)) {
       return value;
     }

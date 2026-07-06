@@ -22,6 +22,7 @@ export async function generateMetadata({
 }: TopicPageProps): Promise<Metadata> {
   const { topic } = await params;
   const decodedTopic = decodeURIComponent(topic);
+  const topicPath = `/blog/topics/${encodeURIComponent(decodedTopic)}`;
   const title = `${decodedTopic} articles`;
   const description = `Browse articles about ${decodedTopic} on ${siteConfig.name}.`;
 
@@ -29,11 +30,11 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
-      canonical: `/blog/topics/${decodedTopic}`,
+      canonical: topicPath,
     },
     openGraph: {
       type: "website",
-      url: `/blog/topics/${decodedTopic}`,
+      url: topicPath,
       siteName: siteConfig.name,
       title,
       description,

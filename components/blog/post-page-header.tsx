@@ -23,7 +23,7 @@ export function PostPageHeader({ post }: PostPageHeaderProps) {
       <p className="mb-4 text-xs font-medium uppercase tracking-wide text-(--accent) lg:mb-5 lg:text-[0.82rem]">
         {primaryTopic ? (
           <Link
-            href={`/blog?topic=${encodeURIComponent(primaryTopic)}`}
+            href={`/blog/topics/${encodeURIComponent(primaryTopic)}`}
             className="focus-ring rounded-sm"
           >
             {primaryTopic}
