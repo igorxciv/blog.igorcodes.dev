@@ -24,12 +24,15 @@ export function Callout({ children, title, type = "note" }: CalloutProps) {
   const Icon = iconByType[type];
 
   return (
-    <aside
+    <div
+      role="note"
+      aria-label={title ?? type}
       className={clsx(
         "my-8 rounded-[2rem] border px-5 py-5 shadow-[var(--fm-shadow-elevated)] lg:my-10 lg:px-6 lg:py-6",
         stylesByType[type],
       )}
     >
+      <span className="sr-only">{type}: </span>
       {title ? (
         <p className="m-0 inline-flex items-center gap-2 font-mono text-[0.72rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
           <Icon aria-hidden="true" className="size-4 text-current" />
@@ -45,6 +48,6 @@ export function Callout({ children, title, type = "note" }: CalloutProps) {
       >
         {children}
       </div>
-    </aside>
+    </div>
   );
 }
