@@ -3,7 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { SiteShell } from "@/components/blog/site-shell";
 import { ThemeToggleLazy } from "@/components/theme-toggle-lazy";
-import { buildPersonJsonLd, buildWebsiteJsonLd } from "@/lib/seo";
+import { buildPersonJsonLd, buildWebsiteJsonLd, jsonLdString } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import {
   DARK_THEME_COLOR,
@@ -133,11 +133,11 @@ export default function RootLayout({
         ) : null}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdString(websiteJsonLd) }}
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdString(personJsonLd) }}
         />
         <SiteShell>{children}</SiteShell>
         <ThemeToggleLazy />

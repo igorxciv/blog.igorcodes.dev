@@ -11,6 +11,15 @@ function isoDate(date: string) {
   return new Date(date).toISOString();
 }
 
+export function jsonLdString(data: unknown): string {
+  return JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .replace(/\u{2028}/gu, "\\u2028")
+    .replace(/\u{2029}/gu, "\\u2029");
+}
+
 export function buildWebsiteJsonLd(): JsonLd {
   return {
     "@context": "https://schema.org",

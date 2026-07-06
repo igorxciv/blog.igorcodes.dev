@@ -9,7 +9,11 @@ import { PostPageHeader } from "@/components/blog/post-page-header";
 import { ReadingProgress } from "@/components/blog/reading-progress";
 import { RelatedPosts } from "@/components/blog/related-posts";
 import { remarkTextFences } from "@/lib/mdx/remark-text-fences";
-import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo";
+import {
+  buildArticleJsonLd,
+  buildBreadcrumbJsonLd,
+  jsonLdString,
+} from "@/lib/seo";
 import {
   getAllPosts,
   getPostBySlug,
@@ -111,11 +115,11 @@ export default async function BlogPostPage({ params }: PostPageProps) {
       <ReadingProgress />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdString(articleJsonLd) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdString(breadcrumbJsonLd) }}
       />
 
       <section className="fade-in mx-auto max-w-3xl lg:max-w-4xl">

@@ -10,10 +10,16 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      // 'unsafe-inline' is required by the theme-init script and JSON-LD blocks.
+      // Next.js App Router emits ~16 inline bootstrap/streaming scripts per page
+      // (self.__next_f.push / self.__next_s.push, incl. the wrapped theme-init) on
+      // statically-rendered pages. These have no stable build-time hash, so
+      // 'unsafe-inline' is required here. Dropping it needs a nonce-based CSP via
+      // middleware + per-request dynamic rendering, which would undo the static
+      // rendering of /blog (R-06) — a deliberate non-goal. JSON-LD is data (not
+      // executable) and is additionally escaped via jsonLdString().
       "script-src 'self' 'unsafe-inline' https://cloud.umami.is",
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: https:",
+      "img-src 'self' data:",
       "font-src 'self'",
       "connect-src 'self' https://cloud.umami.is",
       "frame-ancestors 'none'",

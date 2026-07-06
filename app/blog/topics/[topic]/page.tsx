@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { PostListSection } from "@/components/blog/post-list-section";
 import { RandomPostButton } from "@/components/blog/random-post-button";
 import { TopicFilter } from "@/components/blog/topic-filter";
-import { buildCollectionPageJsonLd } from "@/lib/seo";
+import { buildCollectionPageJsonLd, jsonLdString } from "@/lib/seo";
 import { getAllPosts, getAllTopics } from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
 
@@ -69,7 +69,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(collectionPageJsonLd),
+          __html: jsonLdString(collectionPageJsonLd),
         }}
       />
       <header className="mb-12 sm:mb-16 lg:mb-20">

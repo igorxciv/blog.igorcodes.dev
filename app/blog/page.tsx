@@ -2,7 +2,11 @@ import { type Metadata } from "next";
 import { PostListSection } from "@/components/blog/post-list-section";
 import { RandomPostButton } from "@/components/blog/random-post-button";
 import { TopicFilter } from "@/components/blog/topic-filter";
-import { buildBlogJsonLd, buildCollectionPageJsonLd } from "@/lib/seo";
+import {
+  buildBlogJsonLd,
+  buildCollectionPageJsonLd,
+  jsonLdString,
+} from "@/lib/seo";
 import { getAllPosts, getAllTopics } from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
 
@@ -64,12 +68,12 @@ export default async function BlogPage() {
     <section className="fade-in">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdString(blogJsonLd) }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(collectionPageJsonLd),
+          __html: jsonLdString(collectionPageJsonLd),
         }}
       />
       <header className="mb-12 sm:mb-16 lg:mb-20">
