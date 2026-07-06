@@ -6,22 +6,10 @@ import { buildBlogJsonLd, buildCollectionPageJsonLd } from "@/lib/seo";
 import { getAllPosts, getAllTopics } from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
 
-type BlogPageProps = {
-  searchParams: Promise<{
-    topic?: string;
-  }>;
-};
-
 const BLOG_DESCRIPTION =
   "Writing on software architecture, frontend engineering, AI systems, and technical thinking.";
 
-export async function generateMetadata({
-  searchParams,
-}: BlogPageProps): Promise<Metadata> {
-  const { topic } = await searchParams;
-  const topics = await getAllTopics();
-  const activeTopic = topic && topics.includes(topic) ? topic : null;
-
+export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Blog",
     description: BLOG_DESCRIPTION,
@@ -38,30 +26,19 @@ export async function generateMetadata({
       type: "website",
       url: "/blog",
       siteName: siteConfig.name,
-      title: activeTopic ? `${activeTopic} articles` : "Blog",
-      description: activeTopic
-        ? `Browse articles about ${activeTopic} on ${siteConfig.name}.`
-        : BLOG_DESCRIPTION,
+      title: "Blog",
+      description: BLOG_DESCRIPTION,
       locale: siteConfig.locale,
     },
     twitter: {
       card: "summary_large_image",
-      title: activeTopic ? `${activeTopic} articles` : "Blog",
-      description: activeTopic
-        ? `Browse articles about ${activeTopic} on ${siteConfig.name}.`
-        : BLOG_DESCRIPTION,
+      title: "Blog",
+      description: BLOG_DESCRIPTION,
     },
-    robots: activeTopic
-      ? {
-          index: false,
-          follow: true,
-        }
-      : undefined,
   };
 }
 
-export default async function BlogPage({ searchParams }: BlogPageProps) {
-  const { topic } = await searchParams;
+export default async function BlogPage() {
   const [posts, topics] = await Promise.all([getAllPosts(), getAllTopics()]);
 
   if (posts.length === 0) {
@@ -78,16 +55,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     );
   }
 
-  const activeTopic = topic && topics.includes(topic) ? topic : null;
-  const filteredPosts = activeTopic
-    ? posts.filter((post) => post.topics.includes(activeTopic))
-    : posts;
-  const featuredPosts = filteredPosts.filter((post) => post.featured);
-  const recentPosts = filteredPosts.filter(
-    (post) => !post.featured || activeTopic,
-  );
+  const featuredPosts = posts.filter((post) => post.featured);
+  const recentPosts = posts.filter((post) => !post.featured);
   const blogJsonLd = buildBlogJsonLd(posts);
-  const collectionPageJsonLd = buildCollectionPageJsonLd(filteredPosts);
+  const collectionPageJsonLd = buildCollectionPageJsonLd(posts);
 
   return (
     <section className="fade-in">
@@ -116,15 +87,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         <RandomPostButton />
       </header>
 
-      <TopicFilter activeTopic={activeTopic} topics={topics} />
+      <TopicFilter activeTopic={null} topics={topics} />
 
-      {!activeTopic ? (
-        <PostListSection featured posts={featuredPosts} title="Featured" />
-      ) : null}
-      <PostListSection
-        posts={recentPosts}
-        title={activeTopic ?? "Recent Articles"}
-      />
+      <PostListSection featured posts={featuredPosts} title="Featured" />
+      <PostListSection posts={recentPosts} title="Recent Articles" />
     </section>
   );
 }

@@ -71,7 +71,7 @@ export function TopicFilter({ activeTopic, topics }: TopicFilterProps) {
         {topics.map((topic) => (
           <li key={topic}>
             <TopicFilterLink
-              href={`/blog?topic=${encodeURIComponent(topic)}`}
+              href={`/blog/topics/${encodeURIComponent(topic)}`}
               isActive={activeTopic === topic}
               label={topic}
             />
