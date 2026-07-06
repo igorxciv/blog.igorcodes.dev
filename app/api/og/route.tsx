@@ -55,26 +55,14 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const slug = searchParams.get("slug");
 
-  if (!slug) {
-    return renderCard({
-      eyebrow: "Blog",
-      title: siteConfig.name,
-      description: siteConfig.description,
-      footerLeft: "Software architecture",
-      footerRight: "Frontend engineering",
-    });
+  if (!slug || slug.length > 200 || !/^[a-z0-9/-]+$/.test(slug)) {
+    return new Response("Bad Request", { status: 400 });
   }
 
   const post = await getPostBySlug(slug);
 
   if (!post) {
-    return renderCard({
-      eyebrow: "Blog",
-      title: siteConfig.name,
-      description: siteConfig.description,
-      footerLeft: "Article not found",
-      footerRight: siteConfig.domain,
-    });
+    return new Response("Not Found", { status: 404 });
   }
 
   return renderCard({

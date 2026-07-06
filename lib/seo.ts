@@ -101,7 +101,7 @@ export function buildBreadcrumbJsonLd(post: PostContent): JsonLd {
 
 export function buildArticleJsonLd(post: PostContent): JsonLd {
   const ogImage = toAbsoluteUrl(
-    `/api/og?slug=${encodeURIComponent(post.slug)}`,
+    `/api/og?slug=${encodeURIComponent(post.slug)}&v=${encodeURIComponent(post.updated ?? post.date)}`,
   );
   return {
     "@context": "https://schema.org",

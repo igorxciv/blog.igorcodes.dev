@@ -52,7 +52,7 @@ export async function generateMetadata({
 
   const description = post.description ?? "Read this blog post.";
   const canonicalPath = `/blog/${post.slug}`;
-  const socialImagePath = `/api/og?slug=${encodeURIComponent(post.slug)}`;
+  const socialImagePath = `/api/og?slug=${encodeURIComponent(post.slug)}&v=${encodeURIComponent(post.updated ?? post.date)}`;
 
   return {
     title: post.title,
