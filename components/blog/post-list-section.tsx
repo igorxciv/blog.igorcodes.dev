@@ -21,11 +21,13 @@ export function PostListSection({
       <h2 className="mb-6 text-sm uppercase tracking-wide text-(--muted) lg:mb-7 lg:text-[0.82rem]">
         {title}
       </h2>
-      <div className="[&>article:last-child]:border-b-0">
+      <ul className="list-none [&>li:last-child>article]:border-b-0">
         {posts.map((post) => (
-          <PostCard key={post.slug} post={post} featured={featured} />
+          <li key={post.slug}>
+            <PostCard post={post} featured={featured} />
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }

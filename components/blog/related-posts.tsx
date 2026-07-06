@@ -38,41 +38,40 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
         </Link>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="grid list-none gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((post) => {
           const topicLabel = post.topics[0] ?? "General";
 
           return (
-            <article
-              key={post.slug}
-              className="group rounded-lg border border-(--border) bg-(--surface) p-4 transition-colors hover:border-(--border-strong) hover:bg-(--surface-hover) lg:p-5"
-            >
-              <p className="mb-3 text-[0.68rem] font-medium uppercase tracking-wide text-(--accent) lg:text-xs">
-                {topicLabel}
-              </p>
-              <h3 className="text-base leading-snug text-(--foreground) lg:text-lg">
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="focus-ring rounded-sm transition-colors group-hover:text-(--accent)"
-                >
-                  {post.title}
-                </Link>
-              </h3>
-              {post.description ? (
-                <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-(--foreground-soft)">
-                  {post.description}
+            <li key={post.slug}>
+              <article className="group rounded-lg border border-(--border) bg-(--surface) p-4 transition-colors hover:border-(--border-strong) hover:bg-(--surface-hover) lg:p-5">
+                <p className="mb-3 text-[0.68rem] font-medium uppercase tracking-wide text-(--accent) lg:text-xs">
+                  {topicLabel}
                 </p>
-              ) : null}
-              <PostMeta
-                date={post.date}
-                readingTime={post.readingTime}
-                published={post.published}
-                className="mt-4"
-              />
-            </article>
+                <h3 className="text-base leading-snug text-(--foreground) lg:text-lg">
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="focus-ring rounded-sm transition-colors group-hover:text-(--accent)"
+                  >
+                    {post.title}
+                  </Link>
+                </h3>
+                {post.description ? (
+                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-(--foreground-soft)">
+                    {post.description}
+                  </p>
+                ) : null}
+                <PostMeta
+                  date={post.date}
+                  readingTime={post.readingTime}
+                  published={post.published}
+                  className="mt-4"
+                />
+              </article>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </section>
   );
 }
