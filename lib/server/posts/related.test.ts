@@ -52,6 +52,20 @@ describe("getRelatedPosts", () => {
     expect(result[0].slug).toBe("newer");
   });
 
+  it("never includes a draft candidate in the results", () => {
+    const draft = post({
+      slug: "draft",
+      topics: ["react"],
+      tags: ["hooks", "perf"],
+      published: false,
+    });
+    const result = getRelatedPosts(source, [
+      draft,
+      post({ slug: "published", topics: ["react"] }),
+    ]);
+    expect(result.map((item) => item.slug)).not.toContain("draft");
+  });
+
   it("fills with unrelated posts up to the limit", () => {
     const related = post({ slug: "rel", topics: ["react"] });
     const result = getRelatedPosts(

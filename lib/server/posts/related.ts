@@ -41,7 +41,9 @@ export function getRelatedPosts(
   posts: PostSummary[],
   limit = RELATED_POSTS_LIMIT,
 ): PostSummary[] {
-  const candidates = posts.filter((post) => post.slug !== sourcePost.slug);
+  const candidates = posts.filter(
+    (post) => post.published && post.slug !== sourcePost.slug,
+  );
   const scoredCandidates = candidates
     .map((post) => ({
       post,
@@ -49,14 +51,5 @@ export function getRelatedPosts(
     }))
     .sort(sortByScoreThenDate);
 
-  const relatedPosts = scoredCandidates.filter(
-    (candidate) => candidate.score > 0,
-  );
-  const fallbackPosts = scoredCandidates.filter(
-    (candidate) => candidate.score === 0,
-  );
-
-  return [...relatedPosts, ...fallbackPosts]
-    .slice(0, limit)
-    .map((candidate) => candidate.post);
+  return scoredCandidates.slice(0, limit).map((candidate) => candidate.post);
 }
