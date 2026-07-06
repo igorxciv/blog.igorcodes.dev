@@ -149,6 +149,10 @@ export function StateMachinePlayground() {
             />
           </div>
 
+          <p aria-live="polite" className="sr-only">
+            {`Turn ${turns} of 12. ~${stats.tokens.toLocaleString()} tokens used, ${formatPercent(stats.correctness)} correct flow.`}
+          </p>
+
           <label className="mt-6 block">
             <span className="flex items-center justify-between text-sm text-(--foreground-soft)">
               Conversation turns
@@ -159,6 +163,7 @@ export function StateMachinePlayground() {
               min="1"
               max="12"
               value={turns}
+              aria-valuetext={`Turn ${turns} of 12`}
               onChange={(event) => setTurns(Number(event.target.value))}
               className="mt-3 w-full"
             />
