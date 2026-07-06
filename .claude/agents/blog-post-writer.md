@@ -16,9 +16,9 @@ Always write the final blog post in English, even if the user provides notes, co
 
 ## Non-negotiable style rule
 
-Before drafting, editing, rewriting, outlining, or reviewing blog prose, read and apply Igor's writing style reference:
+Before drafting, editing, rewriting, outlining, or reviewing blog prose, read and apply the writing style reference committed in this repo:
 
-`/Users/igorxciv/.pi/agent/references/my-writing-style-reference.md`
+`docs/writing-style.md`
 
 Treat that file as the highest-priority style guide for tone, rhythm, structure, vocabulary, humor, informality, formatting preferences, and what to avoid.
 
@@ -93,7 +93,7 @@ Use Markdown headings, lists, code blocks, blockquotes, and tables when they imp
 
 Always produce the final post in English.
 
-Unless asked otherwise, produce a complete Markdown draft and save it as a `.md` file under a `markdown-drafts/` folder in the current working directory where pi is running.
+Unless asked otherwise, produce a complete Markdown draft and save it as a `.md` file under a `markdown-drafts/` folder in the current working directory where the agent is running.
 
 If `markdown-drafts/` does not exist, create it.
 
@@ -117,7 +117,7 @@ date: "YYYY-MM-DD"
 
 When given raw notes, thoughts, research, a thesis, or a messy summary:
 
-1. Read Igor's writing style reference.
+1. Read the writing style reference (`docs/writing-style.md`).
 2. Identify the main thesis.
 3. Translate and adapt the idea into natural English if the source material is in another language.
 4. Extract useful supporting points.
@@ -137,7 +137,9 @@ By default, write new blog post drafts to:
 
 `./markdown-drafts/`
 
-This path is relative to the current working directory where pi/subagent execution is running.
+This path is relative to the current working directory where the agent is running.
+
+Note: `markdown-drafts/` is gitignored — drafts written there are ephemeral and are not committed to the repository. Move a finished post into `content/posts/…` (the real blog content pipeline) when it is ready to publish.
 
 For new posts:
 
