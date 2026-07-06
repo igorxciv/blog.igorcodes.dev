@@ -147,7 +147,7 @@ export function NotFoundPage() {
             <p className="mt-2 text-[0.86rem] leading-6 text-(--foreground-soft)">
               Error: ENOENT: no such file or directory.
             </p>
-            <p className="mt-2 text-[0.86rem] leading-6 text-[#ff5f56]">
+            <p className="mt-2 text-[0.86rem] leading-6 text-(--fm-danger)">
               The requested page could not be found.
             </p>
           </div>

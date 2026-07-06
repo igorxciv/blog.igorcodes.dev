@@ -19,6 +19,7 @@
   --fm-accent-soft: rgb(0 217 255 / 0.12);
   --fm-accent-soft-strong: rgb(0 217 255 / 0.16);
   --fm-accent-line: rgb(0 217 255 / 0.45);
+  --fm-danger: #ff5f56;
   --fm-surface: #121212;
   --fm-surface-hover: #171717;
   --fm-surface-raised: #161616;
@@ -82,6 +83,7 @@
   --fm-accent-soft: rgb(var(--fm-accent-rgb) / 0.1);
   --fm-accent-soft-strong: rgb(var(--fm-accent-rgb) / 0.14);
   --fm-accent-line: rgb(var(--fm-accent-rgb) / 0.34);
+  --fm-danger: #b3261e;
   --fm-surface: rgb(255 251 244 / 0.84);
   --fm-surface-hover: #f4ebdf;
   --fm-surface-raised: #fffaf2;
@@ -122,6 +124,7 @@
     --fm-accent-soft: rgb(var(--fm-accent-rgb) / 0.1);
     --fm-accent-soft-strong: rgb(var(--fm-accent-rgb) / 0.14);
     --fm-accent-line: rgb(var(--fm-accent-rgb) / 0.34);
+    --fm-danger: #b3261e;
     --fm-surface: rgb(255 251 244 / 0.84);
     --fm-surface-hover: #f4ebdf;
     --fm-surface-raised: #fffaf2;
