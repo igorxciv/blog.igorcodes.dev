@@ -112,7 +112,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
 
   return (
     <>
-      <ReadingProgress />
+      <ReadingProgress targetId="article-body" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdString(articleJsonLd) }}
@@ -134,7 +134,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
         <article>
           <PostPageHeader post={post} />
 
-          <div className="prose-blog max-w-none">
+          <div id="article-body" className="prose-blog max-w-none">
             <MDXRemote
               source={post.body}
               components={postMdxComponents}
