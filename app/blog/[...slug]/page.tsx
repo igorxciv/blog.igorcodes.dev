@@ -122,7 +122,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
         dangerouslySetInnerHTML={{ __html: jsonLdString(breadcrumbJsonLd) }}
       />
 
-      <section className="fade-in mx-auto max-w-3xl lg:max-w-4xl">
+      <section className="fade-in mx-auto max-w-3xl">
         <Link
           href="/blog"
           className="focus-ring mb-6 inline-flex min-h-11 items-center gap-2 text-sm text-(--foreground-soft) transition hover:text-(--foreground) sm:mb-8 lg:mb-10 lg:gap-2.5 lg:text-[0.95rem]"

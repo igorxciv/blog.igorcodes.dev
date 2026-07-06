@@ -23,8 +23,11 @@ const StateMachinePlayground = dynamic(() =>
 );
 
 export const mdxComponents: MDXComponents = {
-  h1: (props: ComponentPropsWithoutRef<"h1">) => (
-    <h1
+  // The page already renders the post title as the sole <h1>
+  // (PostPageHeader), so a content-level `# heading` maps to an <h2> to keep a
+  // valid heading hierarchy.
+  h1: (props: ComponentPropsWithoutRef<"h2">) => (
+    <h2
       className="mt-8 text-3xl text-(--foreground) sm:text-4xl md:text-5xl lg:text-[3.9rem]"
       style={{ fontWeight: 600 }}
       {...props}

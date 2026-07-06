@@ -165,7 +165,7 @@ body {
   color: var(--foreground);
   font-family: var(--font-wotfard), system-ui, sans-serif;
   line-height: 1.5;
-  overflow-x: hidden;
+  overflow-x: clip;
   accent-color: var(--accent);
   font-synthesis: none;
   text-size-adjust: 100%;

@@ -44,14 +44,14 @@ export function RelatedPosts({ posts }: RelatedPostsProps) {
 
           return (
             <li key={post.slug}>
-              <article className="group rounded-lg border border-(--border) bg-(--surface) p-4 transition-colors hover:border-(--border-strong) hover:bg-(--surface-hover) lg:p-5">
-                <p className="mb-3 text-[0.68rem] font-medium uppercase tracking-wide text-(--accent) lg:text-xs">
+              <article className="group relative rounded-lg border border-(--border) bg-(--surface) p-4 transition-colors hover:border-(--border-strong) hover:bg-(--surface-hover) lg:p-5">
+                <p className="mb-3 text-[0.72rem] font-medium uppercase tracking-wide text-(--accent) lg:text-xs">
                   {topicLabel}
                 </p>
                 <h3 className="text-base leading-snug text-(--foreground) lg:text-lg">
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="focus-ring rounded-sm transition-colors group-hover:text-(--accent)"
+                    className="focus-ring rounded-sm transition-colors after:absolute after:inset-0 group-hover:text-(--accent)"
                   >
                     {post.title}
                   </Link>

@@ -18,7 +18,10 @@ export function SiteShell({ children }: SiteShellProps) {
       </a>
 
       <header className="sticky top-0 z-40 border-b border-(--border) bg-(--header-backdrop) backdrop-blur-sm">
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 lg:px-8 lg:py-6">
+        <nav
+          aria-label="Primary"
+          className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 lg:px-8 lg:py-6"
+        >
           <Link
             href="/blog"
             className="focus-ring inline-flex min-h-11 items-center gap-3 text-current transition hover:text-(--accent) lg:gap-4"
@@ -38,11 +41,11 @@ export function SiteShell({ children }: SiteShellProps) {
               </span>
             </span>
           </Link>
-        </div>
+        </nav>
       </header>
 
       <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-8 sm:px-6 sm:py-10 md:py-12 lg:px-8 lg:py-14">
-        <main id="main-content" className="flex-1">
+        <main id="main-content" tabIndex={-1} className="flex-1">
           {children}
         </main>
 

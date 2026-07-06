@@ -7,7 +7,10 @@ export default function GlobalError({
   reset: () => void;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" style={{ colorScheme: "light dark" }}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </head>
       <body
         style={{
           fontFamily: "system-ui, sans-serif",

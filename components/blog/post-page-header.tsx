@@ -12,7 +12,10 @@ export function PostPageHeader({ post }: PostPageHeaderProps) {
 
   return (
     <header className="mb-10 sm:mb-12 lg:mb-14">
-      <div className="mb-6 h-44 w-full overflow-hidden rounded-lg border border-(--border) bg-[linear-gradient(180deg,var(--surface-raised),var(--surface-inset))] sm:mb-8 sm:h-56 md:h-64 lg:mb-10 lg:h-72 lg:rounded-xl">
+      <div
+        aria-hidden="true"
+        className="mb-6 h-44 w-full overflow-hidden rounded-lg border border-(--border) bg-[linear-gradient(180deg,var(--surface-raised),var(--surface-inset))] sm:mb-8 sm:h-56 md:h-64 lg:mb-10 lg:h-72 lg:rounded-xl"
+      >
         <div className="flex h-full w-full items-end p-4 sm:p-6 lg:p-8">
           <span className="text-xs font-medium uppercase tracking-wide text-(--accent) lg:text-[0.82rem]">
             {primaryTopic ?? "Engineering note"}

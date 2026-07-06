@@ -35,7 +35,14 @@ function formatPercent(value: number) {
   return `${Math.round(value)}%`;
 }
 
-export function StateMachinePlayground() {
+type StateMachinePlaygroundProps = {
+  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
+};
+
+export function StateMachinePlayground({
+  headingLevel = 3,
+}: StateMachinePlaygroundProps = {}) {
+  const Heading = `h${headingLevel}` as const;
   const [mode, setMode] = useState<Mode>("history");
   const [turns, setTurns] = useState(6);
   const [completedFields, setCompletedFields] = useState<FieldKey[]>(["goal"]);
@@ -92,16 +99,16 @@ export function StateMachinePlayground() {
   return (
     <section className="my-8 overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-(--surface-raised) shadow-[var(--fm-shadow-elevated)] lg:my-10">
       <div className="border-b border-(--border) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_44%,transparent),transparent)] px-4 py-4 sm:px-5 lg:px-6">
-        <p className="m-0 text-[0.7rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
+        <p className="m-0 text-[0.72rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
           Interactive Model
         </p>
         <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h3
+          <Heading
             className="m-0 text-xl leading-tight text-(--foreground) sm:text-2xl"
             style={{ fontWeight: 600 }}
           >
             Transcript memory vs explicit state
-          </h3>
+          </Heading>
           <div className="grid grid-cols-2 gap-2 rounded-full border border-(--border) bg-(--surface-inset) p-1">
             <button
               type="button"
@@ -227,7 +234,7 @@ export function StateMachinePlayground() {
           </div>
 
           <div className="mt-5 rounded-[1.2rem] border border-(--border) bg-(--surface-inset) p-4">
-            <p className="m-0 text-[0.7rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
+            <p className="m-0 text-[0.72rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
               Structured Output
             </p>
             {/* biome-ignore lint/a11y/useSemanticElements: a <pre> scroll container cannot be a <section>; role="region" names it for AT */}
@@ -297,7 +304,7 @@ export function StateMachinePlayground() {
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-[1.1rem] border border-(--border) bg-(--surface-inset) px-4 py-3">
-      <p className="m-0 text-[0.68rem] uppercase tracking-[0.2em] text-(--foreground-soft)">
+      <p className="m-0 text-[0.72rem] uppercase tracking-[0.2em] text-(--foreground-soft)">
         {label}
       </p>
       <p

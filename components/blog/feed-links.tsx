@@ -8,6 +8,7 @@ type FeedLinksProps = {
 type FeedLink = {
   href: string;
   label: string;
+  ariaLabel: string;
   description: string;
   icon?: LucideIcon;
 };
@@ -16,12 +17,14 @@ const links: FeedLink[] = [
   {
     href: "/rss.xml",
     label: "RSS",
+    ariaLabel: "RSS feed",
     description: "Works in any feed reader.",
     icon: Rss,
   },
   {
     href: "/feed.json",
     label: "JSON Feed",
+    ariaLabel: "JSON feed",
     description: "Modern format for apps and automations.",
     icon: Braces,
   },
@@ -30,8 +33,7 @@ const links: FeedLink[] = [
 export function FeedLinks({ compact = false }: FeedLinksProps) {
   if (compact) {
     return (
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="sr-only">Syndication feeds</span>
+      <nav aria-label="Feeds" className="flex flex-wrap items-center gap-2">
         {links.map((link) => {
           const Icon = link.icon ?? Rss;
 
@@ -39,16 +41,14 @@ export function FeedLinks({ compact = false }: FeedLinksProps) {
             <Link
               key={link.href}
               href={link.href}
-              aria-label={link.label}
-              title={link.label}
+              aria-label={link.ariaLabel}
               className="focus-ring inline-flex size-10 items-center justify-center rounded-full border border-(--border) bg-(--surface) text-(--foreground-soft) transition hover:border-(--accent-line) hover:text-(--accent)"
             >
               <Icon aria-hidden="true" className="size-4" />
-              <span className="sr-only">{link.label}</span>
             </Link>
           );
         })}
-      </div>
+      </nav>
     );
   }
 

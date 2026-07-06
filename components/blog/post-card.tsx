@@ -39,7 +39,7 @@ export function PostCard({
           <div className="flex h-full w-full items-end bg-[linear-gradient(180deg,var(--surface-raised),var(--surface-inset))] p-4">
             <div className="w-full">
               <div className="h-px w-full bg-(--border-strong)" />
-              <p className="mt-3 text-[10px] uppercase tracking-wide text-(--accent)">
+              <p className="mt-3 text-[0.72rem] uppercase tracking-wide text-(--accent)">
                 {topicLabel}
               </p>
             </div>
@@ -93,7 +93,7 @@ export function PostCard({
           <div className="flex h-full w-full items-end bg-[linear-gradient(180deg,var(--surface-raised),var(--surface-inset))] p-4 lg:p-5">
             <div className="w-full">
               <div className="h-px w-full bg-(--border-strong)" />
-              <p className="mt-3 text-[10px] uppercase tracking-wide text-(--accent) lg:text-[0.72rem]">
+              <p className="mt-3 text-[0.72rem] uppercase tracking-wide text-(--accent) lg:text-[0.72rem]">
                 {topicLabel}
               </p>
             </div>

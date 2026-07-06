@@ -2,6 +2,8 @@ import { clsx } from "clsx";
 import { ArrowRight, Image as ImageIcon } from "lucide-react";
 import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
 type VisualGridProps = {
   children: ReactNode;
   columns?: 2 | 3 | "2" | "3";
@@ -12,18 +14,21 @@ type VisualCardProps = {
   title: string;
   eyebrow?: string;
   tone?: "default" | "accent" | "warning";
+  headingLevel?: HeadingLevel;
 };
 
 type ProcessFlowProps = {
   title?: string;
   steps?: string[] | string;
   mutedSteps?: string[] | string;
+  headingLevel?: HeadingLevel;
 };
 
 type ImagePlaceholderProps = {
   title: string;
   description: string;
   orientation?: "landscape" | "portrait" | "square";
+  headingLevel?: HeadingLevel;
 };
 
 type TableBlockProps = {
@@ -31,6 +36,7 @@ type TableBlockProps = {
   title?: string;
   description?: string;
   footer?: string;
+  headingLevel?: HeadingLevel;
 };
 
 type PromptBlockProps = {
@@ -78,13 +84,16 @@ export function VisualCard({
   title,
   eyebrow,
   tone = "default",
+  headingLevel = 3,
 }: VisualCardProps) {
+  const Heading = `h${headingLevel}` as const;
+
   return (
     <section className={clsx(panelBaseClassName, cardToneStyles[tone])}>
       {eyebrow ? <p className={eyebrowClassName}>{eyebrow}</p> : null}
-      <h3 className={titleClassName} style={{ fontWeight: 600 }}>
+      <Heading className={titleClassName} style={{ fontWeight: 600 }}>
         {title}
-      </h3>
+      </Heading>
       <div className={clsx(bodyClassName, "[&_p:last-child]:mb-0")}>
         {children}
       </div>
@@ -136,7 +145,7 @@ function FlowTrack({
           >
             <span
               className={clsx(
-                "absolute -left-12 top-1/2 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border font-mono text-[0.68rem] tracking-[0.12em] sm:-left-16 sm:size-10",
+                "absolute -left-12 top-1/2 z-10 grid size-8 -translate-y-1/2 place-items-center rounded-full border font-mono text-[0.72rem] tracking-[0.12em] sm:-left-16 sm:size-10",
                 isPrimary
                   ? "border-(--accent-line) bg-(--surface-raised) text-(--accent)"
                   : "border-(--border-strong) bg-(--surface-raised) text-(--foreground-soft)",
@@ -200,7 +209,10 @@ export function ProcessFlow({
   title = "How the loop changes",
   steps = [],
   mutedSteps,
+  headingLevel = 3,
 }: ProcessFlowProps) {
+  const Heading = `h${headingLevel}` as const;
+
   return (
     <section
       className={clsx(
@@ -209,9 +221,12 @@ export function ProcessFlow({
         "border-(--border)",
       )}
     >
-      <h3 className={clsx(titleClassName, "mb-4")} style={{ fontWeight: 600 }}>
+      <Heading
+        className={clsx(titleClassName, "mb-4")}
+        style={{ fontWeight: 600 }}
+      >
         {title}
-      </h3>
+      </Heading>
       <FlowTrack items={steps} variant="primary" />
       {normalizeFlowItems(mutedSteps).length > 0 ? (
         <>
@@ -238,7 +253,10 @@ export function ImagePlaceholder({
   title,
   description,
   orientation = "landscape",
+  headingLevel = 3,
 }: ImagePlaceholderProps) {
+  const Heading = `h${headingLevel}` as const;
+
   return (
     <figure className="my-8 lg:my-10">
       <div
@@ -253,12 +271,12 @@ export function ImagePlaceholder({
             className="mx-auto mb-4 size-8 text-(--accent)"
           />
           <p className={eyebrowClassName}>Image Placeholder</p>
-          <h3
+          <Heading
             className={clsx(titleClassName, "mt-3")}
             style={{ fontWeight: 600 }}
           >
             {title}
-          </h3>
+          </Heading>
           <p className={clsx(bodyClassName, "mx-auto mt-3 max-w-xl")}>
             {description}
           </p>
@@ -273,16 +291,19 @@ export function TableBlock({
   title,
   description,
   footer,
+  headingLevel = 3,
 }: TableBlockProps) {
+  const Heading = `h${headingLevel}` as const;
+
   return (
     <figure className="my-8 lg:my-10">
       {title ? (
-        <h3
+        <Heading
           className="m-0 max-w-5xl text-[1.85rem] leading-tight text-(--foreground) sm:text-3xl lg:text-[2.35rem]"
           style={{ fontWeight: 600 }}
         >
           {title}
-        </h3>
+        </Heading>
       ) : null}
       {description ? (
         <p className="mb-6 mt-4 max-w-4xl text-[0.98rem] leading-8 text-(--foreground-soft) sm:text-base lg:mb-7 lg:text-[1.12rem] lg:leading-9">
@@ -372,7 +393,7 @@ export function WorkflowStepsBlock({ content }: WorkflowStepsBlockProps) {
     <figure className="my-8 lg:my-10">
       <div className="overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface-raised)_96%,transparent),color-mix(in_srgb,var(--surface-inset)_100%,transparent))] shadow-[var(--fm-shadow-elevated)]">
         <div className="border-b border-(--border) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_42%,transparent),transparent)] px-4 py-3 sm:px-5">
-          <p className="m-0 text-[0.7rem] uppercase tracking-[0.24em] text-(--foreground-soft)">
+          <p className="m-0 text-[0.72rem] uppercase tracking-[0.24em] text-(--foreground-soft)">
             Workflow
           </p>
           <p
@@ -388,7 +409,7 @@ export function WorkflowStepsBlock({ content }: WorkflowStepsBlockProps) {
               // biome-ignore lint/suspicious/noArrayIndexKey: steps are parsed from static author content and never reordered
               <div key={`${index}-${step}`} className="flex items-center gap-3">
                 <div className="min-w-0 flex-1 rounded-[1.25rem] border border-(--accent-line) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_74%,transparent),color-mix(in_srgb,var(--surface-raised)_96%,transparent))] px-4 py-3 shadow-[0_8px_22px_color-mix(in_srgb,var(--fm-shadow-glow)_16%,transparent)]">
-                  <p className="m-0 text-[0.68rem] uppercase tracking-[0.2em] text-(--foreground-soft)">
+                  <p className="m-0 text-[0.72rem] uppercase tracking-[0.2em] text-(--foreground-soft)">
                     {String(index + 1).padStart(2, "0")}
                   </p>
                   <p
