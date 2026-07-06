@@ -88,7 +88,7 @@ export default async function BlogPage() {
           engineering, AI systems, and technical thinking. Written for
           developers who care about craft.
         </p>
-        <RandomPostButton />
+        <RandomPostButton slugs={posts.map((p) => p.slug)} />
       </header>
 
       <TopicFilter activeTopic={null} topics={topics} />
