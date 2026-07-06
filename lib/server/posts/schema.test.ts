@@ -44,4 +44,10 @@ describe("parseFrontmatter", () => {
       parseFrontmatter({ ...base, date: "not-a-date" }, "s"),
     ).toThrow();
   });
+
+  it("defaults topics and tags to [] when omitted", () => {
+    const fm = parseFrontmatter({ title: "x", date: "2026-01-01" }, "slug");
+    expect(fm.topics).toEqual([]);
+    expect(fm.tags).toEqual([]);
+  });
 });

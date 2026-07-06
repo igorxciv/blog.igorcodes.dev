@@ -24,7 +24,25 @@ const deployId = process.env.VERCEL_GIT_COMMIT_SHA ?? "dev";
 
 async function computeAllPostContent(): Promise<PostContent[]> {
   const files = await discoverPostFiles();
-  return Promise.all(files.map((file) => parsePostFile(file)));
+  const results = await Promise.allSettled(
+    files.map((file) => parsePostFile(file)),
+  );
+
+  const posts: PostContent[] = [];
+  results.forEach((result, index) => {
+    if (result.status === "fulfilled") {
+      posts.push(result.value);
+      return;
+    }
+
+    const message =
+      result.reason instanceof Error
+        ? result.reason.message
+        : String(result.reason);
+    console.error(`Failed to parse post file ${files[index]}: ${message}`);
+  });
+
+  return posts;
 }
 
 const loadAllPostContentCached = unstable_cache(computeAllPostContent, [
