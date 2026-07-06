@@ -56,11 +56,21 @@ function loadAllPostContent(): Promise<PostContent[]> {
     : loadAllPostContentCached();
 }
 
-async function computeAllPosts(includeDrafts: boolean): Promise<PostSummary[]> {
+async function computeAllPublishedPostContent(
+  includeDrafts: boolean,
+): Promise<PostContent[]> {
   const posts = await loadAllPostContent();
-  return sortPostsByDateDescending(
-    filterPublishedPosts(posts, includeDrafts),
-  ).map((post) => toPostSummary(post));
+  return sortPostsByDateDescending(filterPublishedPosts(posts, includeDrafts));
+}
+
+const getAllPostContentCached = unstable_cache(computeAllPublishedPostContent, [
+  "posts:content-published",
+  deployId,
+]);
+
+async function computeAllPosts(includeDrafts: boolean): Promise<PostSummary[]> {
+  const posts = await computeAllPublishedPostContent(includeDrafts);
+  return posts.map((post) => toPostSummary(post));
 }
 
 const getAllPostsCached = unstable_cache(computeAllPosts, [
@@ -101,6 +111,15 @@ const getAllTopicsCached = unstable_cache(computeAllTopics, [
   "posts:topics",
   deployId,
 ]);
+
+export async function getAllPostContent(
+  options: PostQueryOptions = {},
+): Promise<PostContent[]> {
+  const includeDrafts = resolveIncludeDrafts(options.includeDrafts);
+  return shouldBypassCache
+    ? computeAllPublishedPostContent(includeDrafts)
+    : getAllPostContentCached(includeDrafts);
+}
 
 export async function getAllPosts(
   options: PostQueryOptions = {},

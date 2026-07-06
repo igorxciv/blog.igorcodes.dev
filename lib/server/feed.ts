@@ -5,7 +5,7 @@ import {
   toRssLanguage,
 } from "@/lib/server/feed-utils";
 import { renderPostHtml } from "@/lib/server/mdx-to-html";
-import { getAllPosts, getPostBySlug } from "@/lib/server/posts";
+import { getAllPostContent } from "@/lib/server/posts";
 import { siteConfig, toAbsoluteUrl } from "@/lib/site";
 
 type FeedItem = {
@@ -31,12 +31,11 @@ type FeedManifest = {
 };
 
 async function getFeedItems(): Promise<FeedItem[]> {
-  const posts = await getAllPosts();
+  const posts = await getAllPostContent();
 
   return Promise.all(
     posts.map(async (post) => {
-      const content = await getPostBySlug(post.slug);
-      const contentHtml = content ? await renderPostHtml(content.body) : "";
+      const contentHtml = await renderPostHtml(post.body);
 
       return {
         id: toAbsoluteUrl(`/blog/${post.slug}`),
