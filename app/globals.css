@@ -128,37 +128,39 @@ body {
 }
 
 :root[data-theme-transition] body,
-:root[data-theme-transition] body :where(
-  a,
-  button,
-  div,
-  span,
-  p,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  article,
-  section,
-  header,
-  footer,
-  main,
-  nav,
-  aside,
-  li,
-  ul,
-  ol,
-  input,
-  textarea,
-  select,
-  summary,
-  hr,
-  code,
-  pre,
-  blockquote
-) {
+:root[data-theme-transition]
+  body
+  :where(
+    a,
+    button,
+    div,
+    span,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    article,
+    section,
+    header,
+    footer,
+    main,
+    nav,
+    aside,
+    li,
+    ul,
+    ol,
+    input,
+    textarea,
+    select,
+    summary,
+    hr,
+    code,
+    pre,
+    blockquote
+  ) {
   transition-duration: var(--fm-motion-theme);
   transition-property: background-color, border-color, box-shadow;
   transition-timing-function: var(--fm-ease-standard);
@@ -205,7 +207,15 @@ samp {
   outline-offset: 3px;
 }
 
-:where(a, button, input, textarea, select, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
+:where(
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  summary,
+  [tabindex]:not([tabindex="-1"])
+):focus-visible {
   outline: 2px solid var(--fm-accent);
   outline-offset: 3px;
 }
@@ -322,17 +332,20 @@ samp {
   inline-size: 3.5rem;
   align-items: center;
   justify-content: center;
-  border: 2px solid color-mix(in srgb, var(--fm-theme-button-border) 82%, transparent);
+  border: 2px solid
+    color-mix(in srgb, var(--fm-theme-button-border) 82%, transparent);
   border-radius: 999px;
   background: color-mix(in srgb, var(--fm-theme-button-bg) 94%, transparent);
-  box-shadow: 0 8px 22px color-mix(in srgb, var(--fm-theme-button-glow) 70%, transparent);
+  box-shadow: 0 8px 22px
+    color-mix(in srgb, var(--fm-theme-button-glow) 70%, transparent);
   color: var(--fm-theme-button-icon);
   cursor: pointer;
   isolation: isolate;
   transform: translateY(0);
   backdrop-filter: blur(8px);
   transition-duration: 180ms;
-  transition-property: transform, box-shadow, border-color, background-color, color;
+  transition-property:
+    transform, box-shadow, border-color, background-color, color;
   transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -341,7 +354,8 @@ samp {
   border-color: var(--fm-theme-button-focus-ring);
   box-shadow:
     0 12px 28px color-mix(in srgb, var(--fm-theme-button-glow) 82%, transparent),
-    0 0 0 1px color-mix(in srgb, var(--fm-theme-button-focus-ring) 18%, transparent);
+    0 0 0 1px
+    color-mix(in srgb, var(--fm-theme-button-focus-ring) 18%, transparent);
 }
 
 .theme-toggle:active {
@@ -460,4 +474,21 @@ samp {
   .theme-toggle-icon-moon {
     color: ButtonText;
   }
+}
+
+/* Syntax highlighting (Shiki via rehype-pretty-code) dual theme. With an object
+   theme, rehype-pretty-code emits only --shiki-light / --shiki-dark variables on
+   each token (no inline color), so theme switching is pure CSS: light is the
+   base, dark overrides under [data-theme="dark"]. */
+.prose-blog pre code {
+  display: grid;
+  background: transparent;
+}
+
+.prose-blog pre code span {
+  color: var(--shiki-light);
+}
+
+:root[data-theme="dark"] .prose-blog pre code span {
+  color: var(--shiki-dark);
 }

@@ -1,13 +1,20 @@
-import type { Metadata } from "next";
+import { ArrowLeft } from "lucide-react";
+import { type Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { ArrowLeft } from "lucide-react";
+import rehypePrettyCode, { type Options } from "rehype-pretty-code";
+import remarkGfm from "remark-gfm";
 import { PostPageHeader } from "@/components/blog/post-page-header";
 import { ReadingProgress } from "@/components/blog/reading-progress";
 import { RelatedPosts } from "@/components/blog/related-posts";
-import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/server/posts";
+import { remarkTextFences } from "@/lib/mdx/remark-text-fences";
 import { buildArticleJsonLd, buildBreadcrumbJsonLd } from "@/lib/seo";
+import {
+  getAllPosts,
+  getPostBySlug,
+  getRelatedPosts,
+} from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
 import { createPostMdxComponents } from "@/mdx-components";
 
@@ -17,6 +24,14 @@ type PostPageProps = {
 
 export const dynamicParams = false;
 
+// Build-time syntax highlighting (Shiki via rehype-pretty-code) — zero client JS.
+// Dual theme: light is the inline default; dark is exposed as the --shiki-dark
+// CSS variable and activated under [data-theme="dark"] in globals.css.
+const prettyCodeOptions: Options = {
+  theme: { dark: "github-dark", light: "github-light" },
+  keepBackground: false,
+};
+
 export async function generateStaticParams() {
   const posts = await getAllPosts();
   return posts.map((post) => ({
@@ -24,7 +39,9 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PostPageProps): Promise<Metadata> {
   const { slug } = await params;
   const slugPath = slug.join("/");
   const post = await getPostBySlug(slugPath);
@@ -102,7 +119,10 @@ export default async function BlogPostPage({ params }: PostPageProps) {
       />
 
       <section className="fade-in mx-auto max-w-3xl lg:max-w-4xl">
-        <Link href="/blog" className="focus-ring mb-6 inline-flex min-h-11 items-center gap-2 text-sm text-(--foreground-soft) transition hover:text-(--foreground) sm:mb-8 lg:mb-10 lg:gap-2.5 lg:text-[0.95rem]">
+        <Link
+          href="/blog"
+          className="focus-ring mb-6 inline-flex min-h-11 items-center gap-2 text-sm text-(--foreground-soft) transition hover:text-(--foreground) sm:mb-8 lg:mb-10 lg:gap-2.5 lg:text-[0.95rem]"
+        >
           <ArrowLeft aria-hidden="true" className="size-4 lg:size-[1.05rem]" />
           Back to articles
         </Link>
@@ -111,7 +131,16 @@ export default async function BlogPostPage({ params }: PostPageProps) {
           <PostPageHeader post={post} />
 
           <div className="prose-blog max-w-none">
-            <MDXRemote source={post.body} components={postMdxComponents} />
+            <MDXRemote
+              source={post.body}
+              components={postMdxComponents}
+              options={{
+                mdxOptions: {
+                  remarkPlugins: [remarkTextFences, remarkGfm],
+                  rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
+                },
+              }}
+            />
           </div>
 
           <RelatedPosts posts={relatedPosts} />

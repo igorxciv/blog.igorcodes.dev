@@ -1,5 +1,5 @@
+import { Braces, type LucideIcon, Rss } from "lucide-react";
 import Link from "next/link";
-import { Braces, Rss, type LucideIcon } from "lucide-react";
 
 type FeedLinksProps = {
   compact?: boolean;
@@ -53,7 +53,7 @@ export function FeedLinks({ compact = false }: FeedLinksProps) {
   }
 
   return (
-    <div className="flex flex-col gap-3" aria-label="Feed formats">
+    <nav className="flex flex-col gap-3" aria-label="Feed formats">
       {links.map((link) => {
         const Icon = link.icon ?? Rss;
 
@@ -68,8 +68,12 @@ export function FeedLinks({ compact = false }: FeedLinksProps) {
                 <Icon aria-hidden="true" className="size-4" />
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-medium text-(--foreground) lg:text-[0.98rem]">{link.label}</span>
-                <span className="block text-sm text-(--foreground-soft)">{link.description}</span>
+                <span className="block text-sm font-medium text-(--foreground) lg:text-[0.98rem]">
+                  {link.label}
+                </span>
+                <span className="block text-sm text-(--foreground-soft)">
+                  {link.description}
+                </span>
               </span>
             </span>
             <span className="text-xs uppercase tracking-[0.18em] text-(--muted) transition group-hover:text-(--accent)">
@@ -78,6 +82,6 @@ export function FeedLinks({ compact = false }: FeedLinksProps) {
           </Link>
         );
       })}
-    </div>
+    </nav>
   );
 }

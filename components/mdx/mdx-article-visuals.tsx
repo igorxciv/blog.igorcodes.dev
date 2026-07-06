@@ -1,6 +1,6 @@
-import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { clsx } from "clsx";
 import { ArrowRight, Image as ImageIcon } from "lucide-react";
+import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 
 type VisualGridProps = {
   children: ReactNode;
@@ -49,7 +49,8 @@ const eyebrowClassName =
 
 const titleClassName = "mb-3 text-lg text-(--foreground) sm:text-xl";
 
-const bodyClassName = "text-sm leading-7 text-(--foreground-soft) sm:text-[0.98rem]";
+const bodyClassName =
+  "text-sm leading-7 text-(--foreground-soft) sm:text-[0.98rem]";
 
 export function VisualGrid({ children, columns = 2 }: VisualGridProps) {
   const columnCount = Number(columns);
@@ -79,17 +80,14 @@ export function VisualCard({
   tone = "default",
 }: VisualCardProps) {
   return (
-    <section
-      className={clsx(
-        panelBaseClassName,
-        cardToneStyles[tone],
-      )}
-    >
+    <section className={clsx(panelBaseClassName, cardToneStyles[tone])}>
       {eyebrow ? <p className={eyebrowClassName}>{eyebrow}</p> : null}
       <h3 className={titleClassName} style={{ fontWeight: 600 }}>
         {title}
       </h3>
-      <div className={clsx(bodyClassName, "[&_p:last-child]:mb-0")}>{children}</div>
+      <div className={clsx(bodyClassName, "[&_p:last-child]:mb-0")}>
+        {children}
+      </div>
     </section>
   );
 }
@@ -166,7 +164,10 @@ function FlowTrack({
   return (
     <div className="grid gap-3 md:grid-cols-[repeat(auto-fit,minmax(13rem,1fr))]">
       {safeItems.map((item, index) => (
-        <div key={`${variant}-${item}`} className="flex min-w-0 items-stretch gap-3">
+        <div
+          key={`${variant}-${item}`}
+          className="flex min-w-0 items-stretch gap-3"
+        >
           <div
             className={clsx(
               "min-w-0 flex-1 rounded-[1.35rem] border px-4 py-3 text-sm leading-6 sm:text-[0.95rem]",
@@ -224,7 +225,10 @@ export function ProcessFlow({
   );
 }
 
-const aspectStyles: Record<NonNullable<ImagePlaceholderProps["orientation"]>, string> = {
+const aspectStyles: Record<
+  NonNullable<ImagePlaceholderProps["orientation"]>,
+  string
+> = {
   landscape: "aspect-[16/9]",
   portrait: "aspect-[4/5]",
   square: "aspect-square",
@@ -244,9 +248,15 @@ export function ImagePlaceholder({
         )}
       >
         <div className="max-w-lg text-center">
-          <ImageIcon aria-hidden="true" className="mx-auto mb-4 size-8 text-(--accent)" />
+          <ImageIcon
+            aria-hidden="true"
+            className="mx-auto mb-4 size-8 text-(--accent)"
+          />
           <p className={eyebrowClassName}>Image Placeholder</p>
-          <h3 className={clsx(titleClassName, "mt-3")} style={{ fontWeight: 600 }}>
+          <h3
+            className={clsx(titleClassName, "mt-3")}
+            style={{ fontWeight: 600 }}
+          >
             {title}
           </h3>
           <p className={clsx(bodyClassName, "mx-auto mt-3 max-w-xl")}>
@@ -346,25 +356,37 @@ export function WorkflowStepsBlock({ content }: WorkflowStepsBlockProps) {
     <figure className="my-8 lg:my-10">
       <div className="overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface-raised)_96%,transparent),color-mix(in_srgb,var(--surface-inset)_100%,transparent))] shadow-[var(--fm-shadow-elevated)]">
         <div className="border-b border-(--border) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_42%,transparent),transparent)] px-4 py-3 sm:px-5">
-          <p className="m-0 text-[0.7rem] uppercase tracking-[0.24em] text-(--foreground-soft)">Workflow</p>
-          <p className="mt-1 text-sm text-(--foreground) sm:text-[0.96rem]" style={{ fontWeight: 600 }}>
+          <p className="m-0 text-[0.7rem] uppercase tracking-[0.24em] text-(--foreground-soft)">
+            Workflow
+          </p>
+          <p
+            className="mt-1 text-sm text-(--foreground) sm:text-[0.96rem]"
+            style={{ fontWeight: 600 }}
+          >
             Compressed loop
           </p>
         </div>
         <div className="px-4 py-4 sm:px-5 sm:py-5">
           <div className="grid gap-3 md:grid-cols-[repeat(auto-fit,minmax(0,1fr))]">
             {steps.map((step, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: steps are parsed from static author content and never reordered
               <div key={`${index}-${step}`} className="flex items-center gap-3">
                 <div className="min-w-0 flex-1 rounded-[1.25rem] border border-(--accent-line) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_74%,transparent),color-mix(in_srgb,var(--surface-raised)_96%,transparent))] px-4 py-3 shadow-[0_8px_22px_color-mix(in_srgb,var(--fm-shadow-glow)_16%,transparent)]">
                   <p className="m-0 text-[0.68rem] uppercase tracking-[0.2em] text-(--foreground-soft)">
                     {String(index + 1).padStart(2, "0")}
                   </p>
-                  <p className="mt-1 text-sm leading-6 text-(--foreground) sm:text-[0.96rem]" style={{ fontWeight: 600 }}>
+                  <p
+                    className="mt-1 text-sm leading-6 text-(--foreground) sm:text-[0.96rem]"
+                    style={{ fontWeight: 600 }}
+                  >
                     {step}
                   </p>
                 </div>
                 {index < steps.length - 1 ? (
-                  <ArrowRight aria-hidden="true" className="hidden size-4 shrink-0 text-(--accent) md:block" />
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="hidden size-4 shrink-0 text-(--accent) md:block"
+                  />
                 ) : null}
               </div>
             ))}

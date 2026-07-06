@@ -1,8 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { ArrowRight, Bot, Check, History, ListChecks, RotateCcw, Shuffle } from "lucide-react";
 import { clsx } from "clsx";
+import {
+  ArrowRight,
+  Bot,
+  Check,
+  History,
+  ListChecks,
+  RotateCcw,
+  Shuffle,
+} from "lucide-react";
+import { useMemo, useState } from "react";
 
 type Mode = "history" | "state";
 type FieldKey = "goal" | "audience" | "timeline";
@@ -32,14 +40,20 @@ export function StateMachinePlayground() {
   const [turns, setTurns] = useState(6);
   const [completedFields, setCompletedFields] = useState<FieldKey[]>(["goal"]);
 
-  const activeField = fields.find((field) => !completedFields.includes(field.key)) ?? fields[fields.length - 1];
+  const activeField =
+    fields.find((field) => !completedFields.includes(field.key)) ??
+    fields[fields.length - 1];
 
   const stats = useMemo(() => {
     if (mode === "history") {
       return {
         tokens: 450 + turns * 380,
         latency: 0.7 + turns * 0.31,
-        correctness: clamp(101 - turns * 4.3 - completedFields.length * 2.5, 58, 98),
+        correctness: clamp(
+          101 - turns * 4.3 - completedFields.length * 2.5,
+          58,
+          98,
+        ),
       };
     }
 
@@ -51,15 +65,19 @@ export function StateMachinePlayground() {
   }, [completedFields.length, mode, turns]);
 
   const statePreview = fields.reduce<Record<FieldKey, string | null>>(
-    (accumulator, field) => ({
-      ...accumulator,
-      [field.key]: completedFields.includes(field.key) ? field.value : null,
-    }),
+    (accumulator, field) => {
+      accumulator[field.key] = completedFields.includes(field.key)
+        ? field.value
+        : null;
+      return accumulator;
+    },
     { goal: null, audience: null, timeline: null },
   );
 
   function collectNextField() {
-    const nextField = fields.find((field) => !completedFields.includes(field.key));
+    const nextField = fields.find(
+      (field) => !completedFields.includes(field.key),
+    );
 
     if (!nextField) {
       setCompletedFields([]);
@@ -74,9 +92,14 @@ export function StateMachinePlayground() {
   return (
     <section className="my-8 overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-(--surface-raised) shadow-[var(--fm-shadow-elevated)] lg:my-10">
       <div className="border-b border-(--border) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_44%,transparent),transparent)] px-4 py-4 sm:px-5 lg:px-6">
-        <p className="m-0 text-[0.7rem] uppercase tracking-[0.22em] text-(--foreground-soft)">Interactive Model</p>
+        <p className="m-0 text-[0.7rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
+          Interactive Model
+        </p>
         <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <h3 className="m-0 text-xl leading-tight text-(--foreground) sm:text-2xl" style={{ fontWeight: 600 }}>
+          <h3
+            className="m-0 text-xl leading-tight text-(--foreground) sm:text-2xl"
+            style={{ fontWeight: 600 }}
+          >
             Transcript memory vs explicit state
           </h3>
           <div className="grid grid-cols-2 gap-2 rounded-full border border-(--border) bg-(--surface-inset) p-1">
@@ -115,9 +138,15 @@ export function StateMachinePlayground() {
       <div className="grid gap-0 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="border-b border-(--border) p-4 sm:p-5 lg:border-b-0 lg:border-r lg:p-6">
           <div className="grid gap-3 sm:grid-cols-3">
-            <Metric label="Tokens" value={`~${stats.tokens.toLocaleString()}`} />
+            <Metric
+              label="Tokens"
+              value={`~${stats.tokens.toLocaleString()}`}
+            />
             <Metric label="Latency" value={`${stats.latency.toFixed(1)}s`} />
-            <Metric label="Correct flow" value={formatPercent(stats.correctness)} />
+            <Metric
+              label="Correct flow"
+              value={formatPercent(stats.correctness)}
+            />
           </div>
 
           <label className="mt-6 block">
@@ -167,30 +196,51 @@ export function StateMachinePlayground() {
                   )}
                 >
                   <div>
-                    <p className="m-0 text-sm text-(--foreground)" style={{ fontWeight: 600 }}>
+                    <p
+                      className="m-0 text-sm text-(--foreground)"
+                      style={{ fontWeight: 600 }}
+                    >
                       {field.label}
                     </p>
                     <p className="m-0 mt-1 text-sm text-(--foreground-soft)">
-                      {isComplete ? field.value : isActive ? "Ask this next" : "Still missing"}
+                      {isComplete
+                        ? field.value
+                        : isActive
+                          ? "Ask this next"
+                          : "Still missing"}
                     </p>
                   </div>
-                  {isComplete ? <Check aria-hidden="true" className="size-5 text-(--accent)" /> : null}
+                  {isComplete ? (
+                    <Check
+                      aria-hidden="true"
+                      className="size-5 text-(--accent)"
+                    />
+                  ) : null}
                 </div>
               );
             })}
           </div>
 
           <div className="mt-5 rounded-[1.2rem] border border-(--border) bg-(--surface-inset) p-4">
-            <p className="m-0 text-[0.7rem] uppercase tracking-[0.22em] text-(--foreground-soft)">Structured Output</p>
+            <p className="m-0 text-[0.7rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
+              Structured Output
+            </p>
             <pre className="m-0 mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.82rem] leading-6 text-(--foreground)">
               {JSON.stringify(
                 {
-                  message: completedFields.length === fields.length
-                    ? "All set. I have enough to continue."
-                    : `What should I know about the ${activeField.label.toLowerCase()}?`,
+                  message:
+                    completedFields.length === fields.length
+                      ? "All set. I have enough to continue."
+                      : `What should I know about the ${activeField.label.toLowerCase()}?`,
                   is_ready: completedFields.length === fields.length,
-                  suggestions: completedFields.length === fields.length ? [] : suggestionSets[activeField.key],
-                  next_field: completedFields.length === fields.length ? null : activeField.key,
+                  suggestions:
+                    completedFields.length === fields.length
+                      ? []
+                      : suggestionSets[activeField.key],
+                  next_field:
+                    completedFields.length === fields.length
+                      ? null
+                      : activeField.key,
                   state: statePreview,
                 },
                 null,
@@ -205,8 +255,14 @@ export function StateMachinePlayground() {
               onClick={collectNextField}
               className="inline-flex min-h-11 items-center gap-2 rounded-full border border-(--accent-line) bg-(--accent-soft) px-4 text-sm text-(--foreground) transition hover:border-(--accent)"
             >
-              {completedFields.length === fields.length ? <RotateCcw aria-hidden="true" className="size-4" /> : <ArrowRight aria-hidden="true" className="size-4" />}
-              {completedFields.length === fields.length ? "Reset flow" : "Answer next field"}
+              {completedFields.length === fields.length ? (
+                <RotateCcw aria-hidden="true" className="size-4" />
+              ) : (
+                <ArrowRight aria-hidden="true" className="size-4" />
+              )}
+              {completedFields.length === fields.length
+                ? "Reset flow"
+                : "Answer next field"}
             </button>
             <button
               type="button"
@@ -229,8 +285,13 @@ export function StateMachinePlayground() {
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-[1.1rem] border border-(--border) bg-(--surface-inset) px-4 py-3">
-      <p className="m-0 text-[0.68rem] uppercase tracking-[0.2em] text-(--foreground-soft)">{label}</p>
-      <p className="m-0 mt-2 text-xl text-(--foreground)" style={{ fontWeight: 600 }}>
+      <p className="m-0 text-[0.68rem] uppercase tracking-[0.2em] text-(--foreground-soft)">
+        {label}
+      </p>
+      <p
+        className="m-0 mt-2 text-xl text-(--foreground)"
+        style={{ fontWeight: 600 }}
+      >
         {value}
       </p>
     </div>
