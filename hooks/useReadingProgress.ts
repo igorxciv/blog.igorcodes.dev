@@ -15,8 +15,10 @@ export function useReadingProgress<T extends HTMLElement>() {
     let frameId = 0;
 
     const syncProgress = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const nextProgress = totalHeight <= 0 ? 0 : Math.min(window.scrollY / totalHeight, 1);
+      const totalHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const nextProgress =
+        totalHeight <= 0 ? 0 : Math.min(window.scrollY / totalHeight, 1);
       element.style.transform = `scaleX(${nextProgress})`;
     };
 

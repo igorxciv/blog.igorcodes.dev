@@ -1,4 +1,4 @@
-import type { PostSummary } from "@/lib/types/posts";
+import { type PostSummary } from "@/lib/types/posts";
 
 type RelatedPostCandidate = {
   post: PostSummary;
@@ -12,14 +12,23 @@ function countSharedValues(left: string[], right: string[]): number {
   return left.filter((value) => rightValues.has(value)).length;
 }
 
-function scoreRelatedPost(sourcePost: PostSummary, candidatePost: PostSummary): number {
-  const sharedTopics = countSharedValues(sourcePost.topics, candidatePost.topics);
+function scoreRelatedPost(
+  sourcePost: PostSummary,
+  candidatePost: PostSummary,
+): number {
+  const sharedTopics = countSharedValues(
+    sourcePost.topics,
+    candidatePost.topics,
+  );
   const sharedTags = countSharedValues(sourcePost.tags, candidatePost.tags);
 
   return sharedTopics * 3 + sharedTags;
 }
 
-function sortByScoreThenDate(left: RelatedPostCandidate, right: RelatedPostCandidate): number {
+function sortByScoreThenDate(
+  left: RelatedPostCandidate,
+  right: RelatedPostCandidate,
+): number {
   if (right.score !== left.score) {
     return right.score - left.score;
   }
@@ -30,7 +39,7 @@ function sortByScoreThenDate(left: RelatedPostCandidate, right: RelatedPostCandi
 export function getRelatedPosts(
   sourcePost: PostSummary,
   posts: PostSummary[],
-  limit = RELATED_POSTS_LIMIT
+  limit = RELATED_POSTS_LIMIT,
 ): PostSummary[] {
   const candidates = posts.filter((post) => post.slug !== sourcePost.slug);
   const scoredCandidates = candidates
@@ -40,8 +49,14 @@ export function getRelatedPosts(
     }))
     .sort(sortByScoreThenDate);
 
-  const relatedPosts = scoredCandidates.filter((candidate) => candidate.score > 0);
-  const fallbackPosts = scoredCandidates.filter((candidate) => candidate.score === 0);
+  const relatedPosts = scoredCandidates.filter(
+    (candidate) => candidate.score > 0,
+  );
+  const fallbackPosts = scoredCandidates.filter(
+    (candidate) => candidate.score === 0,
+  );
 
-  return [...relatedPosts, ...fallbackPosts].slice(0, limit).map((candidate) => candidate.post);
+  return [...relatedPosts, ...fallbackPosts]
+    .slice(0, limit)
+    .map((candidate) => candidate.post);
 }

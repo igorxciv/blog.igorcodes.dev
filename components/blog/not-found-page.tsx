@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import Link from "next/link";
 import { ArrowLeft, House, Terminal } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useRef } from "react";
 
 const GLITCH_CHARS = ["404", "4Ø4", "4□4", "404", "4o4", "404"] as const;
 const FULL_COMMAND = "$ page not found";
@@ -10,9 +10,13 @@ const STATIC_CODE = "404";
 
 function shouldAllowAnimatedEffects() {
   const prefersReducedMotion =
-    "matchMedia" in window && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-  const prefersDataSaving = typeof connection?.saveData === "boolean" && connection.saveData;
+    "matchMedia" in window &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const connection = (
+    navigator as Navigator & { connection?: { saveData?: boolean } }
+  ).connection;
+  const prefersDataSaving =
+    typeof connection?.saveData === "boolean" && connection.saveData;
 
   return !prefersReducedMotion && !prefersDataSaving;
 }
@@ -77,14 +81,18 @@ export function NotFoundPage() {
 
   function handleBackClick() {
     const hasReferrer = Boolean(document.referrer);
-    const referrerUrl = hasReferrer ? new URL(document.referrer, window.location.href) : null;
+    const referrerUrl = hasReferrer
+      ? new URL(document.referrer, window.location.href)
+      : null;
     const isSameOriginReferrer =
       referrerUrl &&
       referrerUrl.origin === window.location.origin &&
       referrerUrl.href !== window.location.href;
 
     if (isSameOriginReferrer) {
-      window.location.assign(`${referrerUrl.pathname}${referrerUrl.search}${referrerUrl.hash}`);
+      window.location.assign(
+        `${referrerUrl.pathname}${referrerUrl.search}${referrerUrl.hash}`,
+      );
       return;
     }
 
@@ -110,7 +118,10 @@ export function NotFoundPage() {
       <div className="relative z-10 w-full max-w-176">
         <div className="overflow-hidden rounded-xl border border-(--border-strong) bg-[linear-gradient(180deg,var(--surface-raised),var(--surface-inset))] motion-safe:animate-[fade-in_420ms_ease-out_both]">
           <div className="flex min-h-11 items-center gap-3 border-b border-(--border-strong) bg-(--surface-strong) px-4 py-3">
-            <span className="inline-flex items-center gap-1.5" aria-hidden="true">
+            <span
+              className="inline-flex items-center gap-1.5"
+              aria-hidden="true"
+            >
               <span className="size-2.5 rounded-full bg-[#ff5f56]" />
               <span className="size-2.5 rounded-full bg-[#ffbd2e]" />
               <span className="size-2.5 rounded-full bg-[#27c93f]" />
@@ -152,7 +163,10 @@ export function NotFoundPage() {
           >
             {STATIC_CODE}
           </span>
-          <span ref={codeRef} className="relative inline-block min-w-[3ch] text-center">
+          <span
+            ref={codeRef}
+            className="relative inline-block min-w-[3ch] text-center"
+          >
             {STATIC_CODE}
           </span>
         </p>
@@ -168,7 +182,8 @@ export function NotFoundPage() {
             id="page-not-found-description"
             className="mx-auto mt-3 max-w-140 text-pretty text-[clamp(1rem,3.8vw,1.12rem)] leading-normal font-light text-(--muted)"
           >
-            The page you&apos;re looking for doesn&apos;t exist, was moved, or the URL is incorrect.
+            The page you&apos;re looking for doesn&apos;t exist, was moved, or
+            the URL is incorrect.
           </p>
         </header>
 
@@ -189,7 +204,6 @@ export function NotFoundPage() {
             Go Back
           </button>
         </div>
-
       </div>
     </section>
   );

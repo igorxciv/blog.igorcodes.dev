@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Hash } from "lucide-react";
-import type { PostContent } from "@/lib/types/posts";
+import Link from "next/link";
+import { type PostContent } from "@/lib/types/posts";
 import { PostMeta } from "./post-meta";
 
 type PostPageHeaderProps = {
@@ -22,7 +22,10 @@ export function PostPageHeader({ post }: PostPageHeaderProps) {
 
       <p className="mb-4 text-xs font-medium uppercase tracking-wide text-(--accent) lg:mb-5 lg:text-[0.82rem]">
         {primaryTopic ? (
-          <Link href={`/blog?topic=${encodeURIComponent(primaryTopic)}`} className="focus-ring rounded-sm">
+          <Link
+            href={`/blog?topic=${encodeURIComponent(primaryTopic)}`}
+            className="focus-ring rounded-sm"
+          >
             {primaryTopic}
           </Link>
         ) : (

@@ -38,7 +38,10 @@ function TopicFilterLink({
       style={isActive ? activeTopicChipStyle : inactiveTopicChipStyle}
     >
       {isActive ? (
-        <span aria-hidden="true" className="size-2 rounded-full bg-(--accent)" />
+        <span
+          aria-hidden="true"
+          className="size-2 rounded-full bg-(--accent)"
+        />
       ) : null}
       {label}
     </Link>
@@ -47,7 +50,10 @@ function TopicFilterLink({
 
 export function TopicFilter({ activeTopic, topics }: TopicFilterProps) {
   return (
-    <section className="mb-10 sm:mb-12 lg:mb-14" aria-labelledby="topic-filter-heading">
+    <section
+      className="mb-10 sm:mb-12 lg:mb-14"
+      aria-labelledby="topic-filter-heading"
+    >
       <h2
         id="topic-filter-heading"
         className="mb-4 text-sm font-medium uppercase tracking-wide text-(--muted) lg:mb-5 lg:text-[0.82rem]"
@@ -56,7 +62,11 @@ export function TopicFilter({ activeTopic, topics }: TopicFilterProps) {
       </h2>
       <ul className="flex flex-wrap gap-2" aria-label="Topics">
         <li>
-          <TopicFilterLink href="/blog" isActive={activeTopic === null} label="All articles" />
+          <TopicFilterLink
+            href="/blog"
+            isActive={activeTopic === null}
+            label="All articles"
+          />
         </li>
         {topics.map((topic) => (
           <li key={topic}>

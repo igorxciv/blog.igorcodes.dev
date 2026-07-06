@@ -81,16 +81,70 @@ function createArticleImageSet(
 ): PostImageVariantSet {
   return {
     mobile: {
-      "1x": createVariantAsset(date, slug, name, "mobile", "1x", 640, 360, extension),
-      "2x": createVariantAsset(date, slug, name, "mobile", "2x", 1280, 720, extension),
+      "1x": createVariantAsset(
+        date,
+        slug,
+        name,
+        "mobile",
+        "1x",
+        640,
+        360,
+        extension,
+      ),
+      "2x": createVariantAsset(
+        date,
+        slug,
+        name,
+        "mobile",
+        "2x",
+        1280,
+        720,
+        extension,
+      ),
     },
     tablet: {
-      "1x": createVariantAsset(date, slug, name, "tablet", "1x", 768, 432, extension),
-      "2x": createVariantAsset(date, slug, name, "tablet", "2x", 1536, 864, extension),
+      "1x": createVariantAsset(
+        date,
+        slug,
+        name,
+        "tablet",
+        "1x",
+        768,
+        432,
+        extension,
+      ),
+      "2x": createVariantAsset(
+        date,
+        slug,
+        name,
+        "tablet",
+        "2x",
+        1536,
+        864,
+        extension,
+      ),
     },
     desktop: {
-      "1x": createVariantAsset(date, slug, name, "desktop", "1x", 896, 504, extension),
-      "2x": createVariantAsset(date, slug, name, "desktop", "2x", 1792, 1008, extension),
+      "1x": createVariantAsset(
+        date,
+        slug,
+        name,
+        "desktop",
+        "1x",
+        896,
+        504,
+        extension,
+      ),
+      "2x": createVariantAsset(
+        date,
+        slug,
+        name,
+        "desktop",
+        "2x",
+        1792,
+        1008,
+        extension,
+      ),
     },
   };
 }
@@ -116,6 +170,9 @@ const postImageRegistry: PostImageRegistry = {
   },
 };
 
-export function getPostImage(slug: string, name: string): PostImageVariantSet | null {
+export function getPostImage(
+  slug: string,
+  name: string,
+): PostImageVariantSet | null {
   return postImageRegistry[slug]?.[name] ?? null;
 }

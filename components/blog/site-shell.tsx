@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
-import Link from "next/link";
 import { BookOpenText } from "lucide-react";
+import Link from "next/link";
+import { type ReactNode } from "react";
 import { FeedLinks } from "./feed-links";
 
 type SiteShellProps = {
@@ -19,16 +19,25 @@ export function SiteShell({ children }: SiteShellProps) {
 
       <header className="sticky top-0 z-40 border-b border-(--border) bg-(--header-backdrop) backdrop-blur-sm">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 lg:px-8 lg:py-6">
-          <Link href="/blog" className="focus-ring inline-flex min-h-11 items-center gap-3 text-current transition hover:text-(--accent) lg:gap-4">
+          <Link
+            href="/blog"
+            className="focus-ring inline-flex min-h-11 items-center gap-3 text-current transition hover:text-(--accent) lg:gap-4"
+          >
             <span className="inline-flex size-8 items-center justify-center rounded-md bg-(--accent-soft) text-(--accent) lg:size-9 lg:rounded-lg">
-              <BookOpenText aria-hidden="true" className="size-5 lg:size-[1.35rem]" />
+              <BookOpenText
+                aria-hidden="true"
+                className="size-5 lg:size-[1.35rem]"
+              />
             </span>
             <span>
-              <span className="block text-sm font-semibold text-(--foreground) lg:text-base">Engineering Notes</span>
-              <span className="block text-xs text-(--foreground-soft) lg:text-sm">Thoughts on software systems</span>
+              <span className="block text-sm font-semibold text-(--foreground) lg:text-base">
+                Engineering Notes
+              </span>
+              <span className="block text-xs text-(--foreground-soft) lg:text-sm">
+                Thoughts on software systems
+              </span>
             </span>
           </Link>
-
         </div>
       </header>
 

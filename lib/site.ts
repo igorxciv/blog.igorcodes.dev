@@ -3,7 +3,8 @@ export const siteConfig = {
   shortName: "Notes",
   domain: "blog.igorcodes.dev",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://blog.igorcodes.dev",
-  description: "A minimal, MDX-powered engineering blog focused on software architecture, frontend engineering, and AI systems.",
+  description:
+    "A minimal, MDX-powered engineering blog focused on software architecture, frontend engineering, and AI systems.",
   locale: "en_US",
   author: {
     name: "Igor",

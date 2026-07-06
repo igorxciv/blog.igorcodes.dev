@@ -19,7 +19,9 @@ function readStoredTheme(): Theme | null {
 }
 
 function getSystemTheme(): Theme {
-  return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  return window.matchMedia("(prefers-color-scheme: light)").matches
+    ? "light"
+    : "dark";
 }
 
 function updateThemeColorMeta(theme: Theme) {
@@ -78,7 +80,7 @@ function getInitialTheme(): Theme {
 
   return document.documentElement.dataset.theme === "light"
     ? "light"
-    : readStoredTheme() ?? getSystemTheme();
+    : (readStoredTheme() ?? getSystemTheme());
 }
 
 export function useTheme() {

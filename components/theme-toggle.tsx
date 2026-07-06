@@ -1,7 +1,7 @@
 "use client";
 
-import { useId } from "react";
 import { Moon, Sun } from "lucide-react";
+import { useId } from "react";
 import { useTheme } from "@/hooks/useTheme";
 
 export function ThemeToggle() {
@@ -27,10 +27,16 @@ export function ThemeToggle() {
         suppressHydrationWarning
         onClick={toggleTheme}
       >
-        <span aria-hidden="true" className="theme-toggle-icon theme-toggle-icon-sun">
+        <span
+          aria-hidden="true"
+          className="theme-toggle-icon theme-toggle-icon-sun"
+        >
           <Sun className="size-6" strokeWidth={2.1} />
         </span>
-        <span aria-hidden="true" className="theme-toggle-icon theme-toggle-icon-moon">
+        <span
+          aria-hidden="true"
+          className="theme-toggle-icon theme-toggle-icon-moon"
+        >
           <Moon className="size-6" strokeWidth={2.1} />
         </span>
       </button>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { type Metadata } from "next";
 import { NotFoundPage } from "@/components/blog/not-found-page";
 
 export const metadata: Metadata = {

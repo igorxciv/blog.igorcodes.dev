@@ -6,5 +6,8 @@ export function normalizeSlug(slug: string) {
 }
 
 export function toSlug(filePath: string): string {
-  return path.relative(POSTS_DIRECTORY, filePath).replace(/\\/g, "/").replace(/\.(md|mdx)$/i, "");
+  return path
+    .relative(POSTS_DIRECTORY, filePath)
+    .replace(/\\/g, "/")
+    .replace(/\.(md|mdx)$/i, "");
 }

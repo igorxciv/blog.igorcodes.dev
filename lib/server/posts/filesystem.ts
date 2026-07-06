@@ -4,7 +4,9 @@ import { POST_EXTENSIONS, POSTS_DIRECTORY } from "@/lib/server/posts/constants";
 
 const IGNORED_POST_FILENAMES = new Set(["AGENTS.md"]);
 
-export async function discoverPostFiles(directory: string = POSTS_DIRECTORY): Promise<string[]> {
+export async function discoverPostFiles(
+  directory: string = POSTS_DIRECTORY,
+): Promise<string[]> {
   try {
     const entries = await fs.readdir(directory, { withFileTypes: true });
     const files = await Promise.all(
@@ -19,7 +21,10 @@ export async function discoverPostFiles(directory: string = POSTS_DIRECTORY): Pr
           return [];
         }
 
-        if (entry.isFile() && POST_EXTENSIONS.has(path.extname(entry.name).toLowerCase())) {
+        if (
+          entry.isFile() &&
+          POST_EXTENSIONS.has(path.extname(entry.name).toLowerCase())
+        ) {
           return [fullPath];
         }
 

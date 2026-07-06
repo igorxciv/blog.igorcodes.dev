@@ -1,4 +1,4 @@
-import type { PostContent, PostSummary } from "@/lib/types/posts";
+import { type PostContent, type PostSummary } from "@/lib/types/posts";
 
 export function toPostSummary(post: PostContent): PostSummary {
   return {

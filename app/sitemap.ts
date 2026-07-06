@@ -1,4 +1,4 @@
-import type { MetadataRoute } from "next";
+import { type MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/server/posts";
 import { toAbsoluteUrl } from "@/lib/site";
 
@@ -8,7 +8,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     {
       url: toAbsoluteUrl("/blog"),
-      lastModified: posts[0] ? new Date(posts[0].updated ?? posts[0].date) : new Date(),
+      lastModified: posts[0]
+        ? new Date(posts[0].updated ?? posts[0].date)
+        : new Date(),
       changeFrequency: "weekly",
       priority: 0.9,
     },

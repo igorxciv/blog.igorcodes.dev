@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { Dices } from "lucide-react";
+import Link from "next/link";
 
 export function RandomPostButton() {
   return (

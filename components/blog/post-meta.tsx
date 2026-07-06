@@ -1,5 +1,5 @@
-import { CalendarDays, Clock3, FilePenLine, RefreshCw } from "lucide-react";
 import { clsx } from "clsx";
+import { CalendarDays, Clock3, FilePenLine, RefreshCw } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import { formatDate } from "@/lib/formatters/date";
 
@@ -11,14 +11,20 @@ type PostMetaProps = {
   className?: string;
 };
 
-export function PostMeta({ date, readingTime, updated, published = true, className }: PostMetaProps) {
+export function PostMeta({
+  date,
+  readingTime,
+  updated,
+  published = true,
+  className,
+}: PostMetaProps) {
   return (
     <div
       className={twMerge(
         clsx(
           "flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-(--muted) lg:gap-x-5 lg:text-[0.82rem]",
-          className
-        )
+          className,
+        ),
       )}
     >
       <span className="inline-flex items-center gap-1.5">

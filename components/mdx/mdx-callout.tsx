@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
-import { CircleCheck, Info, TriangleAlert } from "lucide-react";
 import { clsx } from "clsx";
+import { CircleCheck, Info, TriangleAlert } from "lucide-react";
+import { type ReactNode } from "react";
 
 type CalloutProps = {
   children: ReactNode;
