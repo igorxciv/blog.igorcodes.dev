@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import { type MDXComponents } from "mdx/types";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import { type ComponentPropsWithoutRef } from "react";
 import { twMerge } from "tailwind-merge";
@@ -15,7 +16,12 @@ import {
 } from "@/components/mdx/mdx-article-visuals";
 import { Callout } from "@/components/mdx/mdx-callout";
 import { createPostImageComponent } from "@/components/mdx/post-image";
-import { StateMachinePlayground } from "@/components/mdx/state-machine-playground";
+
+const StateMachinePlayground = dynamic(() =>
+  import("@/components/mdx/state-machine-playground").then(
+    (m) => m.StateMachinePlayground,
+  ),
+);
 
 export const mdxComponents: MDXComponents = {
   h1: (props: ComponentPropsWithoutRef<"h1">) => (
@@ -176,6 +182,5 @@ export function createPostMdxComponents(postSlug: string): MDXComponents {
   return {
     ...mdxComponents,
     PostImage: createPostImageComponent(postSlug),
-    StateMachinePlayground,
   };
 }
