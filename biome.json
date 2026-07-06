@@ -49,7 +49,7 @@
         "noVar": "error"
       },
       "security": {
-        "noDangerouslySetInnerHtml": "off"
+        "noDangerouslySetInnerHtml": "error"
       },
       "style": {
         "useConst": "error",
@@ -87,6 +87,21 @@
         "rules": {
           "suspicious": {
             "noConsole": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "app/layout.tsx",
+        "app/blog/page.tsx",
+        "app/blog/\\[...slug\\]/page.tsx",
+        "app/blog/topics/\\[topic\\]/page.tsx"
+      ],
+      "linter": {
+        "rules": {
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
           }
         }
       }
