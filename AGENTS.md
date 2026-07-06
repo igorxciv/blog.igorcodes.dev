@@ -29,16 +29,19 @@
 - Static metadata (`robots.txt`, icons, sitemap): use `app/` metadata files instead of `public/` when supported by Next.js.
 
 ## MDX Rules
-- Use `@next/mdx` for MDX support.
-- Keep MDX extensions and page extensions configured in `next.config.ts`.
+- MDX is rendered at runtime via `next-mdx-remote/rsc` (see `app/blog/[...slug]/page.tsx`); there is no compile-time MDX plugin, so `pageExtensions` in `next.config.ts` stays `ts`/`tsx` only.
 - Use `mdx-components.tsx` for MDX component mapping.
+- Pass remark/rehype plugins directly to `<MDXRemote>`.
 - Avoid `MDXProvider` unless explicitly required by a task.
 
 ## Build, Test, Run
-- `npm run dev` (starts local dev server).
-- `npm run build` (creates production build in `.next/`).
-- `npm run start` (runs production build).
-- `npm run lint` (runs ESLint + Stylelint).
+- `pnpm dev` (starts local dev server).
+- `pnpm build` (fetches fonts, then creates a production build in `.next/`).
+- `pnpm start` (runs the production build).
+- `pnpm lint` (Biome check).
+- `pnpm typecheck` (`tsc --noEmit`).
+- `pnpm test` (Vitest).
+- `pnpm check` (lint + typecheck + test — the full local gate).
 
 ## Coding Style & Naming
 - TypeScript + React with Next.js App Router conventions.
@@ -48,8 +51,9 @@
 - File naming: follow nearby patterns (`kebab-case` or `camelCase`).
 
 ## Testing
-- No testing framework is configured yet.
-- If tests are added, document the framework and command in this file.
+- Tests use Vitest. Run them with `pnpm test` (watch mode: `pnpm test:watch`).
+- Tests currently live in `lib/**/*.test.ts` (the Vitest `include` pattern is scoped to `lib/`; it is slated to widen to all `*.test.{ts,tsx}` files).
+- Add unit tests for pure logic alongside the module under test.
 
 ## Boundaries and Safety
 - Ask first before reorganizing top-level folders or moving existing routes.

@@ -96,7 +96,7 @@
 - Explain practical implications after conceptual sections so the reader can apply the idea.
 
 ## Verification
-- Run `npm run lint` and `npm run build` after changing MDX structure, shared MDX components, images, or post metadata.
+- Run `pnpm lint` and `pnpm build` after changing MDX structure, shared MDX components, images, or post metadata.
 - Use Playwright to verify visual changes in a real browser whenever possible, especially for tables, image blocks, links, and custom MDX components.
 - If Playwright is unavailable because the browser runtime is missing or blocked, say so explicitly and verify with the next best available method.
 - After adding a new published post, confirm it appears in the blog list and at its `/blog/...` route.
