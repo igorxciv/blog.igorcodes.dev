@@ -70,7 +70,7 @@ export function NotFoundPage() {
     const glitchStopTimeout = window.setTimeout(() => {
       window.clearInterval(glitchInterval);
       setCode(STATIC_CODE);
-    }, 12000);
+    }, 4500);
 
     return () => {
       window.clearInterval(typingInterval);
