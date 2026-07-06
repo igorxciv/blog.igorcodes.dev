@@ -15,7 +15,9 @@ import { useMemo, useState } from "react";
 type Mode = "history" | "state";
 type FieldKey = "goal" | "audience" | "timeline";
 
-const fields: Array<{ key: FieldKey; label: string; value: string }> = [
+type Field = { key: FieldKey; label: string; value: string };
+
+const fields: [Field, ...Field[]] = [
   { key: "goal", label: "Goal", value: "Launch a cleaner onboarding flow" },
   { key: "audience", label: "Audience", value: "Small engineering teams" },
   { key: "timeline", label: "Timeline", value: "Two weeks" },
@@ -49,7 +51,8 @@ export function StateMachinePlayground({
 
   const activeField =
     fields.find((field) => !completedFields.includes(field.key)) ??
-    fields[fields.length - 1];
+    fields[fields.length - 1] ??
+    fields[0];
 
   const stats = useMemo(() => {
     if (mode === "history") {

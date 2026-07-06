@@ -10,6 +10,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "noUncheckedIndexedAccess": true,
     "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
@@ -20,7 +21,8 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "allowJs": true
+    "allowJs": true,
+    "checkJs": true
   },
   "include": [
     "next-env.d.ts",
@@ -28,7 +30,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "app/_tools/**/*.mjs"
   ],
   "exclude": ["node_modules"]
 }

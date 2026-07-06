@@ -34,7 +34,7 @@ describe("getRelatedPosts", () => {
     const byTopic = post({ slug: "topic", topics: ["react"] });
     const byTags = post({ slug: "tags", tags: ["hooks", "perf"] });
     const result = getRelatedPosts(source, [byTags, byTopic]);
-    expect(result[0].slug).toBe("topic");
+    expect(result[0]?.slug).toBe("topic");
   });
 
   it("breaks score ties by the most recent date", () => {
@@ -49,7 +49,7 @@ describe("getRelatedPosts", () => {
       date: "2026-06-01",
     });
     const result = getRelatedPosts(source, [older, newer]);
-    expect(result[0].slug).toBe("newer");
+    expect(result[0]?.slug).toBe("newer");
   });
 
   it("never includes a draft candidate in the results", () => {
@@ -74,6 +74,6 @@ describe("getRelatedPosts", () => {
       2,
     );
     expect(result).toHaveLength(2);
-    expect(result[0].slug).toBe("rel");
+    expect(result[0]?.slug).toBe("rel");
   });
 });

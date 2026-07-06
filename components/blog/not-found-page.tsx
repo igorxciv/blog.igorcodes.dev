@@ -64,7 +64,10 @@ export function NotFoundPage() {
 
     const glitchInterval = window.setInterval(() => {
       const randomIndex = Math.floor(Math.random() * GLITCH_CHARS.length);
-      setCode(GLITCH_CHARS[randomIndex]);
+      const glitchChar = GLITCH_CHARS[randomIndex];
+      if (glitchChar) {
+        setCode(glitchChar);
+      }
     }, 160);
 
     const glitchStopTimeout = window.setTimeout(() => {

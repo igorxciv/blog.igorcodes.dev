@@ -25,6 +25,7 @@ const projectRoot = path.resolve(appDir, "..");
 const fallbackDir = path.join(toolsDir, "fallback-fonts");
 const cacheDir = path.join(projectRoot, ".next", "cache", "fonts");
 
+/** @param {string} filePath */
 const exists = (filePath) =>
   access(filePath).then(
     () => true,
@@ -33,6 +34,7 @@ const exists = (filePath) =>
 
 // Copy bundled open-licensed fonts in place of the missing licensed files so
 // `next/font/local` can resolve every path without the Blob token.
+/** @param {string[]} missing */
 async function populateFallback(missing) {
   console.warn(
     `fonts: ${missing.length} licensed font file(s) missing and no token; ` +
@@ -49,6 +51,11 @@ async function populateFallback(missing) {
 }
 
 // Fetch a single blob's bytes, retrying once on failure.
+/**
+ * @param {string} rel
+ * @param {string} token
+ * @returns {Promise<Buffer>}
+ */
 async function fetchBlobBytes(rel, token) {
   for (let attempt = 1; attempt <= 2; attempt++) {
     try {
@@ -68,10 +75,15 @@ async function fetchBlobBytes(rel, token) {
       );
     }
   }
+  throw new Error(`fonts: exhausted retries fetching "${rel}".`);
 }
 
 // Populate one missing file: prefer the cross-build cache, else fetch from Blob
 // and write BOTH `app/fonts/` and `.next/cache/fonts/`.
+/**
+ * @param {string} rel
+ * @param {string} token
+ */
 async function populateFromBlob(rel, token) {
   const dest = path.join(appDir, rel);
   const cachePath = path.join(cacheDir, rel);
