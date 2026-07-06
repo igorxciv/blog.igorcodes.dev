@@ -175,8 +175,10 @@ body {
  * Wotfard weight 500 is not shipped as a preloaded face (see app/fonts.ts).
  * Remap the medium utility to 600 so `.font-medium` text keeps its intended
  * emphasis instead of falling back to the 400 face (font-synthesis is off).
+ * Scoped away from mono (Dank Mono ships only 400/700, so 600 would render
+ * bold there).
  */
-.font-medium {
+.font-medium:not(.font-mono) {
   font-weight: 600;
 }
 
