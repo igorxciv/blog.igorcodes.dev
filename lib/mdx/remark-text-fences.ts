@@ -5,14 +5,16 @@
 //
 // This preserves the original `pre`-component interception behaviour while
 // keeping those fences out of the Shiki pipeline (which would tokenize them and
-// break the prompt/workflow rendering). AST nodes are loosely typed on purpose —
-// the mdast + mdast-util-mdx-jsx unions are noisy; see the biome override for
-// lib/mdx/**.
+// break the prompt/workflow rendering).
+
+import { type Code } from "mdast";
+import { type MdxJsxFlowElement } from "mdast-util-mdx-jsx";
+import { type Node, type Parent } from "unist";
 
 // A plain-string mdxJsxAttribute is the same shape MDX's own parser produces for
 // `<Foo content="..." />`; the compiler emits a correctly-escaped string literal,
 // so arbitrary prompt text (quotes, newlines) is handled for us.
-function toBlockElement(node: any): any {
+function toBlockElement(node: Code): MdxJsxFlowElement {
   const content = String(node.value ?? "").trim();
   const name = content.includes("->") ? "WorkflowStepsBlock" : "PromptBlock";
   return {
@@ -23,13 +25,17 @@ function toBlockElement(node: any): any {
   };
 }
 
-function transform(node: any): void {
-  if (!node || !Array.isArray(node.children)) {
+function isParent(node: Node): node is Parent {
+  return Array.isArray((node as Parent).children);
+}
+
+function transform(node: Node): void {
+  if (!isParent(node)) {
     return;
   }
-  node.children.forEach((child: any, index: number) => {
-    if (child?.type === "code" && child.lang === "text") {
-      node.children[index] = toBlockElement(child);
+  node.children.forEach((child, index) => {
+    if (child.type === "code" && (child as Code).lang === "text") {
+      node.children[index] = toBlockElement(child as Code);
       return;
     }
     transform(child);
@@ -37,7 +43,7 @@ function transform(node: any): void {
 }
 
 export function remarkTextFences() {
-  return (tree: any): void => {
+  return (tree: Node): void => {
     transform(tree);
   };
 }

@@ -90,16 +90,6 @@
           }
         }
       }
-    },
-    {
-      "includes": ["lib/mdx/**"],
-      "linter": {
-        "rules": {
-          "suspicious": {
-            "noExplicitAny": "off"
-          }
-        }
-      }
     }
   ]
 }

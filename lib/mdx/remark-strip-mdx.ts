@@ -1,28 +1,40 @@
 // Feed-only remark transform: unwrap MDX JSX elements to their children (so the
 // prose inside <Callout>…</Callout> etc. survives) and drop MDX expressions and
 // ESM import/export nodes. Interactive components can't render in a feed reader,
-// so they degrade to their textual content. AST nodes are loosely typed — see
-// the biome override for lib/mdx/**.
+// so they degrade to their textual content.
 
-function stripChildren(node: any): void {
-  if (!Array.isArray(node.children)) {
+import { type Node, type Parent } from "unist";
+
+// Node types unwrapped to their children (the interactive component wrapper is
+// discarded, its prose kept).
+const UNWRAP_TYPES = new Set(["mdxJsxFlowElement", "mdxJsxTextElement"]);
+
+// Node types dropped entirely (expressions and ESM import/export have no
+// textual equivalent in a feed).
+const DROP_TYPES = new Set([
+  "mdxFlowExpression",
+  "mdxTextExpression",
+  "mdxjsEsm",
+]);
+
+function isParent(node: Node): node is Parent {
+  return Array.isArray((node as Parent).children);
+}
+
+function stripChildren(node: Node): void {
+  if (!isParent(node)) {
     return;
   }
-  const next: any[] = [];
+  const next: Node[] = [];
   for (const child of node.children) {
-    if (
-      child.type === "mdxJsxFlowElement" ||
-      child.type === "mdxJsxTextElement"
-    ) {
+    if (UNWRAP_TYPES.has(child.type)) {
       stripChildren(child);
-      next.push(...(child.children ?? []));
+      if (isParent(child)) {
+        next.push(...child.children);
+      }
       continue;
     }
-    if (
-      child.type === "mdxFlowExpression" ||
-      child.type === "mdxTextExpression" ||
-      child.type === "mdxjsEsm"
-    ) {
+    if (DROP_TYPES.has(child.type)) {
       continue;
     }
     stripChildren(child);
@@ -32,5 +44,5 @@ function stripChildren(node: any): void {
 }
 
 export function remarkStripMdx() {
-  return (tree: any): void => stripChildren(tree);
+  return (tree: Node): void => stripChildren(tree);
 }
