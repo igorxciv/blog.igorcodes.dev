@@ -13,8 +13,10 @@
     "lint": "biome check",
     "lint:fix": "biome check --write",
     "format": "biome format --write",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
     "prepare": "lefthook install"
   },
   "dependencies": {

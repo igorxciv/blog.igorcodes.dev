@@ -10,3 +10,5 @@ pre-push:
   jobs:
     - name: test
       run: pnpm test
+    - name: typecheck
+      run: pnpm typecheck
