@@ -1,7 +1,6 @@
 import { clsx } from "clsx";
 import { type MDXComponents } from "mdx/types";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { type ComponentPropsWithoutRef } from "react";
 import { twMerge } from "tailwind-merge";
 import {
@@ -116,6 +115,12 @@ export const mdxComponents: MDXComponents = {
       return null;
     }
 
+    if (src.startsWith("http://") || src.startsWith("https://")) {
+      throw new Error(
+        `Remote image src not allowed: "${src}". Use local images under public/images/posts/…`,
+      );
+    }
+
     if (alt == null && process.env.NODE_ENV !== "production") {
       console.warn(`Markdown image without alt text: ${src}`);
     }
@@ -126,14 +131,18 @@ export const mdxComponents: MDXComponents = {
 
     return (
       <figure className="my-8 lg:my-10">
-        <div className="relative aspect-video overflow-hidden rounded-2xl border border-(--border) bg-(--surface) lg:rounded-[1.75rem]">
-          <Image
+        <div className="overflow-hidden rounded-2xl border border-(--border) bg-(--surface) lg:rounded-[1.75rem]">
+          {/* biome-ignore lint/performance/noImgElement: markdown images have
+              unknown intrinsic dimensions; a plain <img> avoids next/image's
+              required width/height and the previous forced aspect-ratio cropping
+              of non-16:9 images. */}
+          <img
             src={src}
             alt={imageAlt}
             title={caption ?? undefined}
-            fill
-            sizes="(min-width: 1024px) 768px, 100vw"
-            className={twMerge(clsx("object-contain", className))}
+            loading="lazy"
+            decoding="async"
+            className={twMerge(clsx("h-auto w-full", className))}
           />
         </div>
         {caption ? (

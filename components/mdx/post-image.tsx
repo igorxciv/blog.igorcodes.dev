@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import Image from "next/image";
 import { twMerge } from "tailwind-merge";
 import { getPostImage } from "@/lib/post-images";
 
@@ -34,34 +35,18 @@ export function PostImage({
     return null;
   }
 
-  const fallbackAsset = asset.mobile["1x"];
-  const loading = priority ? "eager" : "lazy";
-  const fetchPriority = priority ? "high" : "auto";
-
   return (
     <figure className={twMerge(clsx("my-8 lg:my-10", className))}>
       <div className="overflow-hidden rounded-2xl border border-(--border) bg-(--surface) lg:rounded-[1.75rem]">
-        <picture>
-          <source
-            media="(min-width: 1024px)"
-            srcSet={`${asset.desktop["1x"].src} 1x, ${asset.desktop["2x"].src} 2x`}
-          />
-          <source
-            media="(min-width: 768px)"
-            srcSet={`${asset.tablet["1x"].src} 1x, ${asset.tablet["2x"].src} 2x`}
-          />
-          <img
-            src={fallbackAsset.src}
-            srcSet={`${asset.mobile["1x"].src} 1x, ${asset.mobile["2x"].src} 2x`}
-            alt={alt}
-            width={fallbackAsset.width}
-            height={fallbackAsset.height}
-            loading={loading}
-            decoding="async"
-            fetchPriority={fetchPriority}
-            className={twMerge(clsx("h-auto w-full", imageClassName))}
-          />
-        </picture>
+        <Image
+          src={asset.src}
+          width={asset.width}
+          height={asset.height}
+          alt={alt}
+          sizes="(min-width: 1024px) 896px, 100vw"
+          priority={priority}
+          className={twMerge(clsx("h-auto w-full", imageClassName))}
+        />
       </div>
       {caption ? (
         <figcaption className="mt-3 text-sm leading-relaxed text-(--foreground-soft) lg:mt-4 lg:text-[0.98rem]">
