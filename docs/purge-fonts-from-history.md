@@ -1,10 +1,16 @@
 # Purge commercial fonts from git history
 
-> **Status: pending.** The font binaries have been removed from the working tree
-> and untracked (`git rm --cached`), and `app/fonts/` is now `.gitignore`d — but
-> they **still exist in earlier commits**. Until history is rewritten and
-> force-pushed, they remain downloadable from the public repo. Follow this
-> runbook to finish the job.
+> **Status: completed** (verified 2026-07-06 — object scan clean). The commercial
+> Wotfard and Dank Mono binaries are gone from the entire history: the purge was
+> run and force-pushed, and `main == origin/main`. **Do not re-run the purge
+> below** — it is retained only as a historical record of what was done.
+>
+> Verification: `git rev-list --all --objects | grep -iE '\.(woff2?|otf|ttf)$'`
+> lists **no** licensed fonts. The only font objects it now returns are the
+> intentional, open-licensed (SIL OFL) build fallbacks committed later under
+> `app/_tools/fallback-fonts/` (`sans.woff2`, `mono.woff2`) — see
+> `app/_tools/fallback-fonts/OFL.txt`. Those are meant to be in history; leave
+> them alone.
 
 The Wotfard (Atipo Foundry) and Dank Mono fonts are **commercial,
 non-redistributable** fonts. Because this repository is public, their binaries
