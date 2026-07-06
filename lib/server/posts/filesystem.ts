@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { POST_EXTENSIONS, POSTS_DIRECTORY } from "@/lib/server/posts/constants";
+import { POST_EXTENSIONS, POSTS_DIRECTORY } from "@/lib/server/posts/helpers";
 
 const IGNORED_POST_FILENAMES = new Set(["AGENTS.md"]);
 

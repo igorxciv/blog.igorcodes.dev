@@ -1,7 +1,10 @@
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { POSTS_DIRECTORY } from "@/lib/server/posts/constants";
-import { normalizeSlug, toSlug } from "@/lib/server/posts/slug";
+import {
+  normalizeSlug,
+  POSTS_DIRECTORY,
+  toSlug,
+} from "@/lib/server/posts/helpers";
 
 describe("normalizeSlug", () => {
   it("strips leading and trailing slashes", () => {

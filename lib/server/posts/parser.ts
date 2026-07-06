@@ -1,7 +1,7 @@
 import matter from "gray-matter";
 import { readPostSource } from "@/lib/server/posts/filesystem";
+import { toSlug } from "@/lib/server/posts/helpers";
 import { parseFrontmatter } from "@/lib/server/posts/schema";
-import { toSlug } from "@/lib/server/posts/slug";
 import { type PostContent } from "@/lib/types/posts";
 
 // ~225 wpm; word count over raw MDX includes component tags, so the ±1 min
