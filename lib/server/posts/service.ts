@@ -18,6 +18,10 @@ import { type PostContent, type PostSummary } from "@/lib/types/posts";
 // cached/uncached pairs that could silently drift apart.
 const shouldBypassCache = process.env.NODE_ENV !== "production";
 
+// Scope the Vercel Data Cache to the current deployment so cached post content
+// does not persist across deployments and serve stale content.
+const deployId = process.env.VERCEL_GIT_COMMIT_SHA ?? "dev";
+
 async function computeAllPostContent(): Promise<PostContent[]> {
   const files = await discoverPostFiles();
   return Promise.all(files.map((file) => parsePostFile(file)));
@@ -25,6 +29,7 @@ async function computeAllPostContent(): Promise<PostContent[]> {
 
 const loadAllPostContentCached = unstable_cache(computeAllPostContent, [
   "posts:content",
+  deployId,
 ]);
 
 function loadAllPostContent(): Promise<PostContent[]> {
@@ -40,7 +45,10 @@ async function computeAllPosts(includeDrafts: boolean): Promise<PostSummary[]> {
   ).map((post) => toPostSummary(post));
 }
 
-const getAllPostsCached = unstable_cache(computeAllPosts, ["posts:summaries"]);
+const getAllPostsCached = unstable_cache(computeAllPosts, [
+  "posts:summaries",
+  deployId,
+]);
 
 async function computePostBySlug(
   slug: string,
@@ -63,6 +71,7 @@ async function computePostBySlug(
 
 const getPostBySlugCached = unstable_cache(computePostBySlug, [
   "posts:by-slug",
+  deployId,
 ]);
 
 async function computeAllTopics(includeDrafts: boolean): Promise<string[]> {
@@ -70,7 +79,10 @@ async function computeAllTopics(includeDrafts: boolean): Promise<string[]> {
   return collectTopics(posts);
 }
 
-const getAllTopicsCached = unstable_cache(computeAllTopics, ["posts:topics"]);
+const getAllTopicsCached = unstable_cache(computeAllTopics, [
+  "posts:topics",
+  deployId,
+]);
 
 export async function getAllPosts(
   options: PostQueryOptions = {},
