@@ -45,6 +45,25 @@ describe("parseFrontmatter", () => {
     ).toThrow();
   });
 
+  it("accepts a well-formed YYYY-MM-DD date", () => {
+    expect(parseFrontmatter({ ...base, date: "2026-04-14" }, "s").date).toBe(
+      "2026-04-14",
+    );
+  });
+
+  it("rejects a malformed date shape", () => {
+    expect(() =>
+      parseFrontmatter({ ...base, date: "2026/04/14" }, "s"),
+    ).toThrow();
+    expect(() => parseFrontmatter({ ...base, date: "April 4" }, "s")).toThrow();
+  });
+
+  it("rejects an impossible calendar date", () => {
+    expect(() =>
+      parseFrontmatter({ ...base, date: "2026-02-31" }, "s"),
+    ).toThrow();
+  });
+
   it("defaults topics and tags to [] when omitted", () => {
     const fm = parseFrontmatter({ title: "x", date: "2026-01-01" }, "slug");
     expect(fm.topics).toEqual([]);

@@ -1,11 +1,29 @@
 import { z } from "zod";
 import { type PostFrontmatter } from "@/lib/types/posts";
 
+const DATE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+function isValidCalendarDate(value: string): boolean {
+  const match = DATE_PATTERN.exec(value);
+  if (!match) {
+    return false;
+  }
+
+  const [, year, month, day] = match;
+  const date = new Date(`${value}T00:00:00Z`);
+
+  return (
+    date.getUTCFullYear() === Number(year) &&
+    date.getUTCMonth() + 1 === Number(month) &&
+    date.getUTCDate() === Number(day)
+  );
+}
+
 const dateStringSchema = z
   .string()
   .refine(
-    (value) => !Number.isNaN(Date.parse(value)),
-    "Must be a parseable date string.",
+    isValidCalendarDate,
+    "Must be a real calendar date in YYYY-MM-DD format.",
   );
 
 const arrayFromStringOrArraySchema = z.preprocess(
