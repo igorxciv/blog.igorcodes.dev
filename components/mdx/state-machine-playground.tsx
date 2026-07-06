@@ -225,7 +225,14 @@ export function StateMachinePlayground() {
             <p className="m-0 text-[0.7rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
               Structured Output
             </p>
-            <pre className="m-0 mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.82rem] leading-6 text-(--foreground)">
+            {/* biome-ignore lint/a11y/useSemanticElements: a <pre> scroll container cannot be a <section>; role="region" names it for AT */}
+            <pre
+              role="region"
+              aria-label="State output"
+              // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
+              tabIndex={0}
+              className="m-0 mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.82rem] leading-6 text-(--foreground)"
+            >
               {JSON.stringify(
                 {
                   message:

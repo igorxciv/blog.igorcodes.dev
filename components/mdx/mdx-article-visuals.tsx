@@ -310,7 +310,16 @@ export function TableBlock({
           "[&_tbody_td:nth-child(3)]:bg-[linear-gradient(180deg,color-mix(in_srgb,rgba(245,158,11,0.05)_68%,transparent),transparent)]",
         )}
       >
-        <div className="overflow-x-auto">{children}</div>
+        {/* biome-ignore lint/a11y/useSemanticElements: overflow scroll wrapper; role="region" names the diagram for AT */}
+        <div
+          role="region"
+          aria-label="Diagram"
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
+          tabIndex={0}
+          className="overflow-x-auto"
+        >
+          {children}
+        </div>
       </div>
 
       {footer ? (
@@ -336,7 +345,14 @@ export function PromptBlock({ content }: PromptBlockProps) {
           </p>
         </div>
         <div className="px-5 py-5 sm:px-6 sm:py-6">
-          <pre className="m-0 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.98rem] leading-8 text-(--foreground) sm:text-[1.02rem] sm:leading-9">
+          {/* biome-ignore lint/a11y/useSemanticElements: a <pre> scroll container cannot be a <section>; role="region" names it for AT */}
+          <pre
+            role="region"
+            aria-label="Diagram"
+            // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
+            tabIndex={0}
+            className="m-0 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.98rem] leading-8 text-(--foreground) sm:text-[1.02rem] sm:leading-9"
+          >
             {normalizedContent}
           </pre>
         </div>

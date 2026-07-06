@@ -81,13 +81,25 @@ export const mdxComponents: MDXComponents = {
   // remarkTextFences; real code fences arrive here already highlighted by
   // rehype-pretty-code (token colors come from CSS vars — see globals.css).
   pre: (props: ComponentPropsWithoutRef<"pre">) => (
+    // biome-ignore lint/a11y/useSemanticElements: a <pre> scroll container cannot be a <section>; role="region" names it for AT
     <pre
+      role="region"
+      aria-label="Code sample"
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
+      tabIndex={0}
       className="mb-6 overflow-x-auto rounded-lg border border-(--border) bg-(--surface) p-3 text-sm sm:p-4 lg:mb-7 lg:rounded-xl lg:p-5 lg:text-[0.98rem]"
       {...props}
     />
   ),
   table: (props: ComponentPropsWithoutRef<"table">) => (
-    <div className="my-8 overflow-x-auto lg:my-10">
+    // biome-ignore lint/a11y/useSemanticElements: overflow scroll wrapper; role="region" keeps the nested table's own semantics intact
+    <div
+      role="region"
+      aria-label="Table"
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
+      tabIndex={0}
+      className="my-8 overflow-x-auto lg:my-10"
+    >
       <div className="overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface-raised)_96%,transparent),color-mix(in_srgb,var(--surface)_100%,transparent))] shadow-[0_10px_24px_rgb(0_0_0_/_0.18)]">
         <table
           className="w-full border-collapse text-left text-(--foreground-soft) lg:text-[1.02rem]"
