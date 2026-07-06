@@ -155,7 +155,7 @@ export const mdxComponents: MDXComponents = {
       </figure>
     );
   },
-  a: ({ href, className, style, ...props }: ComponentPropsWithoutRef<"a">) => {
+  a: ({ href, className, ...props }: ComponentPropsWithoutRef<"a">) => {
     return (
       <a
         href={href}
@@ -166,14 +166,6 @@ export const mdxComponents: MDXComponents = {
             className,
           ),
         )}
-        style={{
-          color: "var(--accent)",
-          textDecorationLine: "underline",
-          textDecorationColor: "var(--accent)",
-          textDecorationThickness: "2px",
-          textUnderlineOffset: "0.18em",
-          ...style,
-        }}
       />
     );
   },
