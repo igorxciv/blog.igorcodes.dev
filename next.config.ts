@@ -1,18 +1,49 @@
-import createMDX from "@next/mdx";
-import type { NextConfig } from "next";
+import { type NextConfig } from "next";
 
-const withMDX = createMDX({
-  extension: /\.(md|mdx)$/,
-  options: {
-    remarkPlugins: ["remark-gfm"],
+// Posts are rendered at runtime via next-mdx-remote/rsc (see
+// app/blog/[...slug]/page.tsx), so the @next/mdx toolchain is intentionally not
+// used and `pageExtensions` stays ts/tsx only. Remark/rehype plugins are passed
+// directly to <MDXRemote>.
+
+const securityHeaders = [
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      // 'unsafe-inline' is required by the theme-init script and JSON-LD blocks.
+      "script-src 'self' 'unsafe-inline' https://cloud.umami.is",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: https:",
+      "font-src 'self'",
+      "connect-src 'self' https://cloud.umami.is",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "object-src 'none'",
+      "upgrade-insecure-requests",
+    ].join("; "),
   },
-});
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
+  },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "X-Frame-Options", value: "DENY" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
+  },
+];
 
 const nextConfig: NextConfig = {
-  pageExtensions: ["ts", "tsx", "md", "mdx"],
+  pageExtensions: ["ts", "tsx"],
   experimental: {
     optimizePackageImports: ["lucide-react"],
   },
+  async headers() {
+    return [{ source: "/:path*", headers: securityHeaders }];
+  },
 };
 
-export default withMDX(nextConfig);
+export default nextConfig;

@@ -26,7 +26,12 @@ export function PostImage({
   const asset = getPostImage(slug, name);
 
   if (!asset) {
-    throw new Error(`Missing post image asset for "${slug}" and image "${name}".`);
+    // Degrade gracefully instead of crashing the whole route on a missing
+    // asset; surface the problem loudly in dev so it is caught before ship.
+    if (process.env.NODE_ENV !== "production") {
+      console.warn(`Missing post image asset for "${slug}" / "${name}".`);
+    }
+    return null;
   }
 
   const fallbackAsset = asset.mobile["1x"];
