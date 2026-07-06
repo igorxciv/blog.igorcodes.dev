@@ -72,6 +72,7 @@
 - Keep table copy short. If a cell needs a paragraph, the content probably wants cards or a prose section instead.
 
 ## Images
+- Content images MUST have descriptive `alt` text; a missing alt now fails the build. Genuinely decorative images must opt out with an explicit empty alt (an `<img alt="" />` element).
 - Use `PostImage` for article images that should be part of the final post.
 - Each `PostImage` must include meaningful `alt` text.
 - Add `caption` when the image needs editorial context or is still a placeholder.

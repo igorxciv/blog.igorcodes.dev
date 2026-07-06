@@ -121,11 +121,13 @@ export const mdxComponents: MDXComponents = {
       );
     }
 
-    if (alt == null && process.env.NODE_ENV !== "production") {
-      console.warn(`Markdown image without alt text: ${src}`);
+    if (alt == null) {
+      throw new Error(
+        `Markdown image without alt text: "${src}". Add descriptive alt text, or if the image is purely decorative, mark it as such with an explicit empty alt (e.g. an <img alt="" /> element).`,
+      );
     }
 
-    const imageAlt = alt ?? "";
+    const imageAlt = alt;
     const caption =
       typeof title === "string" && title.trim().length > 0 ? title : null;
 
