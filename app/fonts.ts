@@ -70,6 +70,15 @@ export const dankMono = localFont({
   variable: "--font-dank-mono",
   display: "swap",
   preload: false,
-  fallback: ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"],
+  fallback: [
+    "ui-monospace",
+    "SFMono-Regular",
+    "Menlo",
+    "Monaco",
+    "Consolas",
+    "Liberation Mono",
+    "Courier New",
+    "monospace",
+  ],
   adjustFontFallback: false,
 });
