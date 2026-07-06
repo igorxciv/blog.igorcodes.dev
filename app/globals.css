@@ -459,8 +459,10 @@ samp {
   *,
   *::before,
   *::after {
-    animation: none;
-    transition-duration: 0s;
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
   }
 
   .theme-toggle,
