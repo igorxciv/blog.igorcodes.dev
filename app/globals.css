@@ -105,6 +105,47 @@
   color-scheme: light;
 }
 
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    /* Keep in sync with :root[data-theme="light"] above. Duplicated because
+       CSS can't share a value block between a media query and a selector. */
+    --fm-accent-rgb: 0, 106, 128;
+    --fm-bg: #f6f1e8;
+    --fm-text: #16130f;
+    --fm-muted: #6e6558;
+    --fm-muted-strong: #423b32;
+    --fm-muted-soft: #796c5b;
+    --fm-accent: #006a80;
+    --fm-border: #d8cfc3;
+    --fm-border-soft: #ebe1d5;
+    --fm-border-strong: #c8bdae;
+    --fm-accent-soft: rgb(var(--fm-accent-rgb) / 0.1);
+    --fm-accent-soft-strong: rgb(var(--fm-accent-rgb) / 0.14);
+    --fm-accent-line: rgb(var(--fm-accent-rgb) / 0.34);
+    --fm-surface: rgb(255 251 244 / 0.84);
+    --fm-surface-hover: #f4ebdf;
+    --fm-surface-raised: #fffaf2;
+    --fm-surface-strong: #f1e8dc;
+    --fm-surface-inset: #efe5d8;
+    --fm-shadow-elevated: 0 18px 36px rgb(77 56 27 / 0.1);
+    --fm-shadow-glow: 0 0 20px rgb(var(--fm-accent-rgb) / 0.22);
+    --fm-theme-button-bg: #ece4d8;
+    --fm-theme-button-border: #8a7760;
+    --fm-theme-button-shadow: 0 0 0 rgb(0 0 0 / 0);
+    --fm-theme-button-icon: #5f5648;
+    --fm-theme-button-icon-muted: #5f5648;
+    --fm-theme-button-highlight: rgb(255 255 255 / 0.45);
+    --fm-theme-button-glow: rgb(95 86 72 / 0.08);
+    --fm-theme-button-focus-ring: #005f75;
+    --fm-focus-ring: rgb(var(--fm-accent-rgb) / 0.34);
+    --header-backdrop: rgb(255 250 242 / 0.84);
+    --selection-bg: #7fd9e8;
+    --selection-fg: #0f1a1d;
+
+    color-scheme: light;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
