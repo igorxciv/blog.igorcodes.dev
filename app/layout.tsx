@@ -10,7 +10,7 @@ import {
   LIGHT_THEME_COLOR,
   THEME_STORAGE_KEY,
 } from "@/lib/theme";
-import { dankMono, wotfard } from "./fonts";
+import { dankMono, wotfard, wotfardItalic } from "./fonts";
 
 // Configurable per-environment; the script only loads when an ID is provided
 // (so local dev stays analytics-free). See .env.example.
@@ -112,7 +112,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${wotfard.variable} ${dankMono.variable}`}
+      className={`${wotfard.variable} ${wotfardItalic.variable} ${dankMono.variable}`}
       suppressHydrationWarning
     >
       <head>

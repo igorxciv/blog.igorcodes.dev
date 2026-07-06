@@ -1,5 +1,8 @@
 import localFont from "next/font/local";
 
+// Preloaded roman faces only. Weight 500 (medium) is intentionally omitted to
+// keep the preload set at 3 files; `.font-medium` is remapped to 600 in
+// globals.css so nothing renders lighter than intended.
 export const wotfard = localFont({
   src: [
     {
@@ -8,24 +11,30 @@ export const wotfard = localFont({
       style: "normal",
     },
     {
-      path: "./fonts/wotfard/wotfard-regularitalic-webfont.woff2",
-      weight: "400",
-      style: "italic",
-    },
-    {
-      path: "./fonts/wotfard/wotfard-medium-webfont.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "./fonts/wotfard/wotfard-mediumitalic-webfont.woff2",
-      weight: "500",
-      style: "italic",
-    },
-    {
       path: "./fonts/wotfard/wotfard-semibold-webfont.woff2",
       weight: "600",
       style: "normal",
+    },
+    {
+      path: "./fonts/wotfard/wotfard-bold-webfont.woff2",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-wotfard",
+  display: "swap",
+  fallback: ["system-ui", "sans-serif"],
+  adjustFontFallback: "Arial",
+});
+
+// Italic faces are not preloaded; italic text opts into this family via
+// globals.css (see the `em, i, cite, .italic` rule).
+export const wotfardItalic = localFont({
+  src: [
+    {
+      path: "./fonts/wotfard/wotfard-regularitalic-webfont.woff2",
+      weight: "400",
+      style: "italic",
     },
     {
       path: "./fonts/wotfard/wotfard-semibolditalic-webfont.woff2",
@@ -33,18 +42,14 @@ export const wotfard = localFont({
       style: "italic",
     },
     {
-      path: "./fonts/wotfard/wotfard-bold-webfont.woff2",
-      weight: "700",
-      style: "normal",
-    },
-    {
       path: "./fonts/wotfard/wotfard-bolditalic-webfont.woff2",
       weight: "700",
       style: "italic",
     },
   ],
-  variable: "--font-wotfard",
+  variable: "--font-wotfard-italic",
   display: "swap",
+  preload: false,
   fallback: ["system-ui", "sans-serif"],
   adjustFontFallback: "Arial",
 });

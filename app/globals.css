@@ -127,6 +127,27 @@ body {
   text-size-adjust: 100%;
 }
 
+/*
+ * Wotfard weight 500 is not shipped as a preloaded face (see app/fonts.ts).
+ * Remap the medium utility to 600 so `.font-medium` text keeps its intended
+ * emphasis instead of falling back to the 400 face (font-synthesis is off).
+ */
+.font-medium {
+  font-weight: 600;
+}
+
+/*
+ * Italic faces live in a separate, non-preloaded family (--font-wotfard-italic).
+ * Point italic text at it so italics still resolve without preloading 8 faces.
+ */
+em,
+i,
+cite,
+.italic {
+  font-family:
+    var(--font-wotfard-italic), var(--font-wotfard), system-ui, sans-serif;
+}
+
 :root[data-theme-transition] body,
 :root[data-theme-transition]
   body
