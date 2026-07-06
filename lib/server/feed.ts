@@ -1,12 +1,19 @@
-import { getAllPosts } from "@/lib/server/posts";
+import {
+  escapeXml,
+  toCdata,
+  toFeedSummary,
+  toRssLanguage,
+} from "@/lib/server/feed-utils";
+import { renderPostHtml } from "@/lib/server/mdx-to-html";
+import { getAllPosts, getPostBySlug } from "@/lib/server/posts";
 import { siteConfig, toAbsoluteUrl } from "@/lib/site";
-import type { PostSummary } from "@/lib/types/posts";
 
 type FeedItem = {
   id: string;
   url: string;
   title: string;
   summary: string;
+  contentHtml: string;
   publishedAt: string;
   modifiedAt: string;
   tags: string[];
@@ -23,39 +30,26 @@ type FeedManifest = {
   items: FeedItem[];
 };
 
-function escapeXml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&apos;");
-}
-
-function toRssLanguage(locale: string) {
-  return locale.replace("_", "-").toLowerCase();
-}
-
-function toFeedSummary(post: Pick<PostSummary, "description">) {
-  if (post.description?.trim()) {
-    return post.description.trim();
-  }
-
-  return "Read the full post on the site.";
-}
-
 async function getFeedItems(): Promise<FeedItem[]> {
   const posts = await getAllPosts();
 
-  return posts.map((post) => ({
-    id: toAbsoluteUrl(`/blog/${post.slug}`),
-    url: toAbsoluteUrl(`/blog/${post.slug}`),
-    title: post.title,
-    summary: toFeedSummary(post),
-    publishedAt: new Date(post.date).toISOString(),
-    modifiedAt: new Date(post.updated ?? post.date).toISOString(),
-    tags: [...post.topics, ...post.tags],
-  }));
+  return Promise.all(
+    posts.map(async (post) => {
+      const content = await getPostBySlug(post.slug);
+      const contentHtml = content ? await renderPostHtml(content.body) : "";
+
+      return {
+        id: toAbsoluteUrl(`/blog/${post.slug}`),
+        url: toAbsoluteUrl(`/blog/${post.slug}`),
+        title: post.title,
+        summary: toFeedSummary(post),
+        contentHtml,
+        publishedAt: new Date(post.date).toISOString(),
+        modifiedAt: new Date(post.updated ?? post.date).toISOString(),
+        tags: [...post.topics, ...post.tags],
+      };
+    }),
+  );
 }
 
 export async function getFeedManifest(): Promise<FeedManifest> {
@@ -90,6 +84,7 @@ export async function buildJsonFeed() {
       title: item.title,
       summary: item.summary,
       content_text: item.summary,
+      content_html: item.contentHtml || item.summary,
       date_published: item.publishedAt,
       date_modified: item.modifiedAt,
       tags: item.tags,
@@ -108,14 +103,14 @@ export async function buildRssFeed() {
       <link>${escapeXml(item.url)}</link>
       <guid isPermaLink="true">${escapeXml(item.id)}</guid>
       <description>${escapeXml(item.summary)}</description>
-      <pubDate>${new Date(item.publishedAt).toUTCString()}</pubDate>
+${item.contentHtml ? `      <content:encoded>${toCdata(item.contentHtml)}</content:encoded>\n` : ""}      <pubDate>${new Date(item.publishedAt).toUTCString()}</pubDate>
 ${item.tags.map((tag) => `      <category>${escapeXml(tag)}</category>`).join("\n")}
     </item>`,
     )
     .join("\n");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>${escapeXml(feed.title)}</title>
     <link>${escapeXml(feed.homePageUrl)}</link>
