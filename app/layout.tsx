@@ -1,15 +1,23 @@
-import type { Metadata } from "next";
+import { type Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
 import { SiteShell } from "@/components/blog/site-shell";
 import { ThemeToggleLazy } from "@/components/theme-toggle-lazy";
-import { DARK_THEME_COLOR, LIGHT_THEME_COLOR, THEME_STORAGE_KEY } from "@/lib/theme";
-import { dankMono, wotfard } from "./fonts";
 import { buildPersonJsonLd, buildWebsiteJsonLd } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
+import {
+  DARK_THEME_COLOR,
+  LIGHT_THEME_COLOR,
+  THEME_STORAGE_KEY,
+} from "@/lib/theme";
+import { dankMono, wotfard } from "./fonts";
 
-const UMAMI_WEBSITE_ID = "0aa17cc2-4dda-408c-8211-b361b76dfa91";
-const UMAMI_SCRIPT_URL = "https://cloud.umami.is/script.js";
+// Configurable per-environment; the script only loads when an ID is provided
+// (so local dev stays analytics-free). See .env.example.
+const UMAMI_WEBSITE_ID = process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID;
+const UMAMI_SCRIPT_URL =
+  process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL ??
+  "https://cloud.umami.is/script.js";
 
 const themeInitScript = `
   (() => {
@@ -47,7 +55,9 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
   alternates: {
-    canonical: "/blog",
+    // No site-wide canonical: each page sets its own so new top-level routes
+    // are never mislabeled as /blog. Only the genuinely site-wide feed
+    // alternates live here.
     types: {
       "application/rss+xml": "/rss.xml",
       "application/feed+json": "/feed.json",
@@ -58,7 +68,13 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.author.name, url: siteConfig.url }],
   creator: siteConfig.author.name,
   publisher: siteConfig.author.name,
-  keywords: ["engineering blog", "software architecture", "frontend engineering", "Next.js", "AI systems"],
+  keywords: [
+    "engineering blog",
+    "software architecture",
+    "frontend engineering",
+    "Next.js",
+    "AI systems",
+  ],
   openGraph: {
     type: "website",
     url: siteConfig.url,
@@ -94,7 +110,11 @@ export default function RootLayout({
   const personJsonLd = buildPersonJsonLd();
 
   return (
-    <html lang="en" className={`${wotfard.variable} ${dankMono.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${wotfard.variable} ${dankMono.variable}`}
+      suppressHydrationWarning
+    >
       <head>
         <meta name="theme-color" content={DARK_THEME_COLOR} />
       </head>
@@ -102,13 +122,15 @@ export default function RootLayout({
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInitScript}
         </Script>
-        <Script
-          src={UMAMI_SCRIPT_URL}
-          data-website-id={UMAMI_WEBSITE_ID}
-          data-domains={siteConfig.domain}
-          data-do-not-track="true"
-          strategy="afterInteractive"
-        />
+        {UMAMI_WEBSITE_ID ? (
+          <Script
+            src={UMAMI_SCRIPT_URL}
+            data-website-id={UMAMI_WEBSITE_ID}
+            data-domains={siteConfig.domain}
+            data-do-not-track="true"
+            strategy="afterInteractive"
+          />
+        ) : null}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}

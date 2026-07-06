@@ -1,5 +1,5 @@
-import type { PostContent, PostSummary } from "@/lib/types/posts";
 import { siteConfig, toAbsoluteUrl } from "@/lib/site";
+import { type PostContent, type PostSummary } from "@/lib/types/posts";
 
 type JsonLd = {
   "@context": "https://schema.org";
@@ -100,11 +100,15 @@ export function buildBreadcrumbJsonLd(post: PostContent): JsonLd {
 }
 
 export function buildArticleJsonLd(post: PostContent): JsonLd {
+  const ogImage = toAbsoluteUrl(
+    `/api/og?slug=${encodeURIComponent(post.slug)}`,
+  );
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
     description: post.description ?? siteConfig.description,
+    image: [ogImage],
     mainEntityOfPage: toAbsoluteUrl(`/blog/${post.slug}`),
     url: toAbsoluteUrl(`/blog/${post.slug}`),
     datePublished: isoDate(post.date),
@@ -115,10 +119,12 @@ export function buildArticleJsonLd(post: PostContent): JsonLd {
     author: {
       "@type": "Person",
       name: siteConfig.author.name,
+      url: siteConfig.url,
     },
     publisher: {
       "@type": "Person",
       name: siteConfig.author.name,
+      url: siteConfig.url,
     },
   };
 }
