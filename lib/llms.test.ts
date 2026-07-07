@@ -80,6 +80,21 @@ describe("buildLlmsIndex", () => {
   it("handles an empty corpus", () => {
     expect(buildLlmsIndex([])).toContain("_No published posts yet._");
   });
+
+  it("escapes brackets in titles and collapses multiline descriptions", () => {
+    const index = buildLlmsIndex([
+      post({
+        slug: "x",
+        title: "Arrays [in depth]",
+        description: "line one\n  line two",
+      }),
+    ]);
+
+    // Each post must stay a single list item; brackets must not break the link.
+    expect(index).toContain("- [Arrays \\[in depth\\]](");
+    expect(index).toContain(": line one line two —");
+    expect(index).not.toContain("line one\n");
+  });
 });
 
 describe("buildLlmsFull", () => {

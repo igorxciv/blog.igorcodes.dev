@@ -6,9 +6,20 @@ import { type PostContent, type PostSummary } from "@/lib/types/posts";
 // index (https://llmstxt.org/), a single-file corpus, and per-post Markdown
 // mirrors. Kept dependency-free and pure so they unit-test without server-only.
 
-// Path of a post's clean-Markdown mirror. See app/api/md/[...slug]/route.ts.
+// Path of a post's Markdown mirror. See app/api/md/[...slug]/route.ts.
 export function postMarkdownPath(slug: string): string {
   return `/api/md/${slug}`;
+}
+
+// Escape the `[` / `]` that would otherwise break Markdown link-text syntax.
+function escapeLinkText(text: string): string {
+  return text.replace(/[[\]]/g, "\\$&");
+}
+
+// Collapse any run of whitespace (incl. newlines from multiline YAML) to a
+// single space so a value stays on one line inside a list item.
+function oneLine(text: string): string {
+  return text.replace(/\s+/g, " ").trim();
 }
 
 function metaLines(post: PostSummary): string[] {
@@ -31,17 +42,18 @@ function metaLines(post: PostSummary): string[] {
   return lines;
 }
 
-// One post as a self-contained Markdown document: title, description, a compact
-// metadata block, then the raw MDX body. Interactive components appear as their
-// JSX source (agents read the surrounding prose fine, same as a `.md` mirror on
-// docs sites), so no lossy component stripping is applied.
+// One post as a self-contained document: title, description, a compact metadata
+// block, then the post's Markdown/MDX source. Interactive components are left as
+// their JSX source rather than stripped — that keeps prop-encoded data (tables,
+// process flows) intact and information-complete for agents, the same way docs
+// platforms serve `.mdx` source. No leading `---` before the body so the corpus
+// join delimiter in buildLlmsFull stays unambiguous.
 export function postToMarkdown(post: PostContent): string {
   const parts = [`# ${post.title}`];
   if (post.description) {
-    parts.push(`> ${post.description}`);
+    parts.push(`> ${oneLine(post.description)}`);
   }
   parts.push(metaLines(post).join("\n"));
-  parts.push("---");
   parts.push(post.body.trim());
   return `${parts.join("\n\n")}\n`;
 }
@@ -62,8 +74,11 @@ export function buildLlmsIndex(posts: PostSummary[]): string {
   const items = posts.map((post) => {
     const page = toAbsoluteUrl(`/blog/${post.slug}`);
     const markdown = toAbsoluteUrl(postMarkdownPath(post.slug));
-    const description = post.description ? `: ${post.description}` : "";
-    return `- [${post.title}](${page})${description} — Markdown: ${markdown}`;
+    const title = escapeLinkText(post.title);
+    const description = post.description
+      ? `: ${oneLine(post.description)}`
+      : "";
+    return `- [${title}](${page})${description} — Markdown: ${markdown}`;
   });
 
   const postsSection =

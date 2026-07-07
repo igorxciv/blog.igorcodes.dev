@@ -7,6 +7,9 @@ export const dynamic = "force-static";
 export async function GET() {
   const body = buildLlmsFull(await getAllPostContent());
   return new Response(body, {
-    headers: { "content-type": "text/plain; charset=utf-8" },
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+      "Cache-Control": "public, max-age=0, s-maxage=3600",
+    },
   });
 }

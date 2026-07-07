@@ -182,9 +182,11 @@ Claude, Perplexity, Google AI Overviews, …) can consume and cite it accurately
   a linked list of every published post and its Markdown mirror.
 - **`/llms-full.txt`** — the entire published corpus concatenated as one Markdown
   file, for agents that prefer a single fetch over crawling.
-- **`/api/md/<slug>`** — a per-post clean-Markdown mirror (title, metadata block,
-  raw MDX body). Statically prerendered for each published post; also advertised
-  on every post via `<link rel="alternate" type="text/markdown">`.
+- **`/api/md/<slug>`** — a per-post Markdown mirror (title, metadata block, then
+  the post's Markdown/MDX source). Interactive components are left as JSX source
+  so prop-encoded data stays intact and information-complete for agents, the same
+  way docs platforms serve `.mdx`. Statically prerendered for each published post
+  and advertised on every post via `<link rel="alternate" type="text/markdown">`.
 - **`robots.txt`** — explicitly allows the major AI crawlers (GPTBot, ClaudeBot,
   PerplexityBot, Google-Extended, …); this blog opts *into* answer engines.
 - **Structured data** — `Article` JSON-LD carries AEO signals (`isAccessibleForFree`,
