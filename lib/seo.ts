@@ -125,6 +125,18 @@ export function buildArticleJsonLd(post: PostContent): JsonLd {
     articleSection: post.topics[0],
     keywords: post.tags.join(", "),
     inLanguage: "en",
+    // AEO signals: answer engines use these to gauge scope, freely-quotable
+    // status, and the topics an answer can attribute to this article.
+    isAccessibleForFree: true,
+    ...(post.readingTime ? { timeRequired: `PT${post.readingTime}M` } : {}),
+    ...(post.topics.length > 0
+      ? {
+          about: post.topics.map((topic) => ({
+            "@type": "Thing",
+            name: topic,
+          })),
+        }
+      : {}),
     author: {
       "@type": "Person",
       name: siteConfig.author.name,

@@ -173,6 +173,28 @@ Copy `.env.example` to `.env.local` and fill in as needed.
 
 All `NEXT_PUBLIC_*` variables are exposed to the browser and are non-secret.
 
+## Answer Engine Optimization (AEO)
+
+The site exposes clean, agent-readable surfaces so AI answer engines (ChatGPT,
+Claude, Perplexity, Google AI Overviews, …) can consume and cite it accurately:
+
+- **`/llms.txt`** — an [llms.txt](https://llmstxt.org/) index: site summary plus
+  a linked list of every published post and its Markdown mirror.
+- **`/llms-full.txt`** — the entire published corpus concatenated as one Markdown
+  file, for agents that prefer a single fetch over crawling.
+- **`/api/md/<slug>`** — a per-post clean-Markdown mirror (title, metadata block,
+  raw MDX body). Statically prerendered for each published post; also advertised
+  on every post via `<link rel="alternate" type="text/markdown">`.
+- **`robots.txt`** — explicitly allows the major AI crawlers (GPTBot, ClaudeBot,
+  PerplexityBot, Google-Extended, …); this blog opts *into* answer engines.
+- **Structured data** — `Article` JSON-LD carries AEO signals (`isAccessibleForFree`,
+  `timeRequired`, `about`) alongside the existing `WebSite`/`Person`/`BlogPosting`/
+  `BreadcrumbList` graphs. Serialization and formatting live in `lib/llms.ts` and
+  `lib/seo.ts` (both pure and unit-tested).
+
+Everything is derived from the same post pipeline (`lib/server/posts`), so drafts
+never leak and the surfaces stay in sync with `/blog`.
+
 ## Notes
 
 - Tests use Vitest and live in `lib/**/*.test.ts`.

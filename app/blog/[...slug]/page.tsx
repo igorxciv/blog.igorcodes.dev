@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import { PostPageHeader } from "@/components/blog/post-page-header";
 import { ReadingProgress } from "@/components/blog/reading-progress";
 import { RelatedPosts } from "@/components/blog/related-posts";
+import { postMarkdownPath } from "@/lib/llms";
 import { remarkTextFences } from "@/lib/mdx/remark-text-fences";
 import {
   buildArticleJsonLd,
@@ -65,6 +66,10 @@ export async function generateMetadata({
     authors: [{ name: siteConfig.author.name, url: siteConfig.url }],
     alternates: {
       canonical: canonicalPath,
+      // Point AI agents / answer engines at the clean Markdown mirror (AEO).
+      types: {
+        "text/markdown": postMarkdownPath(post.slug),
+      },
     },
     openGraph: {
       type: "article",
