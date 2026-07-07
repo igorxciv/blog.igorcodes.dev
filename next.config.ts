@@ -21,7 +21,9 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data:",
       "font-src 'self'",
-      "connect-src 'self' https://cloud.umami.is",
+      // Umami Cloud serves the tracker from cloud.umami.is but POSTs events to
+      // gateway.umami.is (/api/send), so both hosts are needed here.
+      "connect-src 'self' https://cloud.umami.is https://gateway.umami.is",
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
