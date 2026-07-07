@@ -9,6 +9,8 @@
     "start": "next start",
     "fonts:fetch": "node app/_tools/fetch-fonts.mjs",
     "fonts:upload": "node app/_tools/upload-fonts.mjs",
+    "new:post": "node app/_tools/new-post.mjs",
+    "posts:validate": "tsx app/_tools/validate-posts.ts",
     "icons:generate": "node app/_tools/generate-icons.mjs",
     "lint": "biome check",
     "lint:fix": "biome check --write",
@@ -53,6 +55,7 @@
     "mdast-util-mdx-jsx": "3.2.0",
     "sharp": "^0.35.3",
     "tailwindcss": "^4.3.2",
+    "tsx": "^4.23.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
   }

@@ -18,6 +18,7 @@ jobs:
       - run: pnpm exec biome ci .
       - run: pnpm exec tsc --noEmit
       - run: pnpm test
+      - run: pnpm posts:validate
       - run: pnpm build
         env:
           BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}

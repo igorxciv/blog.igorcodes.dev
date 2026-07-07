@@ -5,6 +5,9 @@ pre-commit:
       glob: "*.{js,jsx,mjs,cjs,ts,tsx,css,json,jsonc}"
       run: pnpm biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
       stage_fixed: true
+    - name: validate-posts
+      glob: "content/**/*.{md,mdx}"
+      run: pnpm posts:validate
 
 pre-push:
   jobs:
