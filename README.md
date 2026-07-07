@@ -177,3 +177,4 @@ All `NEXT_PUBLIC_*` variables are exposed to the browser and are non-secret.
 
 - Tests use Vitest and live in `lib/**/*.test.ts`.
 - Do not commit build output (`.next/`), licensed fonts (`app/fonts/`), or secrets (`.env*` except `.env.example`).
+- Dependency pinning: framework packages (`next`, `react`, `react-dom`) are pinned to **exact** versions; libraries use **caret** (`^`) ranges. Dependabot (`.github/dependabot.yml`) opens a weekly grouped PR for minor/patch bumps and a separate PR for framework majors.

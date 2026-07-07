@@ -1,0 +1,33 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      # Minor and patch bumps for everything land in one weekly PR.
+      minor-and-patch:
+        applies-to: version-updates
+        update-types:
+          - minor
+          - patch
+      # Framework majors (next, react, react-dom) are pinned to exact
+      # versions and reviewed together in a separate PR.
+      framework-majors:
+        applies-to: version-updates
+        patterns:
+          - next
+          - react
+          - react-dom
+        update-types:
+          - major
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns:
+          - "*"
