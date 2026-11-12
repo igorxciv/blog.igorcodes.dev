@@ -1,8 +1,7 @@
-import { type Metadata } from "next";
+import { type Metadata, type Viewport } from "next";
 import Script from "next/script";
 import "./globals.css";
 import { SiteShell } from "@/components/blog/site-shell";
-import { ThemeToggleLazy } from "@/components/theme-toggle-lazy";
 import { buildPersonJsonLd, buildWebsiteJsonLd, jsonLdString } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 import {
@@ -10,7 +9,7 @@ import {
   LIGHT_THEME_COLOR,
   THEME_STORAGE_KEY,
 } from "@/lib/theme";
-import { dankMono, wotfard, wotfardItalic } from "./fonts";
+import { archivo, jetbrainsMono, sourceSerif } from "./fonts";
 
 // Configurable per-environment; the script only loads when an ID is provided
 // (so local dev stays analytics-free). See .env.example.
@@ -19,33 +18,30 @@ const UMAMI_SCRIPT_URL =
   process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL ??
   "https://cloud.umami.is/script.js";
 
+// Applies a stored theme override before first paint. No stored value means
+// "follow the system": CSS handles that on its own, so this only pins.
 const themeInitScript = `
   (() => {
-    const storageKey = ${JSON.stringify(THEME_STORAGE_KEY)};
-    const lightThemeColor = ${JSON.stringify(LIGHT_THEME_COLOR)};
-    const darkThemeColor = ${JSON.stringify(DARK_THEME_COLOR)};
-    const root = document.documentElement;
-    const storedTheme = window.localStorage.getItem(storageKey);
-    const theme =
-      storedTheme === "light" || storedTheme === "dark"
-        ? storedTheme
-        : window.matchMedia("(prefers-color-scheme: light)").matches
-          ? "light"
-          : "dark";
-
-    root.dataset.theme = theme;
-    root.style.colorScheme = theme;
-
-    let themeColorMeta = document.querySelector('meta[name="theme-color"]');
-    if (!themeColorMeta) {
-      themeColorMeta = document.createElement("meta");
-      themeColorMeta.setAttribute("name", "theme-color");
-      document.head.appendChild(themeColorMeta);
-    }
-
-    themeColorMeta.setAttribute("content", theme === "light" ? lightThemeColor : darkThemeColor);
+    try {
+      const stored = window.localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});
+      if (stored !== "light" && stored !== "dark") return;
+      const root = document.documentElement;
+      root.dataset.theme = stored;
+      const color = stored === "light" ? ${JSON.stringify(LIGHT_THEME_COLOR)} : ${JSON.stringify(DARK_THEME_COLOR)};
+      for (const meta of document.querySelectorAll('meta[name="theme-color"]')) {
+        meta.setAttribute("content", color);
+      }
+    } catch {}
   })();
 `;
+
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: LIGHT_THEME_COLOR },
+    { media: "(prefers-color-scheme: dark)", color: DARK_THEME_COLOR },
+  ],
+};
 
 export const metadata: Metadata = {
   title: {
@@ -69,11 +65,11 @@ export const metadata: Metadata = {
   creator: siteConfig.author.name,
   publisher: siteConfig.author.name,
   keywords: [
-    "engineering blog",
+    "engineering day-book",
     "software architecture",
-    "frontend engineering",
-    "Next.js",
-    "AI systems",
+    "technical debt",
+    "AI and learning",
+    "engineering leadership",
   ],
   openGraph: {
     type: "website",
@@ -112,13 +108,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${wotfard.variable} ${wotfardItalic.variable} ${dankMono.variable}`}
+      className={`${sourceSerif.variable} ${archivo.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <meta name="theme-color" content={DARK_THEME_COLOR} />
-      </head>
-      <body className={`${wotfard.className} antialiased`}>
+      <body>
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInitScript}
         </Script>
@@ -140,7 +133,6 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: jsonLdString(personJsonLd) }}
         />
         <SiteShell>{children}</SiteShell>
-        <ThemeToggleLazy />
       </body>
     </html>
   );

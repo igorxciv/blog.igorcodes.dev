@@ -8,10 +8,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "pnpm fonts:fetch && next build",
+    "build": "next build",
     "start": "next start",
-    "fonts:fetch": "node app/_tools/fetch-fonts.mjs",
-    "fonts:upload": "node app/_tools/upload-fonts.mjs",
     "new:post": "node app/_tools/new-post.mjs",
     "posts:validate": "tsx app/_tools/validate-posts.ts",
     "icons:generate": "node app/_tools/generate-icons.mjs",
@@ -27,7 +25,6 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",
-    "lucide-react": "^1.23.0",
     "next": "16.2.10",
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.7",
@@ -53,7 +50,6 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/unist": "3.0.3",
-    "@vercel/blob": "^2.5.0",
     "lefthook": "^2.1.9",
     "mdast-util-mdx-jsx": "3.2.0",
     "sharp": "^0.35.3",

@@ -25,10 +25,21 @@ That translation gap is where good proposals go to die.
 
 The work is real. The pain is real. But the decision is not ready yet.
 
-<ImagePlaceholder
-  title="Technical debt as a risk map"
-  description="Create a hero illustration showing a code module connected to delivery risk, release confidence, team knowledge, and roadmap predictability."
-/>
+```figure caption="Technical debt as a risk map" description="A box for payment provider code spread across billing, onboarding, and plans, connected to four risks around it: delivery risk, team knowledge, release confidence, and roadmap predictability."
+                          +---------------+
+                          | delivery risk |
+                          +---------------+
+                                  |
+                     +------------------------+
++----------------+   | payment provider code  |   +--------------------+
+| team knowledge |---| spread across billing, |---| release confidence |
++----------------+   | onboarding, and plans  |   +--------------------+
+                     +------------------------+
+                                  |
+                     +------------------------+
+                     | roadmap predictability |
+                     +------------------------+
+```
 
 ## The problem is not debt
 
@@ -249,10 +260,21 @@ That distinction matters because technical debt work often fails when the finish
 
 If the finish line is “make the next plan iteration take less than a week,” you have something measurable. Maybe you hit it. Maybe you do not. Either way, you learn.
 
-<ImagePlaceholder
-  title="From vague refactor to bounded risk reduction"
-  description="Create a simple before/after diagram: a large fuzzy 'refactor billing' cloud on one side, and three small scoped risk-reduction cards on the other."
-/>
+```figure caption="From vague refactor to bounded risk reduction" description="Before: a cloud labelled Let's refactor the billing system, with unknown scope and no finish line. After: three small scoped pieces of work, one sprint to isolate one provider, two days of tests on the riskiest checkout flows, and one week to remove duplicate plan calculation logic, done when the next plan change takes less than a week."
+Before                                         After
+
+ .----------------------------------.          +---------------------------------+
+(  "Let's refactor the billing       )         | 1 sprint  isolate one provider  |
+(   system"                          )  ---->  +---------------------------------+
+(   scope: ?        done when: ?     )         | 2 days    tests on the riskiest |
+ '----------------------------------'          |           checkout flows        |
+                                               +---------------------------------+
+                                               | 1 week    remove duplicate plan |
+                                               |           calculation logic     |
+                                               +---------------------------------+
+                                               done when: the next plan change
+                                               takes less than a week
+```
 
 ## Do not hide the trade-off
 

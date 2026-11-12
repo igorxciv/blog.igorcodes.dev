@@ -1,0 +1,798 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T20:18:01.446120Z",
+  "title": "Design System: Day-Book of Igor",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Ledger Paper",
+        "canonical": "#e6ecdc",
+        "cssVar": "--paper",
+        "theme": "day",
+        "tonalRamp": [
+          "#0a0c07",
+          "#24261f",
+          "#40443a",
+          "#5f6357",
+          "#808577",
+          "#a3a79b",
+          "#c7cbc1",
+          "#edf0e8"
+        ]
+      },
+      "paper-sunk": {
+        "role": "neutral",
+        "displayName": "Sunk Paper",
+        "canonical": "#dae3cd",
+        "cssVar": "--paper-sunk",
+        "theme": "day",
+        "tonalRamp": [
+          "#0a0c06",
+          "#23271c",
+          "#3f4436",
+          "#5d6453",
+          "#7e8673",
+          "#a1a898",
+          "#c6ccbe",
+          "#ecf0e6"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Blue-Black Ink",
+        "canonical": "#1a2230",
+        "cssVar": "--ink",
+        "theme": "day",
+        "tonalRamp": [
+          "#080b11",
+          "#20252e",
+          "#3b424e",
+          "#596271",
+          "#798393",
+          "#9da5b4",
+          "#c2cad6",
+          "#e9eff8"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Faded Ink",
+        "canonical": "#3b4552",
+        "cssVar": "--ink-soft",
+        "theme": "day",
+        "tonalRamp": [
+          "#080b10",
+          "#20262d",
+          "#3b434d",
+          "#58626f",
+          "#798391",
+          "#9da6b2",
+          "#c2cad4",
+          "#e9eff7"
+        ]
+      },
+      "pencil": {
+        "role": "neutral",
+        "displayName": "Pencil",
+        "canonical": "#535f58",
+        "cssVar": "--pencil",
+        "theme": "day",
+        "tonalRamp": [
+          "#080c0a",
+          "#202723",
+          "#3c443f",
+          "#59645e",
+          "#7a867f",
+          "#9ea8a2",
+          "#c3ccc6",
+          "#eaf0ec"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Green Rule",
+        "canonical": "#8fae95",
+        "cssVar": "--rule",
+        "theme": "day",
+        "tonalRamp": [
+          "#040e06",
+          "#1a291d",
+          "#334837",
+          "#4e6954",
+          "#6f8b74",
+          "#94ac99",
+          "#bbcfbf",
+          "#e3f3e6"
+        ]
+      },
+      "rule-soft": {
+        "role": "neutral",
+        "displayName": "Faint Rule",
+        "canonical": "#b9cdb9",
+        "cssVar": "--rule-soft",
+        "theme": "day",
+        "tonalRamp": [
+          "#070d07",
+          "#1e281e",
+          "#394639",
+          "#566656",
+          "#778877",
+          "#9baa9b",
+          "#c1cdc0",
+          "#e8f2e8"
+        ]
+      },
+      "head": {
+        "role": "neutral",
+        "displayName": "Head Green",
+        "canonical": "#203a2f",
+        "cssVar": "--head",
+        "theme": "day",
+        "tonalRamp": [
+          "#040e09",
+          "#1a2922",
+          "#33473e",
+          "#4f685c",
+          "#6f897d",
+          "#95aba0",
+          "#bbcec5",
+          "#e4f3eb"
+        ]
+      },
+      "red": {
+        "role": "primary",
+        "displayName": "Bookkeeper's Red",
+        "canonical": "#b3311f",
+        "cssVar": "--red",
+        "theme": "day",
+        "tonalRamp": [
+          "#240000",
+          "#4d0100",
+          "#79190c",
+          "#a83221",
+          "#cf5743",
+          "#ec8371",
+          "#ffaf9e",
+          "#ffdbcd"
+        ]
+      },
+      "cloth": {
+        "role": "secondary",
+        "displayName": "Book Cloth Green",
+        "canonical": "#203a2f",
+        "cssVar": "--cloth",
+        "theme": "day",
+        "tonalRamp": [
+          "#040e09",
+          "#1a2922",
+          "#33473e",
+          "#4f685c",
+          "#6f897d",
+          "#95aba0",
+          "#bbcec5",
+          "#e4f3eb"
+        ]
+      },
+      "cloth-ink": {
+        "role": "neutral",
+        "displayName": "Cloth Cream",
+        "canonical": "#efe6c8",
+        "cssVar": "--cloth-ink",
+        "theme": "day",
+        "tonalRamp": [
+          "#0e0b03",
+          "#292516",
+          "#48422f",
+          "#686149",
+          "#8a8269",
+          "#aca58f",
+          "#cfc9b7",
+          "#f3eee0"
+        ]
+      },
+      "cloth-soft": {
+        "role": "neutral",
+        "displayName": "Cloth Pale",
+        "canonical": "#d3d9c9",
+        "cssVar": "--cloth-soft",
+        "theme": "day",
+        "tonalRamp": [
+          "#0a0c07",
+          "#24261f",
+          "#404439",
+          "#5f6356",
+          "#808577",
+          "#a3a79b",
+          "#c7cbc1",
+          "#edf0e8"
+        ]
+      },
+      "gilt": {
+        "role": "secondary",
+        "displayName": "Gilt",
+        "canonical": "#c9b98a",
+        "cssVar": "--gilt",
+        "theme": "day",
+        "tonalRamp": [
+          "#100a00",
+          "#2c240b",
+          "#4c4120",
+          "#6e6038",
+          "#908158",
+          "#b1a481",
+          "#d3c9ab",
+          "#f6eed7"
+        ]
+      },
+      "link": {
+        "role": "tertiary",
+        "displayName": "Register Blue",
+        "canonical": "#1f4a86",
+        "cssVar": "--link",
+        "theme": "day",
+        "tonalRamp": [
+          "#000a21",
+          "#0c2447",
+          "#22426f",
+          "#39629b",
+          "#5a84c0",
+          "#82a7db",
+          "#adcbf8",
+          "#d8f1ff"
+        ]
+      },
+      "selection": {
+        "role": "neutral",
+        "displayName": "Selection Green",
+        "canonical": "#c3d8b5",
+        "cssVar": "--selection",
+        "theme": "day",
+        "tonalRamp": [
+          "#070d04",
+          "#1f2918",
+          "#3a4730",
+          "#57674b",
+          "#77896b",
+          "#9bab91",
+          "#c1ceb8",
+          "#e8f3e1"
+        ]
+      },
+      "night-paper": {
+        "role": "neutral",
+        "displayName": "Night Paper",
+        "canonical": "#15241d",
+        "cssVar": "--paper",
+        "theme": "night",
+        "tonalRamp": [
+          "#070d0a",
+          "#1e2823",
+          "#39453f",
+          "#56665e",
+          "#76877f",
+          "#9ba9a2",
+          "#c0ccc6",
+          "#e8f1ec"
+        ]
+      },
+      "night-paper-sunk": {
+        "role": "neutral",
+        "displayName": "Night Sunk Paper",
+        "canonical": "#1c2f26",
+        "cssVar": "--paper-sunk",
+        "theme": "night",
+        "tonalRamp": [
+          "#060d09",
+          "#1d2822",
+          "#37463e",
+          "#53665d",
+          "#74887e",
+          "#98aaa1",
+          "#bfcdc6",
+          "#e6f2ec"
+        ]
+      },
+      "night-ink": {
+        "role": "neutral",
+        "displayName": "Night Cream Ink",
+        "canonical": "#e8e2cc",
+        "cssVar": "--ink",
+        "theme": "night",
+        "tonalRamp": [
+          "#0d0b05",
+          "#28251b",
+          "#464234",
+          "#666150",
+          "#888270",
+          "#aaa595",
+          "#cdc9bc",
+          "#f1efe4"
+        ]
+      },
+      "night-ink-soft": {
+        "role": "neutral",
+        "displayName": "Night Faded Ink",
+        "canonical": "#c9c4af",
+        "cssVar": "--ink-soft",
+        "theme": "night",
+        "tonalRamp": [
+          "#0d0b05",
+          "#28251b",
+          "#454234",
+          "#666150",
+          "#878370",
+          "#a9a595",
+          "#ccc9bc",
+          "#f1efe4"
+        ]
+      },
+      "night-pencil": {
+        "role": "neutral",
+        "displayName": "Night Pencil",
+        "canonical": "#a1ad9e",
+        "cssVar": "--pencil",
+        "theme": "night",
+        "tonalRamp": [
+          "#090c08",
+          "#212720",
+          "#3d453b",
+          "#5b6558",
+          "#7b8679",
+          "#9fa89d",
+          "#c4ccc2",
+          "#eaf1e9"
+        ]
+      },
+      "night-rule": {
+        "role": "neutral",
+        "displayName": "Night Rule",
+        "canonical": "#3f604b",
+        "cssVar": "--rule",
+        "theme": "night",
+        "tonalRamp": [
+          "#030e07",
+          "#172a1e",
+          "#304939",
+          "#4b6a56",
+          "#6b8b76",
+          "#91ad9a",
+          "#b9d0c0",
+          "#e2f4e7"
+        ]
+      },
+      "night-rule-soft": {
+        "role": "neutral",
+        "displayName": "Night Faint Rule",
+        "canonical": "#2b4336",
+        "cssVar": "--rule-soft",
+        "theme": "night",
+        "tonalRamp": [
+          "#050e09",
+          "#1b2921",
+          "#35473d",
+          "#50685a",
+          "#71897b",
+          "#96ab9f",
+          "#bdcec4",
+          "#e5f3ea"
+        ]
+      },
+      "night-head": {
+        "role": "neutral",
+        "displayName": "Night Head (Gilt)",
+        "canonical": "#c9b98a",
+        "cssVar": "--head",
+        "theme": "night",
+        "tonalRamp": [
+          "#100a00",
+          "#2c240b",
+          "#4c4120",
+          "#6e6038",
+          "#908158",
+          "#b1a481",
+          "#d3c9ab",
+          "#f6eed7"
+        ]
+      },
+      "night-red": {
+        "role": "primary",
+        "displayName": "Night Red",
+        "canonical": "#e2735f",
+        "cssVar": "--red",
+        "theme": "night",
+        "tonalRamp": [
+          "#210000",
+          "#470c04",
+          "#712418",
+          "#9e3e2e",
+          "#c5604f",
+          "#e28a79",
+          "#ffb4a5",
+          "#ffded2"
+        ]
+      },
+      "night-cloth": {
+        "role": "secondary",
+        "displayName": "Night Cloth",
+        "canonical": "#0f1a15",
+        "cssVar": "--cloth",
+        "theme": "night",
+        "tonalRamp": [
+          "#080c0a",
+          "#202724",
+          "#3b4540",
+          "#58655f",
+          "#798680",
+          "#9da8a3",
+          "#c2ccc7",
+          "#e9f0ed"
+        ]
+      },
+      "night-cloth-soft": {
+        "role": "neutral",
+        "displayName": "Night Cloth Pale",
+        "canonical": "#b9c1b1",
+        "cssVar": "--cloth-soft",
+        "theme": "night",
+        "tonalRamp": [
+          "#0a0c07",
+          "#23271f",
+          "#3f443a",
+          "#5d6457",
+          "#7e8577",
+          "#a1a79b",
+          "#c6cbc1",
+          "#ecf0e8"
+        ]
+      },
+      "night-link": {
+        "role": "tertiary",
+        "displayName": "Night Register Blue",
+        "canonical": "#a9c6ee",
+        "cssVar": "--link",
+        "theme": "night",
+        "tonalRamp": [
+          "#040b18",
+          "#182639",
+          "#30435d",
+          "#4b6383",
+          "#6b84a6",
+          "#91a7c5",
+          "#b8cbe4",
+          "#e1f0ff"
+        ]
+      },
+      "night-selection": {
+        "role": "neutral",
+        "displayName": "Night Selection",
+        "canonical": "#31513f",
+        "cssVar": "--selection",
+        "theme": "night",
+        "tonalRamp": [
+          "#030e08",
+          "#172a1f",
+          "#30483a",
+          "#4b6958",
+          "#6c8b78",
+          "#92ad9c",
+          "#b9d0c2",
+          "#e2f4e9"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Entry page title only."
+      },
+      "label-title": {
+        "displayName": "Label title",
+        "purpose": "The book's name inside the gilt label on the cloth band; 1.75rem under 48rem."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Account and 404 page headings, aligned to the particulars column; optional trailing italic word in pencil at 400."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Entry titles in the ledger; 1.375rem under 48rem."
+      },
+      "section": {
+        "displayName": "Section",
+        "purpose": "Entry body h2; number hung in the date margin from a CSS counter."
+      },
+      "subsection": {
+        "displayName": "Subsection",
+        "purpose": "Entry body h3; numbered n.n."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Entry abstract under the title and the index intro, in ink-soft; 1.1875rem under 48rem."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Prose, max 40rem measure, old-style proportional figures."
+      },
+      "col-head": {
+        "displayName": "Column head",
+        "purpose": "Uppercase heads printed over ruled columns and ruled blocks, in head green. Never a kicker."
+      },
+      "ledger": {
+        "displayName": "Ledger",
+        "purpose": "Account cells, entry details, meta lines, footer: Archivo at 85% width."
+      },
+      "ledger-date": {
+        "displayName": "Ledger date",
+        "purpose": "Dates in the margin: Archivo at 80% width, year below in pencil."
+      },
+      "nav": {
+        "displayName": "Navigation",
+        "purpose": "Band nav and theme toggle: Archivo at 80% width."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "JetBrains Mono for code, pre, kbd, samp only."
+      }
+    },
+    "shadows": [],
+    "rules": [
+      {
+        "name": "margin-double-rule",
+        "value": "border-inline-start: 4px double var(--red)",
+        "purpose": "Closes the date column on ledger and entry pages, full height."
+      },
+      {
+        "name": "board-rule",
+        "value": "3px solid var(--red)",
+        "purpose": "Where the top band (bottom edge) and foot band (top edge) meet the paper."
+      },
+      {
+        "name": "bar-foot-rule",
+        "value": "2px solid var(--red)",
+        "purpose": "Foot of the narrow sticky contents bar."
+      },
+      {
+        "name": "head-rule-over",
+        "value": "2px solid var(--head)",
+        "purpose": "Above column heads; top of notes, panels, accounts head, contents head, forward rows."
+      },
+      {
+        "name": "head-rule-under",
+        "value": "1px solid var(--head)",
+        "purpose": "Below column heads."
+      },
+      {
+        "name": "row-rule",
+        "value": "1px solid var(--rule)",
+        "purpose": "Between rows, column dividers for Fo./Min., code block and figure rules, image frame."
+      },
+      {
+        "name": "blank-rule",
+        "value": "1px solid var(--rule-soft)",
+        "purpose": "Blank ruled lines after the last entry."
+      },
+      {
+        "name": "label-border",
+        "value": "1.5px solid var(--gilt)",
+        "purpose": "The gilt label on cloth; the only closed box used as an identity device."
+      },
+      {
+        "name": "focus",
+        "value": "outline: 2px solid var(--focus); outline-offset: 3px",
+        "purpose": "Focus ring; --focus is red on paper, overridden to gilt inside cloth regions."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state-change",
+        "value": "none",
+        "purpose": "No transitions or animations are declared; all state swaps are instant."
+      },
+      {
+        "name": "scroll",
+        "value": "scroll-behavior: smooth",
+        "purpose": "In-page anchor scrolling, only under prefers-reduced-motion: no-preference."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none !important; transition: none !important",
+        "purpose": "Global guard under prefers-reduced-motion: reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "panels-stack",
+        "value": "34rem",
+        "purpose": "Comparison panels collapse to one column (max-width)."
+      },
+      {
+        "name": "flow-stack",
+        "value": "40rem",
+        "purpose": "Process-flow figure columns stack (max-width)."
+      },
+      {
+        "name": "narrow",
+        "value": "48rem",
+        "purpose": "Below: date-col 4.5rem, cell-x 0.75rem; entry margin becomes the rule alone; section numbers inline; band tightens."
+      },
+      {
+        "name": "ledger-fold",
+        "value": "64rem",
+        "purpose": "Below: ledger folds Account/Fo./Min. into a meta line; accounts aside moves below the ledger."
+      },
+      {
+        "name": "entry-bar",
+        "value": "68rem",
+        "purpose": "Below: entry drops the account track; contents become the sticky cloth bar; details go inline under the lede."
+      },
+      {
+        "name": "wide",
+        "value": "86rem",
+        "purpose": "Below: acct-col 9rem, accounts aside 15rem with 2.5rem gap."
+      }
+    ],
+    "modes": [
+      {
+        "name": "forced-colors",
+        "purpose": "Tick stroke becomes CanvasText; label, notes, panels, figures and flows take CanvasText borders."
+      },
+      {
+        "name": "print",
+        "purpose": "Band nav, contents and skip link hidden; band loses its cloth; page prints black on white."
+      },
+      {
+        "name": "theme",
+        "purpose": "Follows prefers-color-scheme unless data-theme on <html> pins day or night; theme-color is the band cloth (#203a2f day, #0f1a15 night)."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Cloth Band with Label",
+      "kind": "nav",
+      "refersTo": "band",
+      "description": "The top board on every page: cloth, gilt-bordered label, band nav, 3px red foot rule.",
+      "html": "<header class=\"ds-band\"><a class=\"ds-label\" href=\"#\"><span class=\"ds-label-title\">Day-Book of Igor</span><span class=\"ds-label-volume\">Vol. I · 2026</span></a><nav class=\"ds-band-nav\"><a href=\"#\" data-current=\"true\">Entries</a><a href=\"#\">Accounts</a><a href=\"#\">Feed</a><button type=\"button\">Night</button></nav></header>",
+      "css": ".ds-band{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem 2.5rem;min-height:8.25rem;padding:1.25rem 2rem;background:var(--cloth, #203a2f);color:var(--cloth-ink, #efe6c8);border-bottom:3px solid var(--red, #b3311f);} .ds-label{display:inline-flex;flex-direction:column;gap:0.375rem;padding:0.875rem 1.75rem 0.75rem;border:1.5px solid var(--gilt, #c9b98a);color:var(--cloth-ink, #efe6c8);text-decoration:none;} .ds-label-title{font-family:var(--font-serif), 'Source Serif 4', Georgia, serif;font-size:2.5rem;font-weight:600;line-height:1;letter-spacing:-0.01em;} .ds-label-volume{color:var(--gilt, #c9b98a);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.8125rem;font-stretch:70%;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;} .ds-band-nav{display:flex;flex-wrap:wrap;align-items:center;gap:0 2.25rem;font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:1.0625rem;font-stretch:80%;} .ds-band-nav a,.ds-band-nav button{display:inline-flex;align-items:center;min-height:2.75rem;padding:0;border:0;background:none;color:var(--cloth-soft, #d3d9c9);font:inherit;text-decoration:none;cursor:pointer;} .ds-band-nav a:hover,.ds-band-nav button:hover{color:var(--cloth-ink, #efe6c8);} .ds-band-nav a[data-current=\"true\"]{color:var(--cloth-ink, #efe6c8);text-decoration:underline 2px var(--red, #b3311f);text-underline-offset:0.5em;} .ds-band :focus-visible{outline:2px solid var(--gilt, #c9b98a);outline-offset:3px;}"
+    },
+    {
+      "name": "Ledger Table",
+      "kind": "custom",
+      "refersTo": "ledger-row",
+      "description": "The ruled index page: column heads between head rules, date margin closed by the red double rule, serif titles, condensed apparatus, a blank ruled row.",
+      "html": "<div class=\"ds-ledger\"><div class=\"ds-row ds-head\"><span>Date</span><span>Particulars</span><span>Account</span><span class=\"ds-num\">Fo.</span><span class=\"ds-num\">Min.</span></div><div class=\"ds-row\"><span class=\"ds-date\">12 May<small>2026</small></span><span><a class=\"ds-title\" href=\"#\">Technical Debt Is a Risk Conversation</a><p>A practical framework for turning engineering pain into decision-ready proposals.</p></span><span class=\"ds-acct\">Engineering<br>Architecture</span><span class=\"ds-num\">2 <svg class=\"ds-tick\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M2.5 9.2 6.3 12.8 13.6 3.4\"/></svg></span><span class=\"ds-num\">8</span></div><div class=\"ds-row ds-blank\"><span></span><span></span><span></span><span class=\"ds-num\"></span><span class=\"ds-num\"></span></div></div>",
+      "css": ".ds-ledger{position:relative;font-family:var(--font-serif), 'Source Serif 4', Georgia, serif;color:var(--ink, #1a2230);background:var(--paper, #e6ecdc);font-variant-numeric:tabular-nums lining-nums;} .ds-ledger::before{content:\"\";position:absolute;top:0;bottom:0;left:calc(9.25rem - 4px);width:4px;border-left:4px double var(--red, #b3311f);} .ds-row{display:grid;grid-template-columns:9.25rem minmax(0,1fr) 11.875rem 4.25rem 4.25rem;border-bottom:1px solid var(--rule, #8fae95);} .ds-row>span{padding:1.375rem 0.875rem;} .ds-head{border-top:2px solid var(--head, #203a2f);border-bottom:1px solid var(--head, #203a2f);} .ds-head>span{padding:0.625rem 0.875rem;color:var(--head, #203a2f);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.8125rem;font-stretch:70%;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;} .ds-num{border-left:1px solid var(--rule, #8fae95);text-align:end;font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;} .ds-date{font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:1rem;font-stretch:80%;line-height:1.35;} .ds-date small{display:block;color:var(--pencil, #535f58);font-size:0.875rem;} .ds-title{color:var(--ink, #1a2230);font-size:1.875rem;font-weight:600;line-height:1.15;letter-spacing:-0.01em;text-decoration:none;} .ds-title:hover{text-decoration:underline 1px var(--red, #b3311f);text-underline-offset:0.15em;} .ds-title:focus-visible{outline:2px solid var(--red, #b3311f);outline-offset:3px;} .ds-row p{margin:0.5rem 0 0;color:var(--ink-soft, #3b4552);font-size:1.125rem;line-height:1.45;} .ds-acct{color:var(--head, #203a2f);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.9375rem;font-stretch:85%;line-height:1.6;} .ds-blank{height:2.75rem;border-bottom-color:var(--rule-soft, #b9cdb9);} .ds-blank>span{padding:0;} .ds-tick{width:0.95em;height:0.95em;vertical-align:-0.12em;fill:none;stroke:var(--red, #b3311f);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}"
+    },
+    {
+      "name": "Accounts Column",
+      "kind": "nav",
+      "refersTo": "accounts-item",
+      "description": "Topics as accounts with counts, under a column head on a 2px rule; current account at 600.",
+      "html": "<aside class=\"ds-accounts\"><h2>Accounts</h2><ul><li><a href=\"#\" aria-current=\"page\">All entries</a><span>2</span></li><li><a href=\"#\">Architecture</a><span>1</span></li><li><a href=\"#\">Engineering</a><span>2</span></li></ul></aside>",
+      "css": ".ds-accounts{width:17.5rem;font-family:var(--font-serif), 'Source Serif 4', Georgia, serif;font-size:1.125rem;color:var(--ink, #1a2230);} .ds-accounts h2{margin:0;padding-bottom:0.625rem;border-bottom:2px solid var(--head, #203a2f);color:var(--head, #203a2f);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.8125rem;font-stretch:70%;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;} .ds-accounts ul{margin:0;padding:0;list-style:none;} .ds-accounts li{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--rule, #8fae95);} .ds-accounts a{flex:1;padding:0.6875rem 0;color:var(--ink, #1a2230);text-decoration:none;} .ds-accounts a:hover{text-decoration:underline 1px var(--red, #b3311f);text-underline-offset:0.2em;} .ds-accounts a:focus-visible{outline:2px solid var(--red, #b3311f);outline-offset:3px;} .ds-accounts a[aria-current=\"page\"]{font-weight:600;} .ds-accounts span{color:var(--pencil, #535f58);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:1rem;font-variant-numeric:tabular-nums lining-nums;}"
+    },
+    {
+      "name": "Entry Contents (wide)",
+      "kind": "nav",
+      "refersTo": "ledger-head",
+      "description": "Sticky contents in the account column: numbered serif lines, red ticks on passed sections, current line at 600, start minute at right.",
+      "html": "<nav class=\"ds-contents\"><p class=\"ds-contents-head\"><span>Contents</span><span>Min.</span></p><ol><li><a href=\"#\"><span class=\"ds-no\">1</span><span>The problem is not debt</span><svg class=\"ds-tick\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M2.5 9.2 6.3 12.8 13.6 3.4\"/></svg><span class=\"ds-min\">0</span></a></li><li><a href=\"#\" aria-current=\"location\"><span class=\"ds-no\">2</span><span>Managers do not prioritize clean code</span><svg class=\"ds-tick\" viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M2.5 9.2 6.3 12.8 13.6 3.4\"/></svg><span class=\"ds-min\">1</span></a></li><li><a href=\"#\"><span class=\"ds-no\">3</span><span>Use the smallest useful framework</span><span></span><span class=\"ds-min\">1</span></a></li></ol></nav>",
+      "css": ".ds-contents{width:18rem;font-family:var(--font-serif), 'Source Serif 4', Georgia, serif;} .ds-contents-head{display:flex;justify-content:space-between;margin:0;padding-bottom:0.5rem;border-bottom:2px solid var(--head, #203a2f);color:var(--head, #203a2f);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.8125rem;font-stretch:70%;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;} .ds-contents ol{margin:0;padding:0;list-style:none;} .ds-contents a{display:grid;grid-template-columns:2rem minmax(0,1fr) 1.25rem 1.75rem;align-items:baseline;column-gap:0.25rem;padding:0.5rem 0;border-bottom:1px solid var(--rule, #8fae95);color:var(--ink-soft, #3b4552);font-size:0.9375rem;line-height:1.35;text-decoration:none;} .ds-contents a:hover>span:nth-child(2){color:var(--ink, #1a2230);text-decoration:underline 1px var(--red, #b3311f);text-underline-offset:0.2em;} .ds-contents a:focus-visible{outline:2px solid var(--red, #b3311f);outline-offset:3px;} .ds-contents a[aria-current=\"location\"]{color:var(--ink, #1a2230);font-weight:600;} .ds-no,.ds-min{color:var(--pencil, #535f58);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.875rem;font-stretch:85%;font-weight:400;} .ds-min{text-align:end;} .ds-tick{width:0.95em;height:0.95em;fill:none;stroke:var(--red, #b3311f);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}"
+    },
+    {
+      "name": "Entry Contents Bar (narrow)",
+      "kind": "nav",
+      "refersTo": "contents-bar",
+      "description": "At 68rem and below: sticky full-bleed cloth bar with gilt folio, current section, and a gilt-underlined Contents toggle; 2px red foot rule.",
+      "html": "<div class=\"ds-bar\"><span class=\"ds-bar-folio\">Fo. 1</span><span class=\"ds-bar-current\">3  Performance is not learning</span><button type=\"button\" class=\"ds-bar-toggle\" aria-expanded=\"false\">Contents</button></div>",
+      "css": ".ds-bar{display:flex;align-items:center;gap:1rem;min-height:2.75rem;padding:0 1rem;background:var(--cloth, #203a2f);color:var(--cloth-ink, #efe6c8);border-bottom:2px solid var(--red, #b3311f);font-family:var(--font-serif), 'Source Serif 4', Georgia, serif;} .ds-bar-folio{flex:none;color:var(--gilt, #c9b98a);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.8125rem;font-stretch:70%;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;} .ds-bar-current{flex:1 1 auto;min-width:0;overflow:hidden;font-size:0.9375rem;white-space:pre;text-overflow:ellipsis;} .ds-bar-toggle{flex:none;min-height:2.75rem;margin-left:auto;padding:0;border:0;background:none;color:var(--cloth-ink, #efe6c8);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.9375rem;font-stretch:80%;text-decoration:underline 1px var(--gilt, #c9b98a);text-underline-offset:0.35em;cursor:pointer;} .ds-bar-toggle:focus-visible{outline:2px solid var(--gilt, #c9b98a);outline-offset:3px;}"
+    },
+    {
+      "name": "Text Button",
+      "kind": "button",
+      "refersTo": "text-button",
+      "description": "The only button form on paper: link-blue text with a 1px underline, 2.75rem tall, no fill, border or radius.",
+      "html": "<button type=\"button\" class=\"ds-text-button\">Open a random entry</button>",
+      "css": ".ds-text-button{min-height:2.75rem;padding:0;border:0;background:none;color:var(--link, #1f4a86);font-family:var(--font-serif), 'Source Serif 4', Georgia, serif;font-size:1.125rem;text-decoration:underline 1px;text-underline-offset:0.2em;cursor:pointer;} .ds-text-button:hover{text-decoration-thickness:2px;} .ds-text-button:focus-visible{outline:2px solid var(--red, #b3311f);outline-offset:3px;}"
+    },
+    {
+      "name": "Note",
+      "kind": "card",
+      "refersTo": "note",
+      "description": "Callout as a ruled block: 2px head rule above, 1px rule below, column-head label, no sides or fill.",
+      "html": "<aside class=\"ds-note\"><p class=\"ds-note-label\">Note</p><p>Most failed technical debt conversations do not fail because the debt is imaginary.</p></aside>",
+      "css": ".ds-note{max-width:40rem;padding:1rem 0 1.125rem;border-top:2px solid var(--head, #203a2f);border-bottom:1px solid var(--rule, #8fae95);color:var(--ink, #1a2230);font-family:var(--font-serif), 'Source Serif 4', Georgia, serif;} .ds-note-label{margin:0 0 0.375rem;color:var(--head, #203a2f);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.8125rem;font-stretch:70%;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;} .ds-note p:last-child{margin:0;font-size:1.0625rem;line-height:1.6;}"
+    },
+    {
+      "name": "Forward Rows",
+      "kind": "nav",
+      "refersTo": "ledger-head",
+      "description": "Entry close: brought forward / carried forward rows on a 2px head rule, serif titles, condensed dates.",
+      "html": "<ul class=\"ds-forward\"><li><span class=\"ds-fhead\">Brought forward</span><a href=\"#\">AI Doesn't Make You Learn Faster.</a><time>14 Apr 2026</time></li><li><span class=\"ds-fhead\">Carried forward</span><span class=\"ds-empty\">This is the latest entry. The next one goes here.</span></li></ul>",
+      "css": ".ds-forward{max-width:40rem;margin:0;padding:0;list-style:none;border-top:2px solid var(--head, #203a2f);font-family:var(--font-serif), 'Source Serif 4', Georgia, serif;font-size:1.125rem;} .ds-forward li{display:grid;grid-template-columns:9.5rem minmax(0,1fr) auto;align-items:baseline;gap:0.25rem 1.25rem;padding:0.875rem 0;border-bottom:1px solid var(--rule, #8fae95);} .ds-fhead{color:var(--head, #203a2f);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.8125rem;font-stretch:70%;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;} .ds-forward a{color:var(--ink, #1a2230);font-weight:600;line-height:1.35;text-decoration:none;} .ds-forward a:hover{text-decoration:underline 1px var(--red, #b3311f);text-underline-offset:0.2em;} .ds-forward a:focus-visible{outline:2px solid var(--red, #b3311f);outline-offset:3px;} .ds-forward time{color:var(--pencil, #535f58);font-family:var(--font-ledger), Archivo, 'Arial Narrow', sans-serif;font-size:0.9375rem;font-stretch:80%;white-space:nowrap;} .ds-empty{grid-column:2 / -1;color:var(--pencil, #535f58);font-style:italic;}"
+    },
+    {
+      "name": "Code Block",
+      "kind": "custom",
+      "refersTo": "code-block",
+      "description": "Sunk paper between 1px rules, square, JetBrains Mono 0.875rem.",
+      "html": "<pre class=\"ds-code\"><code>const folio = getFolioNumbers(posts).get(post.slug);</code></pre>",
+      "css": ".ds-code{margin:0;padding:1rem 1.125rem;overflow-x:auto;background:var(--paper-sunk, #dae3cd);border-top:1px solid var(--rule, #8fae95);border-bottom:1px solid var(--rule, #8fae95);color:var(--ink, #1a2230);font-family:var(--font-mono), 'JetBrains Mono', ui-monospace, monospace;font-size:0.875rem;line-height:1.6;tab-size:2;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Bound Day-Book",
+    "overview": "The site is one engineer's bound account book. Each page is a sheet of green-ruled ledger paper between two boards of dark green book cloth: a band at the top with a gilt-bordered label, and a matching band at the foot. Posts are entries, topics are accounts, an entry's number is its folio, previous and next are brought forward and carried forward, and an entry read to the end gets a red tick. The index is a real ruled table (Date, Particulars, Account, Fo., Min.) that ends in blank lines still waiting to be filled. An entry page is that same row grown to full height: the date sits in the margin, the text runs in the particulars column, and the account column holds the details and then the sticky contents.\n\nEverything structural is a ruled line. A red 4px double rule closes the date margin and runs the full height of every ledger and every entry. Column heads sit between a 2px rule above and a 1px rule below, both in head green. Rows are divided by 1px green rules. There are no shadows, no rounded corners and no cards. The only closed rectangle on paper is an image's 1px frame. On cloth there is one: the gilt label.\n\nThe type works like two hands in one book. Source Serif 4 carries everything meant to be read (titles, abstracts, prose, account names). Archivo, set condensed at 70–85% width, carries the printed apparatus: column heads, dates, account cells, folios, minutes, section numbers and navigation. JetBrains Mono appears only for code. Night is not an inverted day. It is the cloth itself: a green-black ground, cream ink, gilt heads and a lighter red, with the same rules in the same places.",
+    "keyCharacteristics": [
+      "Ledger paper ruled in green, blue-black ink, red margin rules and ticks, dark green cloth boards with a gilt label.",
+      "A red 4px double rule closes the date column on every ledger and entry page.",
+      "Ruled lines in place of boxes, shadows or radius: 2px over and 1px under column heads, 1px between rows.",
+      "Serif for reading, condensed Archivo for apparatus, mono for code only.",
+      "Read state and reading position are recorded as red pen ticks, not as progress bars or badges.",
+      "Instant state changes. No transitions anywhere."
+    ],
+    "rules": [
+      {
+        "name": "The Red Pen Rule",
+        "body": "Red is drawn, never filled. It appears as rules, ticks, underlines, focus and caret. It is never a surface, a button, a badge, a heading colour, or a whole line of text.",
+        "section": "colors"
+      },
+      {
+        "name": "The Cloth Boards Rule",
+        "body": "Cloth green is the board, not a component colour. It covers the top band, the foot band and the narrow contents bar, and nothing on the paper sheet between them.",
+        "section": "colors"
+      },
+      {
+        "name": "The Gilt-On-Cloth Rule",
+        "body": "Focus is red on paper and gilt on cloth. Any cloth region resets `outline-color` to gilt.",
+        "section": "colors"
+      },
+      {
+        "name": "The Night Is Cloth Rule",
+        "body": "The night theme swaps materials, not structure. Paper becomes Night Paper, heads turn gilt, red lightens to Night Red, and every rule stays where it was. The theme follows the system unless `data-theme` pins it, and it works without JavaScript.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Hands Rule",
+        "body": "If it is read, it is serif. If it is looked up (a date, an account, a number, a column head, a nav link), it is condensed Archivo. Nothing in between.",
+        "section": "typography"
+      },
+      {
+        "name": "The Code-Only Mono Rule",
+        "body": "JetBrains Mono is reserved for `code`, `pre`, `kbd` and `samp`. Mono is never used for labels, dates or decoration.",
+        "section": "typography"
+      },
+      {
+        "name": "The Column Head Rule",
+        "body": "Uppercase tracked text exists only as a head printed over a ruled column or ruled block, sitting on its rule. No small caps line ever floats above a heading as a kicker.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ruled, Not Boxed Rule",
+        "body": "Structure comes from horizontal rules. Use 2px head over 1px head for column heads and the tops of notes, panels and the close rows, 1px green between rows, and faint green for blank lines. A block is closed on all four sides only for an image frame (1px rule) or the gilt label on cloth.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do close the date column with the red 4px double rule on any new ledger-like page, running the full height of the content it frames.",
+      "Do put column heads between a 2px head rule above and a 1px head rule below, set as Archivo 700 at 70% width, 0.8125rem, 0.12em tracking, uppercase.",
+      "Do align page headings and intros to the particulars column (`date-col + cell-x`), not the sheet edge.",
+      "Do set dates, accounts, folios, minutes and nav in condensed Archivo with tabular lining figures, and everything read in Source Serif 4.",
+      "Do use the product's own words: entries, accounts, folio, brought forward, carried forward, the tick.",
+      "Do switch the focus outline to gilt inside any cloth region; keep it red on paper.",
+      "Do keep text links in prose blue with a 45% underline, and keep apparatus links in their surrounding colour, underlined only on hover.",
+      "Do keep state changes instant; smooth scrolling is allowed only when reduced motion is not requested."
+    ],
+    "donts": [
+      "Don't add shadows, rounded corners, filled cards or bordered boxes on paper. Use rules.",
+      "Don't fill anything with red, or use red for headings or running text.",
+      "Don't use cloth green as a component or button fill on the paper sheet.",
+      "Don't use JetBrains Mono for anything that is not code.",
+      "Don't put an uppercase kicker or eyebrow above a heading; a label belongs inline or as a column head on its rule.",
+      "Don't add decorative icons; the tick is the only drawn glyph.",
+      "Don't add progress bars, badges or chips for reading state; record it as a tick.",
+      "Don't invert the palette for night; switch to the cloth materials and keep every rule in place."
+    ]
+  }
+}

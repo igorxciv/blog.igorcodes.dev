@@ -1,6 +1,4 @@
-import { clsx } from "clsx";
 import Image from "next/image";
-import { twMerge } from "tailwind-merge";
 import { getPostImage } from "@/lib/post-images";
 
 type PostImageProps = {
@@ -9,8 +7,6 @@ type PostImageProps = {
   alt: string;
   caption?: string;
   priority?: boolean;
-  className?: string;
-  imageClassName?: string;
 };
 
 type BoundPostImageProps = Omit<PostImageProps, "slug">;
@@ -21,8 +17,6 @@ export function PostImage({
   alt,
   caption,
   priority = false,
-  className,
-  imageClassName,
 }: PostImageProps) {
   const asset = getPostImage(slug, name);
 
@@ -36,23 +30,16 @@ export function PostImage({
   }
 
   return (
-    <figure className={twMerge(clsx("my-8 lg:my-10", className))}>
-      <div className="overflow-hidden rounded-2xl border border-(--border) bg-(--surface) lg:rounded-[1.75rem]">
-        <Image
-          src={asset.src}
-          width={asset.width}
-          height={asset.height}
-          alt={alt}
-          sizes="(min-width: 1024px) 896px, 100vw"
-          priority={priority}
-          className={twMerge(clsx("h-auto w-full", imageClassName))}
-        />
-      </div>
-      {caption ? (
-        <figcaption className="mt-3 text-sm leading-relaxed text-(--foreground-soft) lg:mt-4 lg:text-[0.98rem]">
-          {caption}
-        </figcaption>
-      ) : null}
+    <figure className="entry-image">
+      <Image
+        src={asset.src}
+        width={asset.width}
+        height={asset.height}
+        alt={alt}
+        sizes="(min-width: 48rem) 40rem, 100vw"
+        priority={priority}
+      />
+      {caption ? <figcaption>{caption}</figcaption> : null}
     </figure>
   );
 }

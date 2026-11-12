@@ -1,5 +1,3 @@
-import { clsx } from "clsx";
-import { CircleCheck, Info, TriangleAlert } from "lucide-react";
 import { type ReactNode } from "react";
 
 type CalloutProps = {
@@ -8,46 +6,20 @@ type CalloutProps = {
   type?: "note" | "warning" | "success";
 };
 
-const stylesByType: Record<NonNullable<CalloutProps["type"]>, string> = {
-  note: "border-(--accent-line) bg-(--accent-soft) text-(--foreground)",
-  warning: "border-amber-500/35 bg-amber-500/10 text-(--foreground)",
-  success: "border-emerald-500/30 bg-emerald-500/10 text-(--foreground)",
+const defaultLabel: Record<NonNullable<CalloutProps["type"]>, string> = {
+  note: "Note",
+  warning: "Caution",
+  success: "Result",
 };
 
-const iconByType = {
-  note: Info,
-  warning: TriangleAlert,
-  success: CircleCheck,
-} as const;
-
+/** A boxed note in the memo's voice: one hairline box, the label set in bold. */
 export function Callout({ children, title, type = "note" }: CalloutProps) {
-  const Icon = iconByType[type];
+  const label = title ?? defaultLabel[type];
 
   return (
-    <div
-      role="note"
-      aria-label={title ?? type}
-      className={clsx(
-        "my-8 rounded-[2rem] border px-5 py-5 shadow-[var(--fm-shadow-elevated)] lg:my-10 lg:px-6 lg:py-6",
-        stylesByType[type],
-      )}
-    >
-      <span className="sr-only">{type}: </span>
-      {title ? (
-        <p className="m-0 inline-flex items-center gap-2 font-mono text-[0.72rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
-          <Icon aria-hidden="true" className="size-4 text-current" />
-          {title}
-        </p>
-      ) : null}
-      <div
-        className={clsx(
-          "text-sm leading-7 text-(--foreground-soft) sm:text-[0.98rem]",
-          "[&_a]:text-(--accent) [&_a]:underline [&_a]:decoration-(--accent-line) [&_p:last-child]:mb-0",
-          { "mt-3": title },
-        )}
-      >
-        {children}
-      </div>
-    </div>
+    <aside className="entry-note" aria-label={label}>
+      <p className="entry-note-label">{label}</p>
+      <div>{children}</div>
+    </aside>
   );
 }

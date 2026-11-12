@@ -6,9 +6,12 @@
 //   public/icon-512.png   — manifest icon
 //   app/apple-icon.png    — Next serves this as the apple-touch-icon
 //
-// Design: dark rounded square (matches the site's dark theme color) with three
-// accent "note" lines of descending width — an "Engineering Notes" mark, pure
-// vector so it needs no fonts.
+// app/favicon.ico is built from the same mark (16/32/48 px), e.g. with
+// ImageMagick: magick public/icon-192.png -define icon:auto-resize=48,32,16 app/favicon.ico
+//
+// Design: the day-book's cover. Dark green book cloth, the gilt-bordered
+// label with two lines of lettering, and the red rule along the foot of the
+// board. Pure vector, so it needs no fonts.
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -20,14 +23,17 @@ const rootDir = path.resolve(
   "../..",
 );
 
-const BACKGROUND = "#0a0a0a";
-const ACCENT = "#00d9ff";
+const CLOTH = "#203a2f";
+const GILT = "#c9b98a";
+const CLOTH_INK = "#efe6c8";
+const RED = "#b3311f";
 
 const svg = `<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="112" fill="${BACKGROUND}"/>
-  <rect x="140" y="168" width="232" height="26" rx="13" fill="${ACCENT}"/>
-  <rect x="140" y="243" width="180" height="26" rx="13" fill="${ACCENT}" opacity="0.7"/>
-  <rect x="140" y="318" width="140" height="26" rx="13" fill="${ACCENT}" opacity="0.45"/>
+  <rect width="512" height="512" rx="96" fill="${CLOTH}"/>
+  <rect x="104" y="120" width="304" height="196" fill="none" stroke="${GILT}" stroke-width="14"/>
+  <rect x="148" y="170" width="216" height="42" fill="${CLOTH_INK}"/>
+  <rect x="148" y="240" width="128" height="22" fill="${GILT}"/>
+  <rect x="0" y="392" width="512" height="18" fill="${RED}"/>
 </svg>`;
 
 const targets = [

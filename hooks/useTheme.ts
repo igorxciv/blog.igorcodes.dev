@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import {
   DARK_THEME_COLOR,
   LIGHT_THEME_COLOR,
@@ -8,117 +8,75 @@ import {
   type Theme,
 } from "@/lib/theme";
 
-const THEME_TRANSITION_ATTRIBUTE = "data-theme-transition";
-const THEME_TRANSITION_DURATION_MS = 320;
+const systemQuery = "(prefers-color-scheme: dark)";
 
-let themeTransitionTimeout: number | null = null;
-
-function readStoredTheme(): Theme | null {
-  const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-  return storedTheme === "light" || storedTheme === "dark" ? storedTheme : null;
+function systemTheme(): Theme {
+  return window.matchMedia(systemQuery).matches ? "dark" : "light";
 }
 
-function getSystemTheme(): Theme {
-  return window.matchMedia("(prefers-color-scheme: light)").matches
-    ? "light"
-    : "dark";
-}
-
-function updateThemeColorMeta(theme: Theme) {
-  const content = theme === "light" ? LIGHT_THEME_COLOR : DARK_THEME_COLOR;
-  const meta = document.querySelector('meta[name="theme-color"]');
-
-  if (meta) {
-    meta.setAttribute("content", content);
-    return;
+function storedTheme(): Theme | null {
+  try {
+    const value = window.localStorage.getItem(THEME_STORAGE_KEY);
+    return value === "light" || value === "dark" ? value : null;
+  } catch {
+    return null;
   }
-
-  const createdMeta = document.createElement("meta");
-  createdMeta.setAttribute("name", "theme-color");
-  createdMeta.setAttribute("content", content);
-  document.head.appendChild(createdMeta);
 }
 
-function setThemeTransition(animate: boolean) {
+function renderedTheme(): Theme {
+  const pinned = document.documentElement.dataset.theme;
+  return pinned === "light" || pinned === "dark" ? pinned : systemTheme();
+}
+
+function apply(override: Theme | null) {
   const root = document.documentElement;
-
-  if (!animate) {
-    root.removeAttribute(THEME_TRANSITION_ATTRIBUTE);
-
-    if (themeTransitionTimeout !== null) {
-      window.clearTimeout(themeTransitionTimeout);
-      themeTransitionTimeout = null;
-    }
-
-    return;
+  if (override) {
+    root.dataset.theme = override;
+  } else {
+    delete root.dataset.theme;
   }
-
-  root.setAttribute(THEME_TRANSITION_ATTRIBUTE, "true");
-
-  if (themeTransitionTimeout !== null) {
-    window.clearTimeout(themeTransitionTimeout);
+  const metas = document.querySelectorAll('meta[name="theme-color"]');
+  for (const meta of metas) {
+    const media = meta.getAttribute("media") ?? "";
+    const forDark = media.includes("dark");
+    const theme = override ?? (forDark ? "dark" : "light");
+    meta.setAttribute(
+      "content",
+      theme === "dark" ? DARK_THEME_COLOR : LIGHT_THEME_COLOR,
+    );
   }
-
-  themeTransitionTimeout = window.setTimeout(() => {
-    root.removeAttribute(THEME_TRANSITION_ATTRIBUTE);
-    themeTransitionTimeout = null;
-  }, THEME_TRANSITION_DURATION_MS);
 }
 
-function applyTheme(theme: Theme, animate = false) {
-  const root = document.documentElement;
-  setThemeTransition(animate);
-  root.dataset.theme = theme;
-  root.style.colorScheme = theme;
-  updateThemeColorMeta(theme);
-}
-
-function getInitialTheme(): Theme {
-  if (typeof document === "undefined") {
-    return "dark";
-  }
-
-  return document.documentElement.dataset.theme === "light"
-    ? "light"
-    : (readStoredTheme() ?? getSystemTheme());
-}
-
+/**
+ * Two-state theme toggle over three stored states: no value follows the
+ * system; "light" or "dark" pins an override. Toggling to the scheme the system
+ * already uses clears the override instead of pinning it.
+ */
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
-
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
-
-    const handleChange = () => {
-      if (readStoredTheme()) {
-        return;
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === THEME_STORAGE_KEY) {
+        apply(storedTheme());
       }
-
-      const nextTheme = mediaQuery.matches ? "light" : "dark";
-      applyTheme(nextTheme);
-      setTheme(nextTheme);
     };
-
-    mediaQuery.addEventListener("change", handleChange);
-
-    return () => {
-      mediaQuery.removeEventListener("change", handleChange);
-    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
-  const toggleTheme = () => {
-    const currentTheme =
-      document.documentElement.dataset.theme === "light" ? "light" : "dark";
-    const nextTheme = currentTheme === "dark" ? "light" : "dark";
+  const toggleTheme = useCallback(() => {
+    const target: Theme = renderedTheme() === "dark" ? "light" : "dark";
+    const override = target === systemTheme() ? null : target;
+    try {
+      if (override) {
+        window.localStorage.setItem(THEME_STORAGE_KEY, override);
+      } else {
+        window.localStorage.removeItem(THEME_STORAGE_KEY);
+      }
+    } catch {
+      // Storage blocked: still apply for this page view.
+    }
+    apply(override);
+  }, []);
 
-    applyTheme(nextTheme, true);
-    window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
-    setTheme(nextTheme);
-  };
-
-  return {
-    isDarkTheme: theme === "dark",
-    theme,
-    toggleTheme,
-  };
+  return { toggleTheme };
 }

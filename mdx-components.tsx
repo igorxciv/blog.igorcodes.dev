@@ -1,9 +1,13 @@
-import { clsx } from "clsx";
 import { type MDXComponents } from "mdx/types";
 import dynamic from "next/dynamic";
-import { type ComponentPropsWithoutRef } from "react";
-import { twMerge } from "tailwind-merge";
 import {
+  Children,
+  type ComponentPropsWithoutRef,
+  isValidElement,
+  type ReactNode,
+} from "react";
+import {
+  Figure,
   ImagePlaceholder,
   InlineKicker,
   ProcessFlow,
@@ -15,6 +19,7 @@ import {
 } from "@/components/mdx/mdx-article-visuals";
 import { Callout } from "@/components/mdx/mdx-callout";
 import { createPostImageComponent } from "@/components/mdx/post-image";
+import { slugifyHeading, stripHeadingNumber } from "@/lib/daybook";
 
 const StateMachinePlayground = dynamic(() =>
   import("@/components/mdx/state-machine-playground").then(
@@ -22,67 +27,68 @@ const StateMachinePlayground = dynamic(() =>
   ),
 );
 
+function textOf(node: ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    return node.map(textOf).join("");
+  }
+  if (isValidElement<{ children?: ReactNode }>(node)) {
+    return textOf(node.props.children);
+  }
+  return "";
+}
+
+/** Drops an authored "1. " prefix from the first text child; the entry numbers sections itself. */
+function withoutAuthoredNumber(children: ReactNode): ReactNode {
+  let stripped = false;
+  return Children.map(children, (child) => {
+    if (!stripped && typeof child === "string") {
+      stripped = true;
+      return stripHeadingNumber(child);
+    }
+    stripped = true;
+    return child;
+  });
+}
+
+function SectionHeading({
+  as: Tag,
+  children,
+  ...props
+}: ComponentPropsWithoutRef<"h2"> & { as: "h2" | "h3" }) {
+  const title = stripHeadingNumber(textOf(children));
+  const id = slugifyHeading(title);
+  return (
+    <Tag id={id} {...props}>
+      {/* The number is drawn by a CSS counter, so it stays in step with the contents list. The contents list carries the links. */}
+      <span className="sec-no" aria-hidden="true" />
+      {withoutAuthoredNumber(children)}
+    </Tag>
+  );
+}
+
 export const mdxComponents: MDXComponents = {
-  // The page already renders the post title as the sole <h1>
-  // (PostPageHeader), so a content-level `# heading` maps to an <h2> to keep a
-  // valid heading hierarchy.
-  h1: (props: ComponentPropsWithoutRef<"h2">) => (
-    <h2
-      className="mt-8 text-3xl text-(--foreground) sm:text-4xl md:text-5xl lg:text-[3.9rem]"
-      style={{ fontWeight: 600 }}
-      {...props}
-    />
+  // The page renders the entry title as the sole <h1>, so a content-level
+  // `# heading` becomes a numbered <h2>.
+  h1: ({ children, ...props }: ComponentPropsWithoutRef<"h2">) => (
+    <SectionHeading as="h2" {...props}>
+      {children}
+    </SectionHeading>
   ),
-  h2: (props: ComponentPropsWithoutRef<"h2">) => (
-    <h2
-      className="mb-5 mt-10 text-[1.65rem] leading-tight text-(--foreground) sm:text-3xl lg:mb-6 lg:mt-14 lg:text-[2.35rem]"
-      style={{ fontWeight: 600 }}
-      {...props}
-    />
+  h2: ({ children, ...props }: ComponentPropsWithoutRef<"h2">) => (
+    <SectionHeading as="h2" {...props}>
+      {children}
+    </SectionHeading>
   ),
-  h3: (props: ComponentPropsWithoutRef<"h3">) => (
-    <h3
-      className="mb-4 mt-8 text-xl text-(--foreground) sm:text-2xl lg:mb-5 lg:mt-12 lg:text-[1.7rem]"
-      style={{ fontWeight: 600 }}
-      {...props}
-    />
+  h3: ({ children, ...props }: ComponentPropsWithoutRef<"h3">) => (
+    <SectionHeading as="h3" {...props}>
+      {children}
+    </SectionHeading>
   ),
-  p: (props: ComponentPropsWithoutRef<"p">) => (
-    <p
-      className="mb-6 text-[0.98rem] leading-8 text-(--foreground-soft) sm:text-base lg:mb-7 lg:text-[1.12rem] lg:leading-9"
-      {...props}
-    />
-  ),
-  ul: (props: ComponentPropsWithoutRef<"ul">) => (
-    <ul
-      className="mb-6 list-disc space-y-2 pl-5 text-[0.98rem] text-(--foreground-soft) sm:pl-6 sm:text-base lg:mb-7 lg:space-y-3 lg:pl-7 lg:text-[1.12rem]"
-      {...props}
-    />
-  ),
-  ol: (props: ComponentPropsWithoutRef<"ol">) => (
-    <ol
-      className="mb-6 list-decimal space-y-2 pl-5 text-[0.98rem] text-(--foreground-soft) sm:pl-6 sm:text-base lg:mb-7 lg:space-y-3 lg:pl-7 lg:text-[1.12rem]"
-      {...props}
-    />
-  ),
-  li: (props: ComponentPropsWithoutRef<"li">) => (
-    <li className="pl-1" {...props} />
-  ),
-  blockquote: (props: ComponentPropsWithoutRef<"blockquote">) => (
-    <blockquote
-      className="mb-6 border-l-2 border-(--accent) pl-4 italic text-[0.98rem] text-(--foreground-soft) sm:text-base lg:mb-7 lg:pl-5 lg:text-[1.12rem] lg:leading-9"
-      {...props}
-    />
-  ),
-  code: (props: ComponentPropsWithoutRef<"code">) => (
-    <code
-      className="rounded border border-(--border) bg-(--surface) px-1.5 py-0.5 font-mono text-[0.9em] text-(--accent)"
-      {...props}
-    />
-  ),
-  // `text` fences are converted to Prompt/Workflow blocks upstream by
-  // remarkTextFences; real code fences arrive here already highlighted by
-  // rehype-pretty-code (token colors come from CSS vars — see globals.css).
+  // Real code fences arrive highlighted by rehype-pretty-code; `text` fences
+  // were converted to PromptBlock / WorkflowStepsBlock upstream.
   pre: (props: ComponentPropsWithoutRef<"pre">) => (
     // biome-ignore lint/a11y/useSemanticElements: a <pre> scroll container cannot be a <section>; role="region" names it for AT
     <pre
@@ -90,42 +96,27 @@ export const mdxComponents: MDXComponents = {
       aria-label="Code sample"
       // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
       tabIndex={0}
-      className="mb-6 overflow-x-auto rounded-lg border border-(--border) bg-(--surface) p-3 text-sm sm:p-4 lg:mb-7 lg:rounded-xl lg:p-5 lg:text-[0.98rem]"
       {...props}
     />
   ),
   table: (props: ComponentPropsWithoutRef<"table">) => (
-    // biome-ignore lint/a11y/useSemanticElements: overflow scroll wrapper; role="region" keeps the nested table's own semantics intact
-    <div
-      role="region"
-      aria-label="Table"
-      // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
-      tabIndex={0}
-      className="my-8 overflow-x-auto lg:my-10"
-    >
-      <div className="overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--surface-raised)_96%,transparent),color-mix(in_srgb,var(--surface)_100%,transparent))] shadow-[0_10px_24px_rgb(0_0_0_/_0.18)]">
-        <table
-          className="w-full border-collapse text-left text-(--foreground-soft) lg:text-[1.02rem]"
-          {...props}
-        />
+    <div className="entry-table">
+      {/* biome-ignore lint/a11y/useSemanticElements: overflow scroll wrapper; role="region" keeps the nested table's own semantics intact */}
+      <div
+        role="region"
+        aria-label="Table"
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
+        tabIndex={0}
+        className="entry-table-scroll"
+      >
+        <table {...props} />
       </div>
     </div>
   ),
   th: ({ scope, ...props }: ComponentPropsWithoutRef<"th">) => (
-    <th
-      scope={scope ?? "col"}
-      className="border-b border-(--border-strong) px-5 py-4 align-top text-[0.76rem] uppercase tracking-[0.2em] text-(--foreground-soft) lg:px-6 lg:py-4"
-      style={{ fontWeight: 600 }}
-      {...props}
-    />
+    <th scope={scope ?? "col"} {...props} />
   ),
-  td: (props: ComponentPropsWithoutRef<"td">) => (
-    <td
-      className="border-t border-(--border) px-5 py-4 align-top text-[0.98rem] leading-8 lg:px-6 lg:py-5 lg:text-[1.08rem] lg:leading-9"
-      {...props}
-    />
-  ),
-  img: ({ className, alt, src, title }: ComponentPropsWithoutRef<"img">) => {
+  img: ({ alt, src, title }: ComponentPropsWithoutRef<"img">) => {
     if (typeof src !== "string") {
       return null;
     }
@@ -142,49 +133,21 @@ export const mdxComponents: MDXComponents = {
       );
     }
 
-    const imageAlt = alt;
     const caption =
       typeof title === "string" && title.trim().length > 0 ? title : null;
 
     return (
-      <figure className="my-8 lg:my-10">
-        <div className="overflow-hidden rounded-2xl border border-(--border) bg-(--surface) lg:rounded-[1.75rem]">
-          {/* biome-ignore lint/performance/noImgElement: markdown images have
-              unknown intrinsic dimensions; a plain <img> avoids next/image's
-              required width/height and the previous forced aspect-ratio cropping
-              of non-16:9 images. */}
-          <img
-            src={src}
-            alt={imageAlt}
-            title={caption ?? undefined}
-            loading="lazy"
-            decoding="async"
-            className={twMerge(clsx("h-auto w-full", className))}
-          />
-        </div>
-        {caption ? (
-          <figcaption className="mt-3 text-sm leading-relaxed text-(--foreground-soft) lg:mt-4 lg:text-[0.98rem]">
-            {caption}
-          </figcaption>
-        ) : null}
+      <figure className="entry-image">
+        {/* biome-ignore lint/performance/noImgElement: markdown images have
+            unknown intrinsic dimensions; a plain <img> avoids next/image's
+            required width/height. */}
+        <img src={src} alt={alt} loading="lazy" decoding="async" />
+        {caption ? <figcaption>{caption}</figcaption> : null}
       </figure>
     );
   },
-  a: ({ href, className, ...props }: ComponentPropsWithoutRef<"a">) => {
-    return (
-      <a
-        href={href}
-        {...props}
-        className={twMerge(
-          clsx(
-            "focus-ring rounded-[2px] font-semibold text-(--accent) underline decoration-2 underline-offset-4 transition hover:text-(--accent-strong)",
-            className,
-          ),
-        )}
-      />
-    );
-  },
   Callout,
+  Figure,
   ImagePlaceholder,
   InlineKicker,
   ProcessFlow,

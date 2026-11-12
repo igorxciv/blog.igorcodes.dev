@@ -1,8 +1,9 @@
 import { type Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PostListSection } from "@/components/blog/post-list-section";
-import { RandomPostButton } from "@/components/blog/random-post-button";
-import { TopicFilter } from "@/components/blog/topic-filter";
+import { Accounts } from "@/components/daybook/accounts";
+import { Ledger } from "@/components/daybook/ledger";
+import { formatTopic, getFolioNumbers } from "@/lib/daybook";
 import { buildCollectionPageJsonLd, jsonLdString } from "@/lib/seo";
 import { getAllPosts, getAllTopics } from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
@@ -22,9 +23,10 @@ export async function generateMetadata({
 }: TopicPageProps): Promise<Metadata> {
   const { topic } = await params;
   const decodedTopic = decodeURIComponent(topic);
+  const label = formatTopic(decodedTopic);
   const topicPath = `/blog/topics/${encodeURIComponent(decodedTopic)}`;
-  const title = `${decodedTopic} articles`;
-  const description = `Browse articles about ${decodedTopic} on ${siteConfig.name}.`;
+  const title = `${label} account`;
+  const description = `Entries posted to the ${label} account in ${siteConfig.name}.`;
 
   return {
     title,
@@ -61,35 +63,39 @@ export default async function TopicPage({ params }: TopicPageProps) {
     notFound();
   }
 
+  const label = formatTopic(decodedTopic);
+  const folios = getFolioNumbers(posts);
   const filtered = posts.filter((post) => post.topics.includes(decodedTopic));
   const collectionPageJsonLd = buildCollectionPageJsonLd(filtered);
 
   return (
-    <section className="fade-in">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: jsonLdString(collectionPageJsonLd),
         }}
       />
-      <header className="mb-12 sm:mb-16 lg:mb-20">
-        <h1
-          className="mb-4 text-3xl text-(--foreground) sm:text-4xl lg:mb-5 lg:text-[3.4rem]"
-          style={{ fontWeight: 600 }}
-        >
-          Engineering Notes
-        </h1>
-        <p className="mb-6 max-w-2xl text-base leading-relaxed text-(--foreground-soft) sm:text-lg lg:mb-8 lg:max-w-3xl lg:text-[1.22rem] lg:leading-9">
-          A collection of thoughts on software architecture, frontend
-          engineering, AI systems, and technical thinking. Written for
-          developers who care about craft.
-        </p>
-        <RandomPostButton slugs={posts.map((p) => p.slug)} />
-      </header>
 
-      <TopicFilter activeTopic={decodedTopic} topics={topics} />
-
-      <PostListSection posts={filtered} title={decodedTopic} />
-    </section>
+      <div className="sheet ledger-sheet">
+        <section className="ledger-main" aria-labelledby="account-heading">
+          <h1 id="account-heading" className="ledger-heading">
+            {label} <span>account</span>
+          </h1>
+          <p className="ledger-intro">
+            {filtered.length} of {posts.length}{" "}
+            {posts.length === 1 ? "entry" : "entries"} posted to {label}.{" "}
+            <Link href="/blog">All entries</Link>
+          </p>
+          <Ledger
+            posts={filtered}
+            folios={folios}
+            caption={`Entries posted to ${label}, newest first`}
+            blankRows={2}
+          />
+        </section>
+        <Accounts posts={posts} topics={topics} current={decodedTopic} />
+      </div>
+    </>
   );
 }

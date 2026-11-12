@@ -28,11 +28,7 @@ Blog-only Next.js App Router application powered by file-based MDX content.
 .
 ├─ app/
 │  ├─ _tools/                 # build/CLI scripts (font fetch/upload, icon gen)
-│  │  ├─ fallback-fonts/      # bundled OFL fonts for token-less builds
-│  │  ├─ fetch-fonts.mjs
-│  │  ├─ fonts-manifest.mjs
 │  │  ├─ generate-icons.mjs
-│  │  └─ upload-fonts.mjs
 │  ├─ api/og/route.tsx        # dynamic OpenGraph card renderer
 │  ├─ blog/
 │  │  ├─ [...slug]/page.tsx
@@ -123,8 +119,6 @@ pnpm typecheck       # tsc --noEmit
 pnpm test            # run Vitest once
 pnpm test:watch      # Vitest in watch mode
 pnpm check           # lint + typecheck + test (the full local gate)
-pnpm fonts:fetch     # populate app/fonts/ before build (see Fonts)
-pnpm fonts:upload    # upload local licensed fonts to Vercel Blob
 pnpm icons:generate  # regenerate app icons
 ```
 
@@ -146,21 +140,9 @@ pnpm dev
 
 Git hooks are installed automatically via the `prepare` script (`lefthook install`). Pre-commit runs Biome on staged files; pre-push runs `pnpm test` and `pnpm typecheck`.
 
-> Note on fonts in dev: `next/font/local` in `app/fonts.ts` needs the font files under `app/fonts/`. Without your own licensed copies, run `FONTS_FALLBACK=1 pnpm fonts:fetch` once to drop in bundled generic fallbacks (see Fonts). This is not needed if `app/fonts/` is already populated.
-
 ## Fonts
 
-The Wotfard and Dank Mono fonts are commercial and non-redistributable, so their `.woff2` files are **not** committed. `app/fonts/` is gitignored, and the build supplies the files at build time. `app/_tools/fetch-fonts.mjs` runs first in `pnpm build` and is idempotent:
-
-- **Files already on disk** (local dev with your own licensed copies): it does nothing and needs no credentials.
-- **On Vercel**: `app/fonts/` starts empty and a connected Blob store injects `BLOB_READ_WRITE_TOKEN`; the script downloads the missing files from Vercel Blob (with a one-retry-per-file and a `.next/cache/fonts/` cross-build cache) so `next/font/local` can resolve them during the build.
-- **Token-less machines** (contributors, CI without the secret): run with `FONTS_FALLBACK=1`. Bundled open-licensed OFL woff2 files under `app/_tools/fallback-fonts/` are copied in place of the missing licensed fonts, so every path resolves and the build never breaks. Typography is temporarily generic. (When not running on Vercel, fallback mode is used automatically if the token is absent.)
-
-Uploading fonts is a one-time (or on-font-change) step: place the licensed `.woff2` under `app/fonts/` and run `pnpm fonts:upload` to push them into the Blob store. The expected file list is defined in `app/_tools/fonts-manifest.mjs`.
-
-```bash
-FONTS_FALLBACK=1 pnpm build   # build with no token and empty app/fonts/
-```
+Source Serif 4 (prose and titles), Archivo (the ledger apparatus: column heads, dates, accounts, folios), and JetBrains Mono (code) are open-licensed (SIL OFL). `app/fonts.ts` loads them with `next/font/google`, which downloads and self-hosts them at build time, so the CSP's `font-src 'self'` still holds and no font files live in the repo.
 
 ## Environment
 
@@ -169,7 +151,6 @@ Copy `.env.example` to `.env.local` and fill in as needed.
 - `NEXT_PUBLIC_SITE_URL` (optional): canonical site origin used by `app/layout.tsx` for `metadataBase`. Falls back to the production URL.
 - `NEXT_PUBLIC_UMAMI_WEBSITE_ID` (optional): Umami analytics website ID. Leave unset to disable analytics (e.g. local dev).
 - `NEXT_PUBLIC_UMAMI_SCRIPT_URL` (optional): Umami script URL.
-- `BLOB_READ_WRITE_TOKEN` (build-time, Vercel): injected by the connected Blob store so `pnpm fonts:fetch` can download the licensed fonts. Not needed for `FONTS_FALLBACK=1` builds. See Fonts.
 
 All `NEXT_PUBLIC_*` variables are exposed to the browser and are non-secret.
 

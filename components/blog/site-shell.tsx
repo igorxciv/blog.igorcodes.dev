@@ -1,61 +1,60 @@
-import { BookOpenText } from "lucide-react";
 import Link from "next/link";
 import { type ReactNode } from "react";
-import { FeedLinks } from "./feed-links";
+import { BandNav } from "@/components/daybook/band-nav";
+import { getVolume, getVolumeLabel } from "@/lib/daybook";
+import { getAllPosts } from "@/lib/server/posts";
+import { siteConfig } from "@/lib/site";
 
 type SiteShellProps = {
   children: ReactNode;
 };
 
-export function SiteShell({ children }: SiteShellProps) {
+/**
+ * The book's boards: a cloth band with the gilt label and the site links at
+ * the top, a matching band at the foot. Pages draw the ruled sheet between.
+ */
+export async function SiteShell({ children }: SiteShellProps) {
+  const posts = await getAllPosts();
+  const volume = getVolume(posts);
+  const volumeLine = getVolumeLabel(posts);
+
   return (
-    <div className="min-h-screen bg-(--background) text-(--foreground)">
-      <a
-        href="#main-content"
-        className="skip-link focus-ring rounded-md bg-(--surface) px-4 py-2 text-sm text-(--foreground)"
-      >
-        Skip to main content
+    <>
+      <a href="#main-content" className="skip-link">
+        Skip to content
       </a>
 
-      <header className="sticky top-0 z-40 border-b border-(--border) bg-(--header-backdrop) backdrop-blur-sm">
-        <nav
-          aria-label="Primary"
-          className="mx-auto flex w-full max-w-5xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 lg:px-8 lg:py-6"
-        >
-          <Link
-            href="/blog"
-            className="focus-ring inline-flex min-h-11 items-center gap-3 text-current transition hover:text-(--accent) lg:gap-4"
-          >
-            <span className="inline-flex size-8 items-center justify-center rounded-md bg-(--accent-soft) text-(--accent) lg:size-9 lg:rounded-lg">
-              <BookOpenText
-                aria-hidden="true"
-                className="size-5 lg:size-[1.35rem]"
-              />
-            </span>
-            <span>
-              <span className="block text-sm font-semibold text-(--foreground) lg:text-base">
-                Engineering Notes
-              </span>
-              <span className="block text-xs text-(--foreground-soft) lg:text-sm">
-                Thoughts on software systems
-              </span>
-            </span>
+      <header className="band">
+        <div className="band-inner">
+          <Link href="/blog" className="label">
+            <span className="label-title">{siteConfig.name}</span>
+            {volumeLine ? (
+              <span className="label-volume">{volumeLine}</span>
+            ) : null}
           </Link>
-        </nav>
+          <BandNav />
+        </div>
       </header>
 
-      <div className="mx-auto flex min-h-screen w-full max-w-5xl flex-col px-4 py-8 sm:px-6 sm:py-10 md:py-12 lg:px-8 lg:py-14">
-        <main id="main-content" tabIndex={-1} className="flex-1">
-          {children}
-        </main>
+      <main id="main-content" tabIndex={-1}>
+        {children}
+      </main>
 
-        <footer className="mt-16 border-t border-(--border) pt-8 sm:mt-20 sm:pt-10 md:mt-24 md:pt-12">
-          <div className="flex flex-col gap-3 text-sm text-(--muted) sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-4 lg:text-[0.95rem]">
-            <p>© 2026 blog.igorcodes.dev. Building in public.</p>
-            <FeedLinks compact />
-          </div>
-        </footer>
-      </div>
-    </div>
+      <footer className="band band-foot">
+        <div className="band-inner">
+          <span>
+            {siteConfig.name}
+            {volume ? `, Vol. ${volume.numeral}` : null}
+          </span>
+          <span>
+            Kept by {siteConfig.author.name} at{" "}
+            <Link href="/blog">{siteConfig.domain}</Link>
+          </span>
+          <span>
+            <a href="/rss.xml">RSS</a> · <a href="/feed.json">JSON Feed</a>
+          </span>
+        </div>
+      </footer>
+    </>
   );
 }

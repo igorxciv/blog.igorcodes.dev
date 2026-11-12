@@ -20,5 +20,3 @@ jobs:
       - run: pnpm test
       - run: pnpm posts:validate
       - run: pnpm build
-        env:
-          BLOB_READ_WRITE_TOKEN: ${{ secrets.BLOB_READ_WRITE_TOKEN }}

@@ -1,7 +1,9 @@
-// Converts ```text fenced code blocks into the blog's visual components before
-// any syntax-highlighting rehype plugin runs. A `text` fence whose body contains
-// "->" becomes a <WorkflowStepsBlock>, otherwise a <PromptBlock>. Real code
-// fences (```ts, ```bash, ...) are left untouched for rehype-pretty-code.
+// Converts ```text and ```figure fenced code blocks into the blog's visual
+// components before any syntax-highlighting rehype plugin runs. A `text` fence
+// whose body contains "->" becomes a <WorkflowStepsBlock>, otherwise a
+// <PromptBlock>. A `figure` fence becomes a numbered <Figure>, reading
+// `caption="..."` and `description="..."` from the fence meta. Real code fences
+// (```ts, ```bash, ...) are left untouched for rehype-pretty-code.
 //
 // This preserves the original `pre`-component interception behaviour while
 // keeping those fences out of the Shiki pipeline (which would tokenize them and
@@ -25,6 +27,37 @@ function toBlockElement(node: Code): MdxJsxFlowElement {
   };
 }
 
+/** Reads `key="value"` pairs from a fence's meta string. */
+export function parseFenceMeta(meta: string | null | undefined) {
+  const attributes: Record<string, string> = {};
+  for (const match of (meta ?? "").matchAll(/(\w+)="([^"]*)"/g)) {
+    const [, key, value] = match;
+    if (key && value !== undefined) {
+      attributes[key] = value;
+    }
+  }
+  return attributes;
+}
+
+function toFigureElement(node: Code): MdxJsxFlowElement {
+  const meta = parseFenceMeta(node.meta);
+  const attributes: MdxJsxFlowElement["attributes"] = [
+    { type: "mdxJsxAttribute", name: "art", value: String(node.value ?? "") },
+    { type: "mdxJsxAttribute", name: "caption", value: meta.caption ?? "" },
+    {
+      type: "mdxJsxAttribute",
+      name: "description",
+      value: meta.description ?? meta.caption ?? "Diagram",
+    },
+  ];
+  return {
+    type: "mdxJsxFlowElement",
+    name: "Figure",
+    attributes,
+    children: [],
+  };
+}
+
 function isParent(node: Node): node is Parent {
   return Array.isArray((node as Parent).children);
 }
@@ -36,6 +69,10 @@ function transform(node: Node): void {
   node.children.forEach((child, index) => {
     if (child.type === "code" && (child as Code).lang === "text") {
       node.children[index] = toBlockElement(child as Code);
+      return;
+    }
+    if (child.type === "code" && (child as Code).lang === "figure") {
+      node.children[index] = toFigureElement(child as Code);
       return;
     }
     transform(child);

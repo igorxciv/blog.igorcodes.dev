@@ -1,0 +1,50 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [".impeccable/mocks/decision/assigned.html"],
+        "createdAt": "2026-11-12T18:50:29.477Z",
+        "reason": "agent: red double vertical rule is the ledger's margin column rule across a table, not a card side-tab"
+      },
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "files": [".impeccable/mocks/decision/canon.html"],
+        "createdAt": "2026-11-12T18:50:57.124Z",
+        "reason": "agent: canon card deliberately depicts the category-standard dev blog, Inter is the point"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [".impeccable/mocks/decision/assigned.html"],
+        "createdAt": "2026-11-12T19:33:59.477Z",
+        "reason": "agent: unchosen decision-round sketch depicting another direction; not part of the shipped system"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [".impeccable/mocks/decision/canon.html"],
+        "createdAt": "2026-11-12T19:33:59.512Z",
+        "reason": "agent: unchosen decision-round sketch depicting another direction; not part of the shipped system"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#000",
+        "files": ["app/globals.css"],
+        "createdAt": "2026-11-12T20:19:22.727Z",
+        "reason": "agent: print stylesheet forces plain black on white; print is outside the screen palette"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "#fff",
+        "files": ["app/globals.css"],
+        "createdAt": "2026-11-12T20:19:22.763Z",
+        "reason": "agent: print stylesheet forces plain black on white; print is outside the screen palette"
+      }
+    ]
+  }
+}

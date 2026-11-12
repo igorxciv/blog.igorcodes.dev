@@ -1,15 +1,6 @@
 "use client";
 
 import { clsx } from "clsx";
-import {
-  ArrowRight,
-  Bot,
-  Check,
-  History,
-  ListChecks,
-  RotateCcw,
-  Shuffle,
-} from "lucide-react";
 import { useMemo, useState } from "react";
 
 type Mode = "history" | "state";
@@ -100,31 +91,27 @@ export function StateMachinePlayground({
   }
 
   return (
-    <section className="my-8 overflow-hidden rounded-[1.8rem] border border-(--border-strong) bg-(--surface-raised) shadow-[var(--fm-shadow-elevated)] lg:my-10">
-      <div className="border-b border-(--border) bg-[linear-gradient(180deg,color-mix(in_srgb,var(--accent-soft)_44%,transparent),transparent)] px-4 py-4 sm:px-5 lg:px-6">
-        <p className="m-0 text-[0.72rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
-          Interactive Model
-        </p>
-        <div className="mt-2 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <section className="my-8 overflow-hidden  border border-(--rule) bg-(--paper)  lg:my-10">
+      <div className="border-b border-(--rule)  px-4 py-4 sm:px-5 lg:px-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Heading
-            className="m-0 text-xl leading-tight text-(--foreground) sm:text-2xl"
+            className="m-0 text-xl leading-tight text-(--ink) sm:text-2xl"
             style={{ fontWeight: 600 }}
           >
             Transcript memory vs explicit state
           </Heading>
-          <div className="grid grid-cols-2 gap-2 rounded-full border border-(--border) bg-(--surface-inset) p-1">
+          <div className="grid grid-cols-2 gap-2  border border-(--rule) bg-(--paper-sunk) p-1">
             <button
               type="button"
               aria-pressed={mode === "history"}
               onClick={() => setMode("history")}
               className={clsx(
-                "inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-3 text-sm transition",
+                "inline-flex min-h-10 items-center justify-center gap-2  px-3 text-sm",
                 mode === "history"
-                  ? "bg-(--accent-soft) text-(--foreground) shadow-[0_8px_18px_color-mix(in_srgb,var(--fm-shadow-glow)_16%,transparent)]"
-                  : "text-(--foreground-soft) hover:text-(--foreground)",
+                  ? "bg-(--paper-sunk) font-semibold text-(--ink) "
+                  : "text-(--ink-soft) hover:text-(--ink)",
               )}
             >
-              <History aria-hidden="true" className="size-4" />
               History
             </button>
             <button
@@ -132,13 +119,12 @@ export function StateMachinePlayground({
               aria-pressed={mode === "state"}
               onClick={() => setMode("state")}
               className={clsx(
-                "inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-3 text-sm transition",
+                "inline-flex min-h-10 items-center justify-center gap-2  px-3 text-sm",
                 mode === "state"
-                  ? "bg-(--accent-soft) text-(--foreground) shadow-[0_8px_18px_color-mix(in_srgb,var(--fm-shadow-glow)_16%,transparent)]"
-                  : "text-(--foreground-soft) hover:text-(--foreground)",
+                  ? "bg-(--paper-sunk) font-semibold text-(--ink) "
+                  : "text-(--ink-soft) hover:text-(--ink)",
               )}
             >
-              <ListChecks aria-hidden="true" className="size-4" />
               State
             </button>
           </div>
@@ -146,7 +132,7 @@ export function StateMachinePlayground({
       </div>
 
       <div className="grid gap-0 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="border-b border-(--border) p-4 sm:p-5 lg:border-b-0 lg:border-r lg:p-6">
+        <div className="border-b border-(--rule) p-4 sm:p-5 lg:border-b-0 lg:border-r lg:p-6">
           <div className="grid gap-3 sm:grid-cols-3">
             <Metric
               label="Tokens"
@@ -164,9 +150,9 @@ export function StateMachinePlayground({
           </p>
 
           <label className="mt-6 block">
-            <span className="flex items-center justify-between text-sm text-(--foreground-soft)">
+            <span className="flex items-center justify-between text-sm text-(--ink-soft)">
               Conversation turns
-              <span className="font-mono text-(--foreground)">{turns}</span>
+              <span className="ledger-face text-(--ink)">{turns}</span>
             </span>
             <input
               type="range"
@@ -179,12 +165,11 @@ export function StateMachinePlayground({
             />
           </label>
 
-          <div className="mt-6 rounded-[1.2rem] border border-(--border) bg-(--surface-inset) p-4">
-            <div className="flex items-center gap-2 text-sm text-(--foreground)">
-              <Bot aria-hidden="true" className="size-4 text-(--accent)" />
+          <div className="mt-6  border border-(--rule) bg-(--paper-sunk) p-4">
+            <div className="flex items-center gap-2 text-sm text-(--ink)">
               Assistant behavior
             </div>
-            <p className="mb-0 mt-3 text-sm leading-7 text-(--foreground-soft)">
+            <p className="mb-0 mt-3 text-sm leading-7 text-(--ink-soft)">
               {mode === "history"
                 ? "The model rereads the whole chat, infers what has already happened, then guesses the next best question."
                 : "The backend gives the model the current facts, the missing field, and a narrow job: produce the next useful turn."}
@@ -202,22 +187,22 @@ export function StateMachinePlayground({
                 <div
                   key={field.key}
                   className={clsx(
-                    "flex min-h-14 items-center justify-between gap-3 rounded-[1.1rem] border px-4 py-3",
+                    "flex min-h-14 items-center justify-between gap-3  border px-4 py-3",
                     isComplete
-                      ? "border-(--accent-line) bg-(--accent-soft)"
+                      ? "border-(--ink) bg-(--paper)"
                       : isActive
-                        ? "border-amber-500/40 bg-amber-500/10"
-                        : "border-(--border) bg-(--surface)",
+                        ? "border-(--ink) bg-(--paper)"
+                        : "border-(--rule) bg-(--paper)",
                   )}
                 >
                   <div>
                     <p
-                      className="m-0 text-sm text-(--foreground)"
+                      className="m-0 text-sm text-(--ink)"
                       style={{ fontWeight: 600 }}
                     >
                       {field.label}
                     </p>
-                    <p className="m-0 mt-1 text-sm text-(--foreground-soft)">
+                    <p className="m-0 mt-1 text-sm text-(--ink-soft)">
                       {isComplete
                         ? field.value
                         : isActive
@@ -226,27 +211,25 @@ export function StateMachinePlayground({
                     </p>
                   </div>
                   {isComplete ? (
-                    <Check
-                      aria-hidden="true"
-                      className="size-5 text-(--accent)"
-                    />
+                    <span className="ledger-face text-[0.8125rem] text-(--ink)">
+                      done
+                    </span>
                   ) : null}
                 </div>
               );
             })}
           </div>
 
-          <div className="mt-5 rounded-[1.2rem] border border-(--border) bg-(--surface-inset) p-4">
-            <p className="m-0 text-[0.72rem] uppercase tracking-[0.22em] text-(--foreground-soft)">
+          <div className="mt-5  border border-(--rule) bg-(--paper-sunk) p-4">
+            <p className="m-0 ledger-face text-[0.8125rem] text-(--pencil)">
               Structured Output
             </p>
             {/* biome-ignore lint/a11y/useSemanticElements: a <pre> scroll container cannot be a <section>; role="region" names it for AT */}
             <pre
               role="region"
-              aria-label="State output"
-              // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
+              aria-label="State output" // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
               tabIndex={0}
-              className="m-0 mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.82rem] leading-6 text-(--foreground)"
+              className="m-0 mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.82rem] leading-6 text-(--ink)"
             >
               {JSON.stringify(
                 {
@@ -275,13 +258,8 @@ export function StateMachinePlayground({
             <button
               type="button"
               onClick={collectNextField}
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-(--accent-line) bg-(--accent-soft) px-4 text-sm text-(--foreground) transition hover:border-(--accent)"
+              className="inline-flex min-h-11 items-center gap-2  border border-(--ink) bg-(--paper) px-4 text-sm text-(--ink) hover:border-(--ink)"
             >
-              {completedFields.length === fields.length ? (
-                <RotateCcw aria-hidden="true" className="size-4" />
-              ) : (
-                <ArrowRight aria-hidden="true" className="size-4" />
-              )}
               {completedFields.length === fields.length
                 ? "Reset flow"
                 : "Answer next field"}
@@ -292,9 +270,8 @@ export function StateMachinePlayground({
                 setCompletedFields(["goal"]);
                 setTurns(6);
               }}
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-(--border) bg-(--surface) px-4 text-sm text-(--foreground-soft) transition hover:text-(--foreground)"
+              className="inline-flex min-h-11 items-center gap-2  border border-(--rule) bg-(--paper) px-4 text-sm text-(--ink-soft) hover:text-(--ink)"
             >
-              <Shuffle aria-hidden="true" className="size-4" />
               Replay
             </button>
           </div>
@@ -306,14 +283,11 @@ export function StateMachinePlayground({
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[1.1rem] border border-(--border) bg-(--surface-inset) px-4 py-3">
-      <p className="m-0 text-[0.72rem] uppercase tracking-[0.2em] text-(--foreground-soft)">
+    <div className="border border-(--rule) bg-(--paper-sunk) px-4 py-3">
+      <p className="m-0 ledger-face text-[0.8125rem] text-(--pencil)">
         {label}
       </p>
-      <p
-        className="m-0 mt-2 text-xl text-(--foreground)"
-        style={{ fontWeight: 600 }}
-      >
+      <p className="m-0 mt-2 text-xl text-(--ink)" style={{ fontWeight: 600 }}>
         {value}
       </p>
     </div>

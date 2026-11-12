@@ -41,9 +41,7 @@ next-env.d.ts
 # project specific
 /markdown-drafts
 
-# licensed fonts — commercial, non-redistributable; supplied at build time from
-# Vercel Blob (see app/_tools/fetch-fonts.mjs). Keep your local licensed copies
-# under app/fonts/ for local dev; they are never committed.
+# Previously held licensed fonts for local dev; no longer used.
 /app/fonts/
 
 # oh-my-claudecode operational state

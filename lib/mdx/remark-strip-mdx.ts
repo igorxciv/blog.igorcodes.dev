@@ -21,12 +21,47 @@ function isParent(node: Node): node is Parent {
   return Array.isArray((node as Parent).children);
 }
 
+type FigureFence = Node & {
+  lang?: string | null;
+  meta?: string | null;
+  value?: string;
+};
+
+// ```figure fences (see remark-text-fences.ts) keep their diagram as a plain
+// text block, followed by the caption from the fence meta.
+function figureToMarkdown(node: FigureFence): Node[] | null {
+  if (node.type !== "code" || node.lang !== "figure") {
+    return null;
+  }
+  const caption = /caption="([^"]*)"/.exec(node.meta ?? "")?.[1];
+  const nodes: Node[] = [
+    { type: "code", lang: "text", value: node.value ?? "" } as Node,
+  ];
+  if (caption) {
+    nodes.push({
+      type: "paragraph",
+      children: [
+        {
+          type: "emphasis",
+          children: [{ type: "text", value: `Figure: ${caption}` }],
+        },
+      ],
+    } as Node);
+  }
+  return nodes;
+}
+
 function stripChildren(node: Node): void {
   if (!isParent(node)) {
     return;
   }
   const next: Node[] = [];
   for (const child of node.children) {
+    const figure = figureToMarkdown(child as FigureFence);
+    if (figure) {
+      next.push(...figure);
+      continue;
+    }
     if (UNWRAP_TYPES.has(child.type)) {
       stripChildren(child);
       if (isParent(child)) {

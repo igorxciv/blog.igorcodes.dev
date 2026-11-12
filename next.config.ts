@@ -46,9 +46,6 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx"],
-  experimental: {
-    optimizePackageImports: ["lucide-react"],
-  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

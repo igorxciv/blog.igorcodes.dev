@@ -1,45 +1,25 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
-import { useId } from "react";
 import { useTheme } from "@/hooks/useTheme";
 
+/**
+ * Renders on the server with both labels; CSS shows the one naming the other
+ * theme, so there is no hydration flash and no JS needed to stay current when
+ * the system preference changes.
+ */
 export function ThemeToggle() {
-  const labelId = useId();
-  const descriptionId = useId();
-  const { isDarkTheme, toggleTheme } = useTheme();
+  const { toggleTheme } = useTheme();
 
   return (
-    <div className="theme-toggle-wrap">
-      <span id={labelId} className="sr-only">
-        Dark theme
+    <button type="button" className="theme-toggle" onClick={toggleTheme}>
+      <span className="theme-label-light">
+        Night
+        <span className="sr-only"> theme: switch to dark</span>
       </span>
-      <span id={descriptionId} className="sr-only">
-        Switch between light and dark color themes.
+      <span className="theme-label-dark">
+        Day
+        <span className="sr-only"> theme: switch to light</span>
       </span>
-      <button
-        type="button"
-        role="switch"
-        aria-labelledby={labelId}
-        aria-checked={isDarkTheme}
-        aria-describedby={descriptionId}
-        className="theme-toggle"
-        suppressHydrationWarning
-        onClick={toggleTheme}
-      >
-        <span
-          aria-hidden="true"
-          className="theme-toggle-icon theme-toggle-icon-sun"
-        >
-          <Sun className="size-6" strokeWidth={2.1} />
-        </span>
-        <span
-          aria-hidden="true"
-          className="theme-toggle-icon theme-toggle-icon-moon"
-        >
-          <Moon className="size-6" strokeWidth={2.1} />
-        </span>
-      </button>
-    </div>
+    </button>
   );
 }
