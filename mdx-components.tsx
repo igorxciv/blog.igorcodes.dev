@@ -17,6 +17,17 @@ import {
   WorkflowStepsBlock,
 } from "@/components/mdx/mdx-article-visuals";
 import { Callout } from "@/components/mdx/mdx-callout";
+import {
+  Brief,
+  Checklist,
+  Compare,
+  CompareColumn,
+  Hub,
+  KeyPoints,
+  PullQuote,
+  Steps,
+  Takeaway,
+} from "@/components/mdx/mdx-reading-aids";
 import { createPostImageComponent } from "@/components/mdx/post-image";
 import { slugifyHeading } from "@/lib/writing";
 
@@ -140,6 +151,15 @@ export const mdxComponents: MDXComponents = {
   TableBlock,
   WorkflowStepsBlock,
   StateMachinePlayground,
+  KeyPoints,
+  PullQuote,
+  Takeaway,
+  Checklist,
+  Brief,
+  Compare,
+  CompareColumn,
+  Steps,
+  Hub,
 };
 
 export function createPostMdxComponents(postSlug: string): MDXComponents {

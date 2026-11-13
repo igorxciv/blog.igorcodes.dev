@@ -43,6 +43,15 @@
 - Use `VisualGrid` and `VisualCard` for compact comparison cards or conceptual groupings.
 - Use `ProcessFlow` for step-by-step loops or causal sequences.
 - Use `TableBlock` with a real nested `<table>` for designed comparison tables.
+- Reading aids (`components/mdx/mdx-reading-aids.tsx`) keep their content in children, so feeds keep the words; a `title` prop survives in feeds as a bold line:
+  - `KeyPoints`: 3 to 4 one-sentence claims right after the opening.
+  - `PullQuote`: one per post, two at most.
+  - `<mark>` around a key sentence inside a paragraph: 3 to 5 per post, never two in one paragraph.
+  - `Takeaway`, `Checklist` (actionable lists) and `Brief` (list items opening with a bold label ending in a period).
+  - Diagrams: `Compare` with two `CompareColumn`s (ordered lists; the last item is the outcome; mark the weaker column `muted`), `Steps` (one ordered list) and `Hub` (a centre paragraph, then a list of short branch labels).
+- Don't draw ASCII-art ```` ```figure ```` diagrams in new posts; use `Compare`, `Steps` or `Hub`.
+- A ```` ```text ```` fence takes an optional `label="Prompt"` in its meta, shown above the block.
+- `##` headings are numbered by CSS; never write numbers in headings.
 - Use fenced `text` blocks for prompt examples and compact workflows; the MDX renderer turns these into article-specific prompt/workflow blocks.
 - Avoid passing complex nested arrays or object literals into custom MDX components unless verified in the rendered page. This MDX pipeline can be sensitive to complex prop serialization.
 

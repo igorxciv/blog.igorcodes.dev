@@ -1,6 +1,6 @@
 ---
-title: "Technical Debt Is a Risk Conversation"
-description: "A practical framework for turning engineering pain into decision-ready technical debt proposals that managers, product partners, and tech leads can evaluate."
+title: "Technical debt is a risk conversation"
+description: "How to turn engineering pain into a technical debt proposal that a manager or product partner can say yes or no to."
 date: "2026-05-12"
 topics:
   - engineering
@@ -15,158 +15,124 @@ published: true
 readingTime: 8
 ---
 
-Most failed technical debt conversations do not fail because the debt is imaginary.
+An engineer says, "The payment provider code is tightly coupled and hard to test." A manager hears that the code is ugly and engineering would like time to make it nicer. Product hears that the roadmap is about to get more expensive, for reasons nobody has explained.
 
-They fail because the proposal asks everyone else to translate engineering pain into delivery risk.
+Everyone heard the same sentence, and the debt behind it is real. But the engineer left the translation to the rest of the room, and nobody in a planning meeting wants to work out what tight coupling means for the next release. <mark>That translation gap is where good technical debt proposals go to die.</mark>
 
-An engineer says, “The payment provider code is tightly coupled and hard to test.” A manager hears something fuzzier: “The code is ugly, and engineering would like time to make it nicer.” Product hears: “The feature roadmap is about to get more expensive, but I am not sure why.”
+This is the format I use to close it.
 
-That translation gap is where good proposals go to die.
+<KeyPoints>
 
-The work is real. The pain is real. But the decision is not ready yet.
+- Technical debt is worth raising when it changes the cost of future work, and the proposal has to show that cost.
+- A decision-ready proposal has a one-sentence problem, a concrete impact and a bounded request with a way to check the result.
+- A small proposal with a measurable finish line is easier to believe than an open-ended refactor.
+- Name what the work delays, and change the framing for each audience while keeping the facts fixed.
 
-```figure caption="Technical debt as a risk map" description="A box for payment provider code spread across billing, onboarding, and plans, connected to four risks around it: delivery risk, team knowledge, release confidence, and roadmap predictability."
-                          +---------------+
-                          | delivery risk |
-                          +---------------+
-                                  |
-                     +------------------------+
-+----------------+   | payment provider code  |   +--------------------+
-| team knowledge |---| spread across billing, |---| release confidence |
-+----------------+   | onboarding, and plans  |   +--------------------+
-                     +------------------------+
-                                  |
-                     +------------------------+
-                     | roadmap predictability |
-                     +------------------------+
-```
+</KeyPoints>
 
-## The problem is not debt
+## Debt is fine until it changes the cost of future work
 
-Technical debt is not automatically bad.
+Technical debt isn't automatically bad. If a team is still finding out whether a feature should exist, a fast and slightly awkward implementation is the responsible choice. Spending two extra weeks polishing the architecture of a feature nobody uses buys you expensive decoration.
 
-Sometimes debt is exactly the right trade-off. If a team is still validating whether a feature should exist, a fast and slightly awkward implementation can be responsible engineering. Spending two extra weeks polishing an architecture for a feature nobody uses is not quality. It is expensive decoration.
+<mark>Debt becomes a problem when it changes the economics of future work.</mark> You usually see it in ordinary symptoms:
 
-Debt becomes a problem when it changes the economics of future work.
-
-That shift usually shows up in ordinary symptoms:
-
-- a feature that should take two days starts taking two weeks
-- every release needs manual checking because the automated tests are not trusted
+- a two-day feature starts taking two weeks
+- every release needs manual checks because nobody trusts the automated tests
 - one vendor integration leaks into unrelated parts of the system
-- engineers avoid a module because nobody understands the side effects
-- product cannot plan confidently because estimates become random
+- engineers avoid a module because nobody understands its side effects
+- estimates turn random, so product can't plan
 
-At that point, the technical issue has become a planning issue.
+At that point the technical issue has become a planning issue, and planning issues are business issues. In the billing example I use through this post, the debt sits in one place and the risk spreads out from it.
 
-And planning issues are business issues.
+<Hub title="Technical debt as a risk map">
 
-## Managers do not prioritize “clean code”
+Payment provider code spread across billing, onboarding and plans
 
-This can feel frustrating, but it is healthy.
+- Delivery risk
+- Team knowledge
+- Release confidence
+- Roadmap predictability
 
-A manager’s job is not to make the codebase beautiful. Their job is to decide priorities under constraints. They are usually thinking about the next quarter, release risk, predictability, team health, and the cost of saying yes to one thing instead of another.
+</Hub>
 
-So when we say:
+## Managers don't prioritize clean code
 
-> This module has high coupling and weak test coverage.
+That can feel frustrating, but it's healthy. A manager's job is to decide priorities under constraints, and a beautiful codebase isn't one of the constraints. They're thinking about the next quarter, release risk, team health and what saying yes to one thing costs everything else.
 
-we are asking them to perform a translation:
+So when an engineer says "this module has high coupling and weak test coverage," the manager has to work out the rest alone. Does it delay a release, raise production risk or burn the team out?
 
-> Does this delay a release? Does this increase production risk? Does this burn the team out? Does this block a business goal?
-
-That translation is our job.
-
-Not because managers are incapable of understanding engineering detail. Good ones often can. But because a prioritization conversation should not begin with a reverse-engineering exercise.
-
-The more decision-ready the proposal is, the more likely the conversation becomes about trade-offs instead of taste.
+That translation is our job. Good managers can follow engineering detail, but a prioritization conversation shouldn't open with a reverse-engineering exercise. The more decision-ready the proposal, the more the conversation turns to trade-offs instead of taste.
 
 ## Use the smallest useful framework
 
-The most useful format I know is boring:
+The most useful format I know is boring.
 
-<ProcessFlow
-  title="A decision-ready technical debt proposal"
-  steps="Problem: name the technical issue in one sentence | Impact: connect it to users, business, delivery, or team health | Proposal: ask for a specific investment with scope and validation"
-/>
+<Steps title="A decision-ready technical debt proposal">
 
-That is it.
+1. Problem. Name the technical issue in one sentence.
+2. Impact. Connect it to users, delivery or team health.
+3. Proposal. Ask for a specific investment with a scope and a way to check the result.
 
-The hard part is not remembering the three words. The hard part is refusing to hide behind engineering vocabulary when the actual decision is about risk.
+</Steps>
 
-## 1. Problem: one sentence, not an architecture review
+Remembering three words is easy. The hard part is refusing to hide behind engineering vocabulary when the decision is about risk.
 
-The problem should be small enough to hold in your head.
+### Name the problem in one sentence
 
-Bad:
-
-> The provider integration violates separation of concerns, creates tight coupling between billing, authentication, onboarding, and plan management, and makes tests hard to write because provider logic is spread across multiple services.
-
-This might be technically accurate. It is also too much for a planning conversation.
-
-Better:
-
-> Our payment provider logic is spread across four parts of the system, so every plan change requires updates in multiple unrelated places.
-
-Now the shape of the problem is obvious. There are multiple places. A plan change touches all of them. The risk is easier to see.
-
-A good problem statement does not explain every implementation detail. It gives people the handle they need to pick up the conversation.
-
-## 2. Impact: architecture is the cause, not the consequence
-
-This is where engineers often lose the room.
-
-We stop at “the architecture is bad.” But bad architecture is not the impact. It is the cause.
-
-Impact explains what the technical issue does to users, the business, or the team. It is stronger when it is concrete:
+The problem should be small enough to hold in your head. Here is the same issue written for an architecture review and for a planning meeting.
 
 <VisualGrid columns="2">
-  <VisualCard eyebrow="Delivery" title="Make time visible" tone="accent">
-    “Last quarter this added about six weeks of extra work across three billing-related changes.”
+  <VisualCard eyebrow="Too much" title="The architecture review" tone="warning">
+    "The provider integration violates separation of concerns, creates tight coupling between billing, authentication, onboarding and plan management, and makes tests hard to write because provider logic is spread across multiple services."
   </VisualCard>
-  <VisualCard eyebrow="Release risk" title="Name the confidence problem">
-    “Every plan change now requires manual regression testing because automated tests do not cover provider-specific edge cases.”
-  </VisualCard>
-  <VisualCard eyebrow="Roadmap" title="Connect it to an upcoming goal">
-    “This creates a real risk that the enterprise plan slips because SSO and billing both depend on this module.”
-  </VisualCard>
-  <VisualCard eyebrow="Team health" title="Surface knowledge debt">
-    “Two engineers are the only people comfortable changing this flow, which creates a delivery risk if either is unavailable.”
+  <VisualCard eyebrow="Better" title="The planning version" tone="accent">
+    "Our payment provider logic is spread across billing, onboarding and plan management, so every plan change means edits in several unrelated places."
   </VisualCard>
 </VisualGrid>
 
-Notice what changed.
+The first might be accurate, but it's too much for a planning conversation. The second gives people a handle, and you can see the risk without knowing what separation of concerns means.
 
-We are not hiding the technical problem. We are connecting it to something the organization can reason about.
+### Show what the architecture costs
 
-## 3. Proposal: do not hand someone homework
+This is where engineers often lose the room. We stop at "the architecture is bad," but bad architecture is the cause. The impact is what it does to users, the business or the team, and it gets stronger the more concrete you make it.
 
-A weak proposal sounds like this:
+<VisualGrid columns="2">
+  <VisualCard eyebrow="Delivery" title="Make time visible" tone="accent">
+    "Last quarter this added about six weeks of extra work across three billing changes."
+  </VisualCard>
+  <VisualCard eyebrow="Release risk" title="Name the confidence problem">
+    "Every plan change needs manual regression testing because the automated tests miss provider edge cases."
+  </VisualCard>
+  <VisualCard eyebrow="Roadmap" title="Tie it to an upcoming goal">
+    "The enterprise plan could slip, because SSO and billing both depend on this module."
+  </VisualCard>
+  <VisualCard eyebrow="Team health" title="Surface knowledge debt">
+    "Only two engineers are comfortable changing this flow. If either is away, delivery stalls."
+  </VisualCard>
+</VisualGrid>
 
-> Let’s think about what to do with this.
+None of these hide the technical problem. They tie it to something the organization already knows how to weigh.
 
-That is not a request. That is homework for someone else.
+### Ask for something with edges
 
-A stronger proposal sounds like this:
+A weak proposal sounds like "let's think about what to do with this." That hands someone else homework. A stronger one sounds like this:
 
-> I propose we spend one sprint isolating the payment provider behind a small internal interface. After that, the next plan iteration should take less than a week. We can validate this on the upcoming SSO plan change.
+> I propose we spend one sprint isolating the payment provider behind a small internal interface. After that, the next plan iteration should take less than a week. We can check this on the upcoming SSO plan change.
 
-This is easier to evaluate because it has edges:
+It's easier to evaluate because it has edges:
 
-- scope: one sprint
-- action: isolate the provider
-- expected result: future plan iteration under one week
-- validation: test the improvement on the SSO change
+- **Scope.** One sprint.
+- **Action.** Isolate the provider.
+- **Expected result.** The next plan change takes under a week.
+- **Validation.** Measure it on the SSO change.
 
-The manager may still say no. That is fine. There are always trade-offs.
-
-But now the conversation is about whether one sprint is worth reducing a specific delivery risk. That is a much better conversation than “does clean code matter?”
+The manager may still say no, and that's fine. You're now discussing whether one sprint is worth removing a specific delivery risk, which beats arguing about whether clean code matters.
 
 ## Same facts, different framing
 
-Different roles care about different kinds of risk. The facts should stay the same, but the framing should change.
+Product, engineering managers and tech leads each care about a different kind of risk. Keep the facts the same and change the framing.
 
-<TableBlock footer="Changing the framing is not manipulation. It is matching the explanation to the decision the other person needs to make.">
+<TableBlock>
   <table>
     <thead>
       <tr>
@@ -178,193 +144,127 @@ Different roles care about different kinds of risk. The facts should stay the sa
     <tbody>
       <tr>
         <td>Product</td>
-        <td>Delivery speed, feature sequencing, user value</td>
-        <td>“This affects when we can ship the next valuable feature.”</td>
+        <td>Delivery speed, feature order, user value</td>
+        <td>"This affects when we can ship the next valuable feature."</td>
       </tr>
       <tr>
         <td>Engineering manager</td>
         <td>Risk, predictability, team health, staffing</td>
-        <td>“This creates or removes a delivery risk.”</td>
+        <td>"This creates or removes a delivery risk."</td>
       </tr>
       <tr>
         <td>Tech lead</td>
-        <td>Maintainability, boundaries, scalability, technical risk</td>
-        <td>“This design increases future change cost in these specific areas.”</td>
+        <td>Boundaries, maintainability, technical risk</td>
+        <td>"This design raises the cost of change in these specific areas."</td>
       </tr>
     </tbody>
   </table>
 </TableBlock>
 
-With a tech lead, it is useful to talk about coupling, testability, boundaries, and system design. Still connect those details to impact.
+With a tech lead you can go deep on coupling and testability, as long as you still tie them to impact. Matching the explanation to the decision someone has to make is ordinary communication, and you already do it elsewhere. If I explain a slow page to a user, I don't start with B-trees. I say the page is slow because the system has to scan too much data.
 
-With a manager, the central question is usually:
+## A billing proposal, before and after
 
-> What risk does this create or remove?
-
-With product, the central question is usually:
-
-> How does this affect when we can ship the next valuable thing?
-
-This is ordinary communication. If I explain a database indexing issue to a user, I do not start with B-trees. I say, “The page is slow because the system has to scan too much data.”
-
-Same idea here.
-
-## A concrete before and after
-
-Imagine a billing system where payment provider logic has leaked everywhere.
-
-The engineer version might sound like this:
+Imagine a billing system where payment provider logic has leaked everywhere. The engineer version might sound like this:
 
 > The billing code is too coupled to Stripe. We need to abstract it because it is hard to test and hard to add new plan types.
 
-This is not terrible. But it still asks the reader to do work.
+That's not terrible, but it still asks the reader to do the translation. Here is a version you can take into planning.
 
-A planning-ready version is sharper:
+<Brief title="Decision-ready version">
 
-<Callout title="Decision-ready version" type="note">
-  <strong>Problem:</strong> Payment provider logic is spread across billing, onboarding, and plan management, so every plan change requires updates in multiple places.
-  <br />
-  <br />
-  <strong>Impact:</strong> The last two plan changes took about three extra weeks because we had to manually test edge cases around upgrades, downgrades, and failed payments. This creates a risk for the enterprise plan release next quarter.
-  <br />
-  <br />
-  <strong>Proposal:</strong> Spend one sprint isolating provider logic behind one internal billing interface. We can validate the improvement on the SSO plan change: if the next iteration takes less than a week and does not require manual checks across unrelated flows, the work paid off.
-</Callout>
+- **Problem.** Payment provider logic is spread across billing, onboarding and plan management, so every plan change means edits in several places.
+- **Impact.** The last two plan changes took about three extra weeks because we had to test upgrades, downgrades and failed payments by hand. That puts next quarter's enterprise plan release at risk.
+- **Proposal.** Spend one sprint isolating provider logic behind one internal billing interface, and measure it on the SSO plan change. If that change takes less than a week and needs no manual checks across unrelated flows, the work paid off.
 
-Now people can evaluate the trade-off:
+</Brief>
 
-- Is one sprint worth reducing this risk?
-- Is the enterprise plan important enough?
-- Do we believe the estimate?
-- Can we do a smaller version?
-- What happens if we postpone it?
-
-Those are the right questions.
+Now people can argue about the trade-off itself. Is one sprint worth this risk? Do we believe the estimate? Could a smaller version work, and what happens if we wait? Those are the right questions, and the engineer version never got anyone to them.
 
 ## Make the proposal small enough to believe
 
-“Let’s refactor the billing system” is usually not a proposal. It is a fog machine.
+"Let's refactor the billing system" is usually a fog machine dressed up as a proposal. It sounds expensive and open-ended, the kind of project that starts with optimism and ends with everyone crying into Jira tickets. A believable proposal breaks it into pieces small enough to schedule.
 
-It sounds expensive. It sounds open-ended. It sounds like the kind of thing that starts with optimism and ends with everyone crying into Jira tickets.
+<Compare title="From vague refactor to bounded risk reduction">
 
-A believable proposal is usually smaller:
+<CompareColumn title="Before" muted>
 
-- one sprint to isolate one provider
-- two days to add tests around the riskiest checkout flows
-- one week to remove duplicate plan calculation logic
-- one migration path for the next feature only
+1. "Let's refactor the billing system"
+2. Scope unknown
+3. Cost unknown
+4. No finish line
 
-The goal is not to fix everything. The goal is to reduce a specific risk.
+</CompareColumn>
 
-That distinction matters because technical debt work often fails when the finish line is “make the architecture better.” Nobody knows when that is done.
+<CompareColumn title="After">
 
-If the finish line is “make the next plan iteration take less than a week,” you have something measurable. Maybe you hit it. Maybe you do not. Either way, you learn.
+1. One sprint to isolate one provider
+2. Two days of tests on the riskiest checkout flows
+3. One week to remove duplicate plan calculation logic
+4. Done when the next plan change takes under a week
 
-```figure caption="From vague refactor to bounded risk reduction" description="Before: a cloud labelled Let's refactor the billing system, with unknown scope and no finish line. After: three small scoped pieces of work, one sprint to isolate one provider, two days of tests on the riskiest checkout flows, and one week to remove duplicate plan calculation logic, done when the next plan change takes less than a week."
-Before                                         After
+</CompareColumn>
 
- .----------------------------------.          +---------------------------------+
-(  "Let's refactor the billing       )         | 1 sprint  isolate one provider  |
-(   system"                          )  ---->  +---------------------------------+
-(   scope: ?        done when: ?     )         | 2 days    tests on the riskiest |
- '----------------------------------'          |           checkout flows        |
-                                               +---------------------------------+
-                                               | 1 week    remove duplicate plan |
-                                               |           calculation logic     |
-                                               +---------------------------------+
-                                               done when: the next plan change
-                                               takes less than a week
-```
+</Compare>
 
-## Do not hide the trade-off
+Nobody knows when "make the architecture better" is done. <mark>The goal is to reduce one specific risk and to know when you have.</mark> If the finish line is "the next plan change takes under a week," you can measure it. Hit it or miss it, you learn something about the system.
 
-Technical debt work is still work.
+## Name what the work delays
 
-If we ask for one sprint, that sprint comes from somewhere. It may delay a feature. It may reduce short-term velocity. It may require help from QA or product.
+If we ask for one sprint, that sprint might delay a feature, slow short-term velocity or need help from QA. A credible proposal says so up front:
 
-A credible proposal names that cost:
+> This will likely delay the small admin reporting improvement by one sprint. I think it's worth it because the enterprise plan depends on the billing flow, and fixing this now lowers the release risk for that work.
 
-> This will likely delay the small admin reporting improvement by one sprint. I think it is worth it because the enterprise plan depends on the billing flow, and fixing this now reduces release risk for that work.
+<PullQuote>
 
-That is much stronger than pretending refactoring is free.
+Technical debt work is still work. The sprint you ask for comes out of someone else's plan.
 
-The question is not:
+</PullQuote>
 
-> Should we care about quality?
+Nobody in the room is asking whether quality matters. They're asking whether this is the right quality investment right now, and sometimes the answer is no. If the feature may be deleted next month, maybe don't refactor it. If five internal users touch the system and it changes twice a year, the ugly code may be fine.
 
-The question is:
-
-> Is this the right quality investment at this moment?
-
-Sometimes the answer is no.
-
-If the feature may be deleted next month, maybe do not refactor it. If the system is used by five internal users and changes twice a year, maybe the ugly code is acceptable. If the company has a hard regulatory deadline, maybe the debt is real but still not the top priority.
-
-Good engineering includes knowing when not to polish.
+A hard regulatory deadline can push real debt down the list too. <mark>Good engineering includes knowing when not to polish.</mark>
 
 ## Knowledge debt is delivery risk too
 
-There is another kind of debt that often hides behind technical debt: knowledge debt.
+Some debt lives in people's heads. If only one engineer understands a critical system, the company carries a risk, and that engineer usually did nothing wrong. Often they solve problems so fast that nobody else ever has to learn the area. When they're away, the team slows down or stops.
 
-If only one engineer understands a critical system, the company has a risk. Not because that engineer did anything wrong. Often it happens because they are very good and keep solving problems quickly.
+That's a system problem, so the best proposal is sometimes something other than "give me time to fix this myself":
 
-But if they are unavailable, the team slows down or gets stuck.
+> I propose that another engineer implements this cleanup while I supervise and review the design. That removes the single-person dependency and gives the team more coverage in this area.
 
-That is not a personal problem. It is a system problem.
+You fix the code and spread the knowledge in the same sprint. Delegating debt work is a senior engineering skill because it lowers operational risk.
 
-Sometimes the best proposal is not “give me time to fix this myself.” It is:
-
-> I propose that another engineer implements this cleanup while I supervise and review the design. That reduces the single-person dependency and gives the team more coverage in this area.
-
-This improves the system and the team at the same time.
-
-Learning to delegate technical debt work is a senior engineering skill. Not because delegation sounds fancy, but because it reduces operational risk.
-
-## A practical exercise
+## Try it on one problem this week
 
 Take one painful technical problem from your current project and write it in this format:
 
-```text
+```text label="Template"
 Problem: [one sentence]
-Impact: [what this means for users, business, delivery, or team health]
-Proposal: [specific request with scope, cost, and expected result]
+Impact: [what this means for users, delivery or team health]
+Proposal: [specific request with scope, cost and expected result]
 ```
 
-Then ask one question:
+Then read it back and ask whether someone else would understand why the team should do it. Most first drafts only explain what we want to do. If you're not sure, show it to a teammate and ask whether the why is clear. The first draft will probably be clumsy, and that's fine. You're practising translation, and nobody expects a polished business case.
 
-> If someone reads this, will they understand why we should do it?
+## Before you ask for the sprint
 
-Not what we want to do.
+None of this guarantees approval. It does change what people are deciding.
 
-Why.
+<Checklist title="Before you send the proposal">
 
-If the answer is “I am not sure,” rewrite it. Even better, show it to someone on your team and ask, “Is it clear why this matters?”
-
-The first draft will probably be clumsy. That is normal. The goal is not to write a perfect business case. The goal is to practice translating engineering pain into product and business impact.
-
-## The checklist
-
-When you want to prioritize technical debt, try this:
-
-- Do not start with implementation details.
-- Explain the problem in one sentence.
-- Connect it to user, business, delivery, or team impact.
+- Lead with the problem in one sentence, without implementation details.
+- Connect it to users, delivery or team health.
 - Make a concrete request.
 - Keep the scope small enough to believe.
-- Include how you will validate the result.
-- Be honest about what work gets delayed.
-- Change the framing for the audience without changing the facts.
+- Say how you'll check the result.
+- Say what work gets delayed.
+- Change the framing for the audience and keep the facts the same.
 
-This does not guarantee approval.
+</Checklist>
 
-But it changes the conversation from:
+<Takeaway>
 
-> Engineering wants time to clean code.
+Technical debt work starts before the refactor, when you make the risk clear enough for someone else to decide. A request for one sprint to reduce a specific delivery risk gets a real answer. A request for time to clean code rarely does.
 
-To:
-
-> We can spend one sprint to reduce a specific delivery risk for an important release.
-
-That is the conversation technical debt deserves.
-
-The work starts before the refactor. It starts when we make the risk clear enough that other people can make a good decision.
+</Takeaway>

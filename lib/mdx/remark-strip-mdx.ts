@@ -51,6 +51,29 @@ function figureToMarkdown(node: FigureFence): Node[] | null {
   return nodes;
 }
 
+type JsxElement = Parent & {
+  attributes?: Array<{ type: string; name?: string; value?: unknown }>;
+};
+
+// A component's `title` prop (Callout, Checklist, Compare, ...) is prose the
+// reader needs, so it survives as a bold line before the unwrapped children.
+function titleParagraph(node: JsxElement): Node | null {
+  if (node.type !== "mdxJsxFlowElement") {
+    return null;
+  }
+  const title = node.attributes?.find(
+    (attribute) =>
+      attribute.type === "mdxJsxAttribute" && attribute.name === "title",
+  )?.value;
+  if (typeof title !== "string" || title.trim() === "") {
+    return null;
+  }
+  return {
+    type: "paragraph",
+    children: [{ type: "strong", children: [{ type: "text", value: title }] }],
+  } as Node;
+}
+
 function stripChildren(node: Node): void {
   if (!isParent(node)) {
     return;
@@ -64,6 +87,10 @@ function stripChildren(node: Node): void {
     }
     if (UNWRAP_TYPES.has(child.type)) {
       stripChildren(child);
+      const title = titleParagraph(child as JsxElement);
+      if (title) {
+        next.push(title);
+      }
       if (isParent(child)) {
         next.push(...child.children);
       }

@@ -48,4 +48,21 @@ describe("remarkTextFences", () => {
       run({ type: "code", lang: "text", value: "The code runs." }).name,
     ).toBe("PromptBlock");
   });
+
+  it("passes a fence label through to prompt blocks only", () => {
+    const prompt = run({
+      type: "code",
+      lang: "text",
+      meta: 'label="Prompt"',
+      value: "Explain this pattern.",
+    });
+    expect(attr(prompt, "label")).toBe("Prompt");
+    const sequence = run({
+      type: "code",
+      lang: "text",
+      meta: 'label="Loop"',
+      value: "a -> b",
+    });
+    expect(attr(sequence, "label")).toBeUndefined();
+  });
 });

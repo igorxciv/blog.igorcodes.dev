@@ -19,12 +19,14 @@ import { type Node, type Parent } from "unist";
 function toBlockElement(node: Code): MdxJsxFlowElement {
   const content = String(node.value ?? "").trim();
   const name = content.includes("->") ? "WorkflowStepsBlock" : "PromptBlock";
-  return {
-    type: "mdxJsxFlowElement",
-    name,
-    attributes: [{ type: "mdxJsxAttribute", name: "content", value: content }],
-    children: [],
-  };
+  const attributes: MdxJsxFlowElement["attributes"] = [
+    { type: "mdxJsxAttribute", name: "content", value: content },
+  ];
+  const { label } = parseFenceMeta(node.meta);
+  if (label && name === "PromptBlock") {
+    attributes.push({ type: "mdxJsxAttribute", name: "label", value: label });
+  }
+  return { type: "mdxJsxFlowElement", name, attributes, children: [] };
 }
 
 /** Reads `key="value"` pairs from a fence's meta string. */

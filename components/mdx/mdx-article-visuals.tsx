@@ -55,6 +55,8 @@ type TableBlockProps = {
 
 type PromptBlockProps = {
   content: string;
+  /** Optional label set above the block, e.g. "Prompt" (from the fence meta). */
+  label?: string;
 };
 
 type WorkflowStepsBlockProps = {
@@ -79,6 +81,7 @@ export function VisualCard({
   children,
   title,
   eyebrow,
+  tone = "default",
   headingLevel = 3,
 }: VisualCardProps) {
   // Panel titles sit inside figures and asides, so they are not part of the
@@ -87,7 +90,7 @@ export function VisualCard({
   const Heading = headingLevel === 3 ? "p" : (`h${headingLevel}` as const);
 
   return (
-    <section className="prose-panel" aria-label={title}>
+    <section className="prose-panel" data-tone={tone} aria-label={title}>
       <Heading className="prose-panel-title">
         {eyebrow ? (
           <span className="panel-label">{sentenceCase(eyebrow)}: </span>
@@ -225,9 +228,10 @@ export function TableBlock({
 }
 
 /** Literal lines (prompts, quoted states) set indented in the apparatus face. */
-export function PromptBlock({ content }: PromptBlockProps) {
+export function PromptBlock({ content, label }: PromptBlockProps) {
   return (
     <div className="prose-literal">
+      {label ? <p className="prose-literal-label">{label}</p> : null}
       <pre>{content.trim()}</pre>
     </div>
   );
