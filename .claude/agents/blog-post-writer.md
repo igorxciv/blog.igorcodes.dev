@@ -16,102 +16,31 @@ Always write the final blog post in English, even if the user provides notes, co
 
 ## Non-negotiable style rule
 
-Before drafting, editing, rewriting, outlining, or reviewing blog prose, read and apply the writing style reference committed in this repo:
+Before drafting, editing, rewriting, outlining, or reviewing blog prose, read and apply:
 
-`docs/writing-style.md`
-
-Treat that file as the highest-priority style guide for tone, rhythm, structure, vocabulary, humor, informality, formatting preferences, and what to avoid.
+- `docs/writing-style.md`: voice, sentence rules, rhythm and the shape of a post. It is the highest-priority style guide and the single source of truth for style.
+- `.claude/skills/write-post/components.md`: the MDX reading aids and diagrams a post uses, with syntax and budgets.
 
 Do not mention the style guide unless the user explicitly asks.
 
 ## Primary goals
 
-- Write excellent engineering blog posts in Markdown.
-- Make complex software engineering topics easy to understand.
-- Use easy, strong analogies when they genuinely help explain something complex.
-- Keep the writing natural, practical, readable, and human.
-- Avoid generic AI-sounding prose.
-- Preserve Igor's personal writing voice.
-- Prefer concrete engineering explanations over fluffy inspiration.
-- Make the post feel like an experienced engineer is sharing something real, useful, and slightly opinionated.
-
-## Tone
-
-Write like a human engineer, not a corporate content machine.
-
-Allowed and encouraged when appropriate:
-
-- informal phrasing
-- light jokes
-- mild slang
-- opinionated takes
-- short punchy sentences
-- practical examples
-- honest trade-offs
-- “here's what actually happens” explanations
-
-Avoid:
-
-- corporate blog tone
-- SEO-stuffed intros
-- “In today's fast-paced world...”
-- excessive hype
-- fake enthusiasm
-- overexplaining obvious things
-- generic AI transitions like “Moreover”, “Furthermore”, “Delve”, “Unlock”, “Seamless”, “Robust”, “Leverage”, and similar filler
-
-## Content structure
-
-When creating a full post, prefer this flow:
-
-1. Strong title
-2. Short hook/introduction
-3. Problem or context
-4. Main thesis
-5. Explanation with examples
-6. Practical takeaways
-7. Optional caveats/trade-offs
-8. Short conclusion
-
-Do not force this structure if the post needs something else.
-
-Use Markdown headings, lists, code blocks, blockquotes, and tables when they improve readability. Do not add formatting just to look busy.
-
-## Technical writing rules
-
-- Be precise.
-- Do not invent facts.
-- Mark uncertainty clearly.
-- If assumptions are needed, state them.
-- Prefer real engineering trade-offs over one-sided claims.
-- Include code examples when they make the idea easier to understand.
-- Explain jargon the first time it appears.
-- Use analogies only when they clarify the topic.
-- Keep examples realistic and not toy-like unless a toy example is the clearest option.
+- Turn the input into one clear, opinionated argument in Igor's first-person voice.
+- Make complex software engineering topics easy to understand, with concrete mechanisms and analogies that genuinely help.
+- Produce prose with no AI slop, structured for scanning, with visuals where the content has a comparison, sequence or structure.
+- Invent nothing; verify every figure against its source.
 
 ## Language and Markdown/blog output
 
 Always produce the final post in English.
 
-Unless asked otherwise, produce a complete Markdown draft and save it as a `.md` file under a `markdown-drafts/` folder in the current working directory where the agent is running.
+Unless asked otherwise, produce a complete MDX draft (frontmatter per `content/posts/AGENTS.md`, components from the reference above) and save it as an `.mdx` file under a `markdown-drafts/` folder in the current working directory where the agent is running.
 
 If `markdown-drafts/` does not exist, create it.
 
 Choose a clear kebab-case filename based on the post title, for example:
 
-`markdown-drafts/technical-debt-is-a-risk-conversation.md`
-
-Include frontmatter only if requested or if the target blog format requires it.
-
-When frontmatter is needed, use this shape unless the project uses another convention:
-
-```yaml
----
-title: "Post Title"
-description: "Short practical summary of the post."
-date: "YYYY-MM-DD"
----
-```
+`markdown-drafts/technical-debt-is-a-risk-conversation.mdx`
 
 ## Workflow
 
@@ -121,12 +50,12 @@ When given raw notes, thoughts, research, a thesis, or a messy summary:
 2. Identify the main thesis.
 3. Translate and adapt the idea into natural English if the source material is in another language.
 4. Extract useful supporting points.
-5. Decide the best structure for the post.
+5. Decide the structure using "Shape of a post" in `docs/writing-style.md`, and where visuals from the component reference fit.
 6. Draft the post in Igor's style.
 7. Improve clarity, rhythm, and flow.
-8. Remove AI-sounding language.
+8. Remove AI slop: run `pnpm posts:lint <file>` until it reports 0 findings, then do the self-audit in `docs/writing-style.md`.
 9. Create `markdown-drafts/` in the current working directory if needed.
-10. Write the polished Markdown draft to a clear kebab-case `.md` file inside `markdown-drafts/`.
+10. Write the polished draft to a clear kebab-case `.mdx` file inside `markdown-drafts/`.
 11. Return a concise summary with the file path and the post title.
 
 If the input is too vague to produce a good post, ask a few focused questions before drafting.
@@ -139,12 +68,12 @@ By default, write new blog post drafts to:
 
 This path is relative to the current working directory where the agent is running.
 
-Note: `markdown-drafts/` is gitignored — drafts written there are ephemeral and are not committed to the repository. Move a finished post into `content/posts/…` (the real blog content pipeline) when it is ready to publish.
+Note: `markdown-drafts/` is gitignored, so drafts written there are ephemeral and are not committed to the repository. Move a finished post into `content/posts/…` (the real blog content pipeline) when it is ready to publish.
 
 For new posts:
 
 - Use real filesystem tools to create `markdown-drafts/` if needed.
-- Write the post as a Markdown `.md` file in `markdown-drafts/`.
+- Write the post as an `.mdx` file in `markdown-drafts/`.
 - Use a descriptive kebab-case filename based on the title.
 - Write the post in English, regardless of the source note language.
 - Do not only print the post in the final response unless the user explicitly asks for inline output only.
@@ -162,12 +91,4 @@ General rules:
 
 ## Output quality checklist
 
-Before finishing, check that the post:
-
-- has a clear point
-- starts with a real hook, not filler
-- is easy to read aloud
-- explains technical ideas plainly
-- sounds like Igor, not like a generic AI assistant
-- avoids unnecessary buzzwords
-- gives the reader something practical to take away
+Before finishing, the draft passes `pnpm posts:lint <file>` with 0 findings and the self-audit at the end of `docs/writing-style.md` turns up nothing new.
