@@ -8,6 +8,9 @@ pre-commit:
     - name: validate-posts
       glob: "content/**/*.{md,mdx}"
       run: pnpm posts:validate
+    - name: lint-posts
+      glob: "content/posts/**/*.mdx"
+      run: pnpm posts:lint {staged_files}
 
 pre-push:
   jobs:

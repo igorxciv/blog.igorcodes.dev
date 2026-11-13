@@ -23,36 +23,22 @@
 - Use ISO-like dates such as `"2026-04-14"`.
 - Keep `topics` broad and navigational; keep `tags` more specific.
 
-## Article Structure
-- Start with the core claim or tension, not a generic introduction.
-- Use a short contextual `Callout` near the top when the article depends on external research, a prior article, or an important caveat.
-- Prefer clear sections with concrete headings. Each section should advance the argument, not merely label content.
-- Put the source link close to the first section that depends on it, even if the source is also mentioned in the opening callout.
-- End with a concise synthesis that restates the practical takeaway, not a decorative conclusion.
+## Writing and Structure
+- Write and edit posts with the `write-post` skill (`.claude/skills/write-post/SKILL.md`).
+- Prose rules, rhythm and the shape of a post live in `docs/writing-style.md`; it is the single source of truth for style.
+- Run `pnpm posts:lint` on every changed post; it must report 0 findings.
 
 ## Sourcing And Links
 - Use Markdown links for inline article links: `[label](https://example.com)`.
 - Do not use raw HTML anchors in prose unless a task explicitly requires custom attributes; raw anchors can bypass MDX link styling.
+- Put the source link close to the first section that depends on it, even if a `Callout` near the top already names the source.
 - Make source labels descriptive. Avoid vague labels such as `here` or `this`.
 - When summarizing external research, distinguish what the source shows from your own interpretation.
 - Do not overquote. Prefer paraphrase, short excerpts, and clear attribution.
 
 ## MDX Components
-- Use existing MDX components before adding new ones.
-- Use `Callout` for contextual notes, caveats, warnings, and source framing.
-- Use `VisualGrid` and `VisualCard` for compact comparison cards or conceptual groupings.
-- Use `ProcessFlow` for step-by-step loops or causal sequences.
-- Use `TableBlock` with a real nested `<table>` for designed comparison tables.
-- Reading aids (`components/mdx/mdx-reading-aids.tsx`) keep their content in children, so feeds keep the words; a `title` prop survives in feeds as a bold line:
-  - `KeyPoints`: 3 to 4 one-sentence claims right after the opening.
-  - `PullQuote`: one per post, two at most.
-  - `<mark>` around a key sentence inside a paragraph: 3 to 5 per post, never two in one paragraph.
-  - `Takeaway`, `Checklist` (actionable lists) and `Brief` (list items opening with a bold label ending in a period).
-  - Diagrams: `Compare` with two `CompareColumn`s (ordered lists; the last item is the outcome; mark the weaker column `muted`), `Steps` (one ordered list) and `Hub` (a centre paragraph, then a list of short branch labels).
-- Don't draw ASCII-art ```` ```figure ```` diagrams in new posts; use `Compare`, `Steps` or `Hub`.
-- A ```` ```text ```` fence takes an optional `label="Prompt"` in its meta, shown above the block.
-- `##` headings are numbered by CSS; never write numbers in headings.
-- Use fenced `text` blocks for prompt examples and compact workflows; the MDX renderer turns these into article-specific prompt/workflow blocks.
+- The component catalog, syntax and per-post budgets live in `.claude/skills/write-post/components.md`.
+- Use existing MDX components before adding new ones. A new component keeps its content in children so the feeds keep the words.
 - Avoid passing complex nested arrays or object literals into custom MDX components unless verified in the rendered page. This MDX pipeline can be sensitive to complex prop serialization.
 
 ## Tables
@@ -96,16 +82,8 @@
 - Inline links must be visibly different from body text in the normal reading state through color and underline.
 - Keep visual blocks editorial and purposeful. A component should clarify the argument, compress a comparison, or make a concept easier to scan.
 
-## Writing Style
-- Write in direct, opinionated engineering prose.
-- Prefer concrete mechanisms over broad claims.
-- Avoid inflated phrasing, generic AI commentary, and unsupported certainty.
-- Use short paragraphs around important claims to improve readability.
-- Use bullets when the content is genuinely list-shaped; otherwise prefer prose.
-- Explain practical implications after conceptual sections so the reader can apply the idea.
-
 ## Verification
-- Run `pnpm lint` and `pnpm build` after changing MDX structure, shared MDX components, images, or post metadata.
+- Run `pnpm posts:lint`, `pnpm lint` and `pnpm build` after changing MDX structure, shared MDX components, images, or post metadata.
 - Use Playwright to verify visual changes in a real browser whenever possible, especially for tables, image blocks, links, and custom MDX components.
 - If Playwright is unavailable because the browser runtime is missing or blocked, say so explicitly and verify with the next best available method.
 - After adding a new published post, confirm it appears in the blog list and at its `/blog/...` route.

@@ -22,7 +22,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "pnpm lint && pnpm typecheck && pnpm test",
-    "prepare": "if git rev-parse --git-dir >/dev/null 2>&1; then lefthook install; fi"
+    "prepare": "if git rev-parse --git-dir >/dev/null 2>&1; then lefthook install; fi",
+    "posts:lint": "tsx app/_tools/lint-posts.ts"
   },
   "dependencies": {
     "clsx": "^2.1.1",
