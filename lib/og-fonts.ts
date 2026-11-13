@@ -6,7 +6,7 @@
 type OgFont = {
   name: string;
   data: ArrayBuffer;
-  weight: 400 | 600 | 700;
+  weight: 400 | 700;
   style: "normal";
 };
 
@@ -33,16 +33,15 @@ async function loadGoogleFont(
   }
 }
 
-/** Source Serif 4 for the label, title and abstract; Archivo (semi-condensed) for the ledger apparatus. */
+/** Figtree (closest open face to Wotfard) for the words; JetBrains Mono for the date line and labels. */
 export async function loadOgFonts(
-  serifText: string,
-  ledgerText: string,
+  sansText: string,
+  monoText: string,
 ): Promise<OgFont[]> {
   const requests: [string, string, string, OgFont["weight"]][] = [
-    ["Source Serif 4", "wght@400", serifText, 400],
-    ["Source Serif 4", "wght@600", serifText, 600],
-    ["Archivo", "wdth,wght@80,400", ledgerText, 400],
-    ["Archivo", "wdth,wght@80,700", ledgerText, 700],
+    ["Figtree", "wght@400", sansText, 400],
+    ["Figtree", "wght@700", sansText, 700],
+    ["JetBrains Mono", "wght@400", monoText, 400],
   ];
   const loaded = await Promise.all(
     requests.map(([family, axes, text]) => loadGoogleFont(family, axes, text)),

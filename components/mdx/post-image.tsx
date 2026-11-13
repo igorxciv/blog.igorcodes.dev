@@ -30,7 +30,7 @@ export function PostImage({
   }
 
   return (
-    <figure className="entry-image">
+    <figure className="prose-image">
       <Image
         src={asset.src}
         width={asset.width}

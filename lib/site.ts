@@ -1,12 +1,13 @@
 export const siteConfig = {
-  name: "Day-Book of Igor",
-  shortName: "Day-Book",
+  name: "Igor writes",
+  shortName: "Igor writes",
   domain: "blog.igorcodes.dev",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://blog.igorcodes.dev",
   description:
-    "One working engineer's day-book: dated entries on AI, software architecture, technical debt, and engineering judgment.",
-  tagline:
-    "Notes from one working engineer, entered as they happen. Opinions on AI, debt, and architecture.",
+    "Essays from a working engineer on AI and learning, software architecture, technical debt, and engineering judgment.",
+  tagline: "Writing from a working engineer.",
+  intro:
+    "One claim per essay, argued with real examples: AI and learning, technical debt, architecture, leadership.",
   locale: "en_US",
   author: {
     name: "Igor",

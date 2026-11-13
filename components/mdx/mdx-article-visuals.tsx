@@ -3,7 +3,7 @@ import { type ComponentPropsWithoutRef, type ReactNode } from "react";
 
 // MDX visuals set as ledger apparatus: numbered figures and tables, hairline
 // rules, no cards or shadows. Figure and table numbers come from CSS counters
-// on .entry-body so they stay in document order.
+// on .prose-body so they stay in document order.
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -64,7 +64,7 @@ type WorkflowStepsBlockProps = {
 /** Side-by-side comparison panels separated by hairlines. */
 export function VisualGrid({ children, columns = 2 }: VisualGridProps) {
   return (
-    <div className="entry-panels" data-columns={String(columns)}>
+    <div className="prose-panels" data-columns={String(columns)}>
       {children}
     </div>
   );
@@ -87,8 +87,8 @@ export function VisualCard({
   const Heading = headingLevel === 3 ? "p" : (`h${headingLevel}` as const);
 
   return (
-    <section className="entry-panel" aria-label={title}>
-      <Heading className="entry-panel-title">
+    <section className="prose-panel" aria-label={title}>
+      <Heading className="prose-panel-title">
         {eyebrow ? (
           <span className="panel-label">{sentenceCase(eyebrow)}: </span>
         ) : null}
@@ -114,10 +114,10 @@ function normalizeFlowItems(items?: string[] | string) {
 
 function Steps({ items, muted }: { items: string[]; muted?: boolean }) {
   return (
-    <ol className={clsx("entry-steps", muted && "entry-steps-muted")}>
+    <ol className={clsx("prose-steps", muted && "prose-steps-muted")}>
       {items.map((item, index) => (
         <li key={item}>
-          <span className="step-no ledger-face" aria-hidden="true">
+          <span className="step-no meta-face" aria-hidden="true">
             {index + 1}.
           </span>
           <span>{item}</span>
@@ -138,19 +138,19 @@ export function ProcessFlow({
   const muted = normalizeFlowItems(mutedSteps);
 
   return (
-    <figure className="entry-figure">
+    <figure className="prose-figure">
       <div
-        className={clsx("entry-flow", muted.length > 0 && "entry-flow-columns")}
+        className={clsx("prose-flow", muted.length > 0 && "prose-flow-columns")}
       >
         <div>
           {muted.length > 0 ? (
-            <p className="entry-flow-label">The full loop</p>
+            <p className="prose-flow-label">The full loop</p>
           ) : null}
           <Steps items={primary} />
         </div>
         {muted.length > 0 ? (
           <div>
-            <p className="entry-flow-label">{mutedTitle}</p>
+            <p className="prose-flow-label">{mutedTitle}</p>
             <Steps items={muted} muted />
           </div>
         ) : null}
@@ -163,9 +163,9 @@ export function ProcessFlow({
 /** A preformatted diagram with a numbered caption, in the manner of an RFC figure. */
 export function Figure({ art, caption, description, wide }: FigureProps) {
   return (
-    <figure className={clsx("entry-figure", wide && "entry-figure-wide")}>
+    <figure className={clsx("prose-figure", wide && "prose-figure-wide")}>
       <pre
-        className="entry-art"
+        className="prose-art"
         role="img"
         aria-label={description}
         // biome-ignore lint/a11y/noNoninteractiveTabindex: wide diagrams scroll horizontally and must be keyboard-reachable (WCAG 2.1.1)
@@ -190,7 +190,7 @@ export function ImagePlaceholder({
     return null;
   }
   return (
-    <aside className="figure-pending ledger-face" aria-label="Figure pending">
+    <aside className="figure-pending meta-face" aria-label="Figure pending">
       Figure pending (hidden in production): {title}. {description}
     </aside>
   );
@@ -206,8 +206,8 @@ export function TableBlock({
   const Heading = `h${headingLevel}` as const;
 
   return (
-    <figure className="entry-table">
-      {title ? <Heading className="entry-panel-title">{title}</Heading> : null}
+    <figure className="prose-table">
+      {title ? <Heading className="prose-panel-title">{title}</Heading> : null}
       {description ? <p>{description}</p> : null}
       {/* biome-ignore lint/a11y/useSemanticElements: overflow scroll wrapper; role="region" names the table for AT */}
       <div
@@ -215,7 +215,7 @@ export function TableBlock({
         aria-label={title ?? footer ?? "Table"}
         // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
         tabIndex={0}
-        className="entry-table-scroll"
+        className="prose-table-scroll"
       >
         {children}
       </div>
@@ -227,7 +227,7 @@ export function TableBlock({
 /** Literal lines (prompts, quoted states) set indented in the apparatus face. */
 export function PromptBlock({ content }: PromptBlockProps) {
   return (
-    <div className="entry-literal">
+    <div className="prose-literal">
       <pre>{content.trim()}</pre>
     </div>
   );
@@ -242,7 +242,7 @@ export function WorkflowStepsBlock({ content }: WorkflowStepsBlockProps) {
     .filter(Boolean);
 
   return (
-    <div className="entry-sequence">
+    <div className="prose-sequence">
       <ol aria-label="Sequence">
         {steps.map((step, index) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: steps are parsed from static author content and never reordered
@@ -257,5 +257,5 @@ export function InlineKicker({
   className,
   ...props
 }: ComponentPropsWithoutRef<"span">) {
-  return <span className={clsx("ledger-face", className)} {...props} />;
+  return <span className={clsx("meta-face", className)} {...props} />;
 }

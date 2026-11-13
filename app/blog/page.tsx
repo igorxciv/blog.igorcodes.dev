@@ -1,7 +1,6 @@
 import { type Metadata } from "next";
-import { Accounts } from "@/components/daybook/accounts";
-import { Ledger } from "@/components/daybook/ledger";
-import { getFolioNumbers } from "@/lib/daybook";
+import { PostLog } from "@/components/blog/post-log";
+import { TopicList } from "@/components/blog/topic-list";
 import {
   buildBlogJsonLd,
   buildCollectionPageJsonLd,
@@ -9,6 +8,7 @@ import {
 } from "@/lib/seo";
 import { getAllPosts, getAllTopics } from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
+import { formatIsoDate } from "@/lib/writing";
 
 const BLOG_DESCRIPTION = siteConfig.description;
 
@@ -35,30 +35,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const NUMBER_WORDS = [
-  "No",
-  "One",
-  "Two",
-  "Three",
-  "Four",
-  "Five",
-  "Six",
-  "Seven",
-  "Eight",
-  "Nine",
-  "Ten",
-];
-
-function entriesSoFar(count: number) {
-  const amount = NUMBER_WORDS[count] ?? String(count);
-  return `${amount} ${count === 1 ? "entry" : "entries"} so far.`;
+function lastUpdated(posts: { date: string; updated?: string }[]) {
+  return posts
+    .map((post) => formatIsoDate(post.updated ?? post.date))
+    .sort()
+    .at(-1);
 }
 
 export default async function BlogPage() {
   const [posts, topics] = await Promise.all([getAllPosts(), getAllTopics()]);
-  const folios = getFolioNumbers(posts);
   const blogJsonLd = buildBlogJsonLd(posts);
   const collectionPageJsonLd = buildCollectionPageJsonLd(posts);
+  const updated = lastUpdated(posts);
 
   return (
     <>
@@ -73,21 +61,30 @@ export default async function BlogPage() {
         }}
       />
 
-      <div className="sheet ledger-sheet">
-        <section className="ledger-main" aria-labelledby="entries-heading">
-          <h1 id="entries-heading" className="sr-only">
-            Entries
-          </h1>
-          <p className="ledger-intro">
-            {siteConfig.tagline} <em>{entriesSoFar(posts.length)}</em>
-          </p>
-          <Ledger
-            posts={posts}
-            folios={folios}
-            caption="All entries, newest first"
-          />
-        </section>
-        <Accounts posts={posts} topics={topics} current={null} />
+      <div className="page">
+        <header className="page-intro">
+          <h1>{siteConfig.tagline}</h1>
+          <p>{siteConfig.intro}</p>
+        </header>
+        {posts.length > 0 ? (
+          <>
+            <PostLog posts={posts} label="All essays, newest first" />
+            <p className="log-foot">
+              {posts.length} {posts.length === 1 ? "essay" : "essays"}
+              {updated ? (
+                <>
+                  {" "}
+                  · updated <time dateTime={updated}>{updated}</time>
+                </>
+              ) : null}
+            </p>
+          </>
+        ) : (
+          <p className="page-empty">The first essay is on its way.</p>
+        )}
+        {topics.length > 0 ? (
+          <TopicList posts={posts} topics={topics} current={null} />
+        ) : null}
       </div>
     </>
   );

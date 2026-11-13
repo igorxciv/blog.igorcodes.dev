@@ -15,27 +15,25 @@ export default function RouteError({
   }, [error]);
 
   return (
-    <div className="sheet ledger-sheet ledger-sheet-single">
-      <section className="ledger-main" aria-labelledby="error-heading">
-        <h1 id="error-heading" className="ledger-heading">
-          This page failed to render
-        </h1>
-        <p className="ledger-intro">
-          Something broke while building this page. Trying again usually works;
-          if it does not, the list of entries still will.
+    <div className="page">
+      <header className="page-intro">
+        <h1>This page failed to load.</h1>
+        <p>
+          Something broke while building it. Trying again usually works; if it
+          does not, the list of essays still will.
         </p>
-        <p className="ledger-intro ledger-actions">
+        <p className="page-actions">
           <button type="button" className="text-button" onClick={reset}>
             Try again
           </button>
-          <Link href="/blog">All entries</Link>
+          <Link href="/blog">All writing</Link>
         </p>
         {error.digest ? (
-          <p className="ledger-intro ledger-reference">
+          <p className="page-reference">
             Reference: <code>{error.digest}</code>
           </p>
         ) : null}
-      </section>
+      </header>
     </div>
   );
 }

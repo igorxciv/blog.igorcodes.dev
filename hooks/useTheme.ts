@@ -8,55 +8,34 @@ import {
   type Theme,
 } from "@/lib/theme";
 
-const systemQuery = "(prefers-color-scheme: dark)";
-
-function systemTheme(): Theme {
-  return window.matchMedia(systemQuery).matches ? "dark" : "light";
+function currentTheme(): Theme {
+  return document.documentElement.dataset.theme === "light" ? "light" : "dark";
 }
 
-function storedTheme(): Theme | null {
-  try {
-    const value = window.localStorage.getItem(THEME_STORAGE_KEY);
-    return value === "light" || value === "dark" ? value : null;
-  } catch {
-    return null;
-  }
-}
-
-function renderedTheme(): Theme {
-  const pinned = document.documentElement.dataset.theme;
-  return pinned === "light" || pinned === "dark" ? pinned : systemTheme();
-}
-
-function apply(override: Theme | null) {
+function apply(theme: Theme) {
   const root = document.documentElement;
-  if (override) {
-    root.dataset.theme = override;
+  if (theme === "light") {
+    root.dataset.theme = "light";
   } else {
     delete root.dataset.theme;
   }
-  const metas = document.querySelectorAll('meta[name="theme-color"]');
-  for (const meta of metas) {
-    const media = meta.getAttribute("media") ?? "";
-    const forDark = media.includes("dark");
-    const theme = override ?? (forDark ? "dark" : "light");
+  for (const meta of document.querySelectorAll('meta[name="theme-color"]')) {
     meta.setAttribute(
       "content",
-      theme === "dark" ? DARK_THEME_COLOR : LIGHT_THEME_COLOR,
+      theme === "light" ? LIGHT_THEME_COLOR : DARK_THEME_COLOR,
     );
   }
 }
 
 /**
- * Two-state theme toggle over three stored states: no value follows the
- * system; "light" or "dark" pins an override. Toggling to the scheme the system
- * already uses clears the override instead of pinning it.
+ * Dark by default; switching to light is remembered on this device. Other
+ * open tabs follow the change through the storage event.
  */
 export function useTheme() {
   useEffect(() => {
     const onStorage = (event: StorageEvent) => {
       if (event.key === THEME_STORAGE_KEY) {
-        apply(storedTheme());
+        apply(event.newValue === "light" ? "light" : "dark");
       }
     };
     window.addEventListener("storage", onStorage);
@@ -64,18 +43,17 @@ export function useTheme() {
   }, []);
 
   const toggleTheme = useCallback(() => {
-    const target: Theme = renderedTheme() === "dark" ? "light" : "dark";
-    const override = target === systemTheme() ? null : target;
+    const target: Theme = currentTheme() === "dark" ? "light" : "dark";
     try {
-      if (override) {
-        window.localStorage.setItem(THEME_STORAGE_KEY, override);
+      if (target === "light") {
+        window.localStorage.setItem(THEME_STORAGE_KEY, "light");
       } else {
         window.localStorage.removeItem(THEME_STORAGE_KEY);
       }
     } catch {
       // Storage blocked: still apply for this page view.
     }
-    apply(override);
+    apply(target);
   }, []);
 
   return { toggleTheme };

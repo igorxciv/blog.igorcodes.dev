@@ -17,8 +17,8 @@ export function Callout({ children, title, type = "note" }: CalloutProps) {
   const label = title ?? defaultLabel[type];
 
   return (
-    <aside className="entry-note" aria-label={label}>
-      <p className="entry-note-label">{label}</p>
+    <aside className="prose-note" aria-label={label}>
+      <p className="prose-note-label">{label}</p>
       <div>{children}</div>
     </aside>
   );

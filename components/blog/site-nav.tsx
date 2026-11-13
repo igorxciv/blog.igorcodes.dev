@@ -4,34 +4,34 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
 
-/** The links stamped on the book cloth. The red underline marks where you are. */
-export function BandNav() {
+/** The header links. The current section reads brighter, with a cyan underline. */
+export function SiteNav() {
   const pathname = usePathname() ?? "";
-  const inAccounts = pathname.startsWith("/blog/topics/");
-  const inEntries = !inAccounts && pathname.startsWith("/blog");
+  const inTopics = pathname.startsWith("/blog/topics/");
+  const inWriting = !inTopics && pathname.startsWith("/blog");
 
   return (
-    <nav aria-label="Site" className="band-nav">
+    <nav aria-label="Site" className="site-nav">
       <ul>
         <li>
           <Link
             href="/blog"
             aria-current={pathname === "/blog" ? "page" : undefined}
-            data-current={inEntries ? "true" : undefined}
+            data-current={inWriting ? "true" : undefined}
           >
-            Entries
+            Writing
           </Link>
         </li>
         <li>
           <Link
-            href="/blog#accounts"
-            data-current={inAccounts ? "true" : undefined}
+            href="/blog#topics"
+            data-current={inTopics ? "true" : undefined}
           >
-            Accounts
+            Topics
           </Link>
         </li>
         <li>
-          <a href="/rss.xml">Feed</a>
+          <a href="/rss.xml">RSS</a>
         </li>
         <li>
           <ThemeToggle />

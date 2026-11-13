@@ -4,15 +4,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode, { type Options } from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
-import { EntryContents } from "@/components/daybook/entry-contents";
-import { MarkReadOnReach, ReadTick } from "@/components/daybook/tick";
-import {
-  extractSections,
-  formatLedgerDate,
-  formatTopic,
-  getAdjacentEntries,
-  getFolioNumbers,
-} from "@/lib/daybook";
+import { PostContents } from "@/components/blog/post-contents";
 import { postMarkdownPath } from "@/lib/llms";
 import { remarkTextFences } from "@/lib/mdx/remark-text-fences";
 import {
@@ -22,6 +14,13 @@ import {
 } from "@/lib/seo";
 import { getAllPosts, getPostBySlug } from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
+import {
+  extractSections,
+  formatIsoDate,
+  formatLongDate,
+  formatTopic,
+  getAdjacentPosts,
+} from "@/lib/writing";
 import { createPostMdxComponents } from "@/mdx-components";
 
 type PostPageProps = {
@@ -56,7 +55,7 @@ export async function generateMetadata({
     return {};
   }
 
-  const description = post.description ?? "Read this entry.";
+  const description = post.description ?? "Read this essay.";
   const canonicalPath = `/blog/${post.slug}`;
   const socialImagePath = `/api/og?slug=${encodeURIComponent(post.slug)}&v=${encodeURIComponent(post.updated ?? post.date)}`;
 
@@ -106,31 +105,18 @@ function topicHref(topic: string) {
   return `/blog/topics/${encodeURIComponent(topic)}`;
 }
 
-type ForwardEntry = { slug: string; title: string; date: string } | null;
+type AdjacentPost = { slug: string; title: string; date: string } | null;
 
-function ForwardRow({
-  label,
-  entry,
-  emptyText,
-}: {
-  label: string;
-  entry: ForwardEntry;
-  emptyText: string;
-}) {
-  const date = entry ? formatLedgerDate(entry.date) : null;
+function AdjacentLink({ label, post }: { label: string; post: AdjacentPost }) {
+  if (!post) {
+    return null;
+  }
+  const date = formatIsoDate(post.date);
   return (
     <li>
-      <span className="col-head">{label}</span>
-      {entry && date ? (
-        <>
-          <Link href={`/blog/${entry.slug}`}>{entry.title}</Link>
-          <time dateTime={entry.date}>
-            {date.day} {date.year}
-          </time>
-        </>
-      ) : (
-        <span className="entry-forward-empty">{emptyText}</span>
-      )}
+      <span className="section-label">{label}</span>
+      <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+      <time dateTime={post.date}>{date}</time>
     </li>
   );
 }
@@ -147,16 +133,10 @@ export default async function BlogPostPage({ params }: PostPageProps) {
   const breadcrumbJsonLd = buildBreadcrumbJsonLd(post);
   const postMdxComponents = createPostMdxComponents(post.slug);
   const posts = await getAllPosts();
-  const folio = getFolioNumbers(posts).get(post.slug);
-  const folioLabel = folio ? `Fo. ${folio}` : "Fo. –";
-  const { broughtForward, carriedForward } = getAdjacentEntries(
-    posts,
-    post.slug,
-  );
-  const date = formatLedgerDate(post.date);
-  const updated = post.updated ? formatLedgerDate(post.updated) : null;
+  const { previous, next } = getAdjacentPosts(posts, post.slug);
   const sections = extractSections(post.body);
   const hasContents = sections.length > 1;
+  const isoDate = formatIsoDate(post.date);
 
   return (
     <>
@@ -169,86 +149,37 @@ export default async function BlogPostPage({ params }: PostPageProps) {
         dangerouslySetInnerHTML={{ __html: jsonLdString(breadcrumbJsonLd) }}
       />
 
-      <article className="entry" data-contents={hasContents ? "true" : "false"}>
-        <div className="entry-heads" aria-hidden="true">
-          <span className="col-head entry-heads-date">Date</span>
-          <span className="col-head">Particulars</span>
-          <span className="col-head entry-heads-acct">Account</span>
-        </div>
-        <div className="entry-rule" aria-hidden="true" />
-
-        <div className="entry-row">
-          <p className="entry-date">
-            <time dateTime={post.date}>
-              {date.day}
-              <small>{date.year}</small>
-            </time>
-          </p>
-          <header className="entry-part">
-            <h1 id="entry-title" className="entry-title">
-              {post.title}
-            </h1>
-            {post.description ? (
-              <p className="entry-lede">{post.description}</p>
+      <article
+        className="post"
+        data-contents={hasContents ? "true" : "false"}
+        aria-labelledby="post-title"
+      >
+        <header className="post-header">
+          <h1 id="post-title">{post.title}</h1>
+          {post.description ? (
+            <p className="post-lede">{post.description}</p>
+          ) : null}
+          <div className="post-meta">
+            <time dateTime={post.date}>{isoDate}</time>
+            {post.readingTime ? <span>{post.readingTime} min read</span> : null}
+            {post.published ? null : <span>draft</span>}
+            {post.topics.length > 0 ? (
+              <ul className="post-topics" aria-label="Topics">
+                {post.topics.map((topic) => (
+                  <li key={topic}>
+                    <Link href={topicHref(topic)}>
+                      {formatTopic(topic).toLowerCase()}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             ) : null}
-          </header>
-          <dl className="entry-acct">
-            <div className="entry-acct-date">
-              <dt>Date</dt>
-              <dd>
-                <time dateTime={post.date}>
-                  {date.day} {date.year}
-                </time>
-              </dd>
-            </div>
-            <div className="entry-acct-account">
-              <dt>Account</dt>
-              <dd>
-                <ul>
-                  {post.topics.map((topic) => (
-                    <li key={topic}>
-                      <Link href={topicHref(topic)}>{formatTopic(topic)}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </dd>
-            </div>
-            <div>
-              <dt>Folio</dt>
-              <dd>
-                {folio ?? "–"}
-                <ReadTick slug={post.slug} />
-                {post.published ? null : " · Draft"}
-              </dd>
-            </div>
-            {post.readingTime ? (
-              <div>
-                <dt>Minutes</dt>
-                <dd>{post.readingTime}</dd>
-              </div>
-            ) : null}
-            {updated && post.updated ? (
-              <div>
-                <dt>Revised</dt>
-                <dd>
-                  <time dateTime={post.updated}>
-                    {updated.day} {updated.year}
-                  </time>
-                </dd>
-              </div>
-            ) : null}
-          </dl>
-        </div>
+          </div>
+        </header>
 
-        {hasContents ? (
-          <EntryContents
-            folioLabel={folioLabel}
-            sections={sections}
-            titleId="entry-title"
-          />
-        ) : null}
+        {hasContents ? <PostContents sections={sections} /> : null}
 
-        <div className="entry-body">
+        <div className="prose">
           <MDXRemote
             source={post.body}
             components={postMdxComponents}
@@ -261,32 +192,32 @@ export default async function BlogPostPage({ params }: PostPageProps) {
           />
         </div>
 
-        <footer className="entry-close">
-          <p className="entry-signed">
-            Entered by {siteConfig.author.name},{" "}
-            <time dateTime={post.date}>
-              {date.day} {date.year}
-            </time>
+        <footer className="post-end">
+          <p className="post-signed">
+            Written by {siteConfig.author.name},{" "}
+            <time dateTime={post.date}>{formatLongDate(post.date)}</time>
+            {post.updated ? (
+              <>
+                ; updated{" "}
+                <time dateTime={post.updated}>
+                  {formatLongDate(post.updated)}
+                </time>
+              </>
+            ) : null}
             .
           </p>
-          <MarkReadOnReach slug={post.slug} />
-          <nav aria-label="Neighbouring entries">
-            <ul className="entry-forward">
-              <ForwardRow
-                label="Brought forward"
-                entry={broughtForward}
-                emptyText="This is the first entry in the book."
-              />
-              <ForwardRow
-                label="Carried forward"
-                entry={carriedForward}
-                emptyText="This is the latest entry. The next one goes here."
-              />
-            </ul>
-          </nav>
-          <p className="entry-feeds">
-            New entries arrive by <a href="/rss.xml">RSS</a> or{" "}
-            <a href="/feed.json">JSON Feed</a>.
+          {previous || next ? (
+            <nav aria-label="More essays">
+              <ul className="post-adjacent">
+                <AdjacentLink label="Previous" post={previous} />
+                <AdjacentLink label="Next" post={next} />
+              </ul>
+            </nav>
+          ) : null}
+          <p className="post-feeds">
+            New essays arrive by <a href="/rss.xml">RSS</a> or{" "}
+            <a href="/feed.json">JSON Feed</a>. This essay is also available{" "}
+            <a href={postMarkdownPath(post.slug)}>as Markdown</a>.
           </p>
         </footer>
       </article>

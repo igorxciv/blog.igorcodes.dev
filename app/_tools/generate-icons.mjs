@@ -9,9 +9,9 @@
 // app/favicon.ico is built from the same mark (16/32/48 px), e.g. with
 // ImageMagick: magick public/icon-192.png -define icon:auto-resize=48,32,16 app/favicon.ico
 //
-// Design: the day-book's cover. Dark green book cloth, the gilt-bordered
-// label with two lines of lettering, and the red rule along the foot of the
-// board. Pure vector, so it needs no fonts.
+// Design: a sibling of the igorcodes.dev mark. The same near-black rounded
+// tile inside a cyan ring, holding a text caret and two lines of writing in
+// place of the initials. Pure vector, so it needs no fonts.
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -23,17 +23,18 @@ const rootDir = path.resolve(
   "../..",
 );
 
-const CLOTH = "#203a2f";
-const GILT = "#c9b98a";
-const CLOTH_INK = "#efe6c8";
-const RED = "#b3311f";
+const BG = "#0a0a0a";
+const RING = "#00bfe0";
+const CARET = "#00d9ff";
+const TEXT = "#e5e5e5";
+const MUTED = "#6e6e6e";
 
 const svg = `<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="96" fill="${CLOTH}"/>
-  <rect x="104" y="120" width="304" height="196" fill="none" stroke="${GILT}" stroke-width="14"/>
-  <rect x="148" y="170" width="216" height="42" fill="${CLOTH_INK}"/>
-  <rect x="148" y="240" width="128" height="22" fill="${GILT}"/>
-  <rect x="0" y="392" width="512" height="18" fill="${RED}"/>
+  <rect width="512" height="512" rx="112" fill="${BG}"/>
+  <rect x="22" y="22" width="468" height="468" rx="92" fill="none" stroke="${RING}" stroke-width="20"/>
+  <rect x="128" y="150" width="30" height="212" rx="6" fill="${CARET}"/>
+  <rect x="196" y="196" width="188" height="36" rx="18" fill="${TEXT}"/>
+  <rect x="196" y="280" width="128" height="36" rx="18" fill="${MUTED}"/>
 </svg>`;
 
 const targets = [

@@ -1,0 +1,24 @@
+Bundled open-licensed fallback fonts
+=====================================
+
+These two woff2 files are used ONLY as build-time fallbacks, substituted into
+app/fonts/ when the site's real licensed fonts (Wotfard, Dank Mono) are
+unavailable on a machine without the Vercel Blob token (see fetch-fonts.mjs,
+FONTS_FALLBACK mode). They let token-less contributors and CI run
+`FONTS_FALLBACK=1 pnpm build` without the private fonts. Typography is
+temporarily generic in this mode; these fonts are never shipped as the site's
+actual typefaces.
+
+sans.woff2 — Sora
+  Copyright the Sora Project Authors. Licensed under the SIL Open Font License,
+  Version 1.1. Sourced from Fontsource (https://github.com/fontsource/font-files).
+  Used here solely as a build-time fallback for the Wotfard sans typeface.
+
+mono.woff2 — JetBrains Mono
+  Copyright the JetBrains Mono Project Authors. Licensed under the SIL Open Font
+  License, Version 1.1. Sourced from Fontsource
+  (https://github.com/fontsource/font-files). Used here solely as a build-time
+  fallback for the Dank Mono monospace typeface.
+
+The full text of the SIL Open Font License 1.1 is available at
+https://openfontlicense.org/.

@@ -1,7 +1,6 @@
 import { type MDXComponents } from "mdx/types";
 import dynamic from "next/dynamic";
 import {
-  Children,
   type ComponentPropsWithoutRef,
   isValidElement,
   type ReactNode,
@@ -19,7 +18,7 @@ import {
 } from "@/components/mdx/mdx-article-visuals";
 import { Callout } from "@/components/mdx/mdx-callout";
 import { createPostImageComponent } from "@/components/mdx/post-image";
-import { slugifyHeading, stripHeadingNumber } from "@/lib/daybook";
+import { slugifyHeading } from "@/lib/writing";
 
 const StateMachinePlayground = dynamic(() =>
   import("@/components/mdx/state-machine-playground").then(
@@ -40,38 +39,22 @@ function textOf(node: ReactNode): string {
   return "";
 }
 
-/** Drops an authored "1. " prefix from the first text child; the entry numbers sections itself. */
-function withoutAuthoredNumber(children: ReactNode): ReactNode {
-  let stripped = false;
-  return Children.map(children, (child) => {
-    if (!stripped && typeof child === "string") {
-      stripped = true;
-      return stripHeadingNumber(child);
-    }
-    stripped = true;
-    return child;
-  });
-}
-
+/** Headings keep the author's text; the id drops any "1." prefix so anchors stay stable. */
 function SectionHeading({
   as: Tag,
   children,
   ...props
 }: ComponentPropsWithoutRef<"h2"> & { as: "h2" | "h3" }) {
-  const title = stripHeadingNumber(textOf(children));
-  const id = slugifyHeading(title);
   return (
-    <Tag id={id} {...props}>
-      {/* The number is drawn by a CSS counter, so it stays in step with the contents list. The contents list carries the links. */}
-      <span className="sec-no" aria-hidden="true" />
-      {withoutAuthoredNumber(children)}
+    <Tag id={slugifyHeading(textOf(children))} {...props}>
+      {children}
     </Tag>
   );
 }
 
 export const mdxComponents: MDXComponents = {
-  // The page renders the entry title as the sole <h1>, so a content-level
-  // `# heading` becomes a numbered <h2>.
+  // The page renders the post title as the sole <h1>, so a content-level
+  // `# heading` becomes an <h2>.
   h1: ({ children, ...props }: ComponentPropsWithoutRef<"h2">) => (
     <SectionHeading as="h2" {...props}>
       {children}
@@ -100,14 +83,14 @@ export const mdxComponents: MDXComponents = {
     />
   ),
   table: (props: ComponentPropsWithoutRef<"table">) => (
-    <div className="entry-table">
+    <div className="prose-table">
       {/* biome-ignore lint/a11y/useSemanticElements: overflow scroll wrapper; role="region" keeps the nested table's own semantics intact */}
       <div
         role="region"
         aria-label="Table"
         // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
         tabIndex={0}
-        className="entry-table-scroll"
+        className="prose-table-scroll"
       >
         <table {...props} />
       </div>
@@ -137,7 +120,7 @@ export const mdxComponents: MDXComponents = {
       typeof title === "string" && title.trim().length > 0 ? title : null;
 
     return (
-      <figure className="entry-image">
+      <figure className="prose-image">
         {/* biome-ignore lint/performance/noImgElement: markdown images have
             unknown intrinsic dimensions; a plain <img> avoids next/image's
             required width/height. */}

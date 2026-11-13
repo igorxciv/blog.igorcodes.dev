@@ -44,6 +44,13 @@
         "files": ["app/globals.css"],
         "createdAt": "2026-11-12T20:19:22.763Z",
         "reason": "agent: print stylesheet forces plain black on white; print is outside the screen palette"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [".impeccable/mocks/decision/model-pick.html"],
+        "createdAt": "2026-11-12T23:01:17.858Z",
+        "reason": "agent: unchosen decision-round sketch depicting another direction; not part of the shipped system"
       }
     ]
   }

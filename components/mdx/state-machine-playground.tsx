@@ -91,25 +91,25 @@ export function StateMachinePlayground({
   }
 
   return (
-    <section className="my-8 overflow-hidden  border border-(--rule) bg-(--paper)  lg:my-10">
-      <div className="border-b border-(--rule)  px-4 py-4 sm:px-5 lg:px-6">
+    <section className="my-8 overflow-hidden rounded-[10px] border border-(--line) bg-(--bg) lg:my-10">
+      <div className="border-b border-(--line) px-4 py-4 sm:px-5 lg:px-6">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <Heading
-            className="m-0 text-xl leading-tight text-(--ink) sm:text-2xl"
+            className="m-0 text-xl leading-tight text-(--text) sm:text-2xl"
             style={{ fontWeight: 600 }}
           >
             Transcript memory vs explicit state
           </Heading>
-          <div className="grid grid-cols-2 gap-2  border border-(--rule) bg-(--paper-sunk) p-1">
+          <div className="grid grid-cols-2 gap-2 rounded-full border border-(--line) bg-(--surface) p-1">
             <button
               type="button"
               aria-pressed={mode === "history"}
               onClick={() => setMode("history")}
               className={clsx(
-                "inline-flex min-h-10 items-center justify-center gap-2  px-3 text-sm",
+                "inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-3 text-sm",
                 mode === "history"
-                  ? "bg-(--paper-sunk) font-semibold text-(--ink) "
-                  : "text-(--ink-soft) hover:text-(--ink)",
+                  ? "bg-(--surface-raised) font-semibold text-(--text)"
+                  : "text-(--text-soft) hover:text-(--text)",
               )}
             >
               History
@@ -119,10 +119,10 @@ export function StateMachinePlayground({
               aria-pressed={mode === "state"}
               onClick={() => setMode("state")}
               className={clsx(
-                "inline-flex min-h-10 items-center justify-center gap-2  px-3 text-sm",
+                "inline-flex min-h-10 items-center justify-center gap-2 rounded-full px-3 text-sm",
                 mode === "state"
-                  ? "bg-(--paper-sunk) font-semibold text-(--ink) "
-                  : "text-(--ink-soft) hover:text-(--ink)",
+                  ? "bg-(--surface-raised) font-semibold text-(--text)"
+                  : "text-(--text-soft) hover:text-(--text)",
               )}
             >
               State
@@ -132,7 +132,7 @@ export function StateMachinePlayground({
       </div>
 
       <div className="grid gap-0 lg:grid-cols-[0.95fr_1.05fr]">
-        <div className="border-b border-(--rule) p-4 sm:p-5 lg:border-b-0 lg:border-r lg:p-6">
+        <div className="border-b border-(--line) p-4 sm:p-5 lg:border-b-0 lg:border-r lg:p-6">
           <div className="grid gap-3 sm:grid-cols-3">
             <Metric
               label="Tokens"
@@ -150,9 +150,9 @@ export function StateMachinePlayground({
           </p>
 
           <label className="mt-6 block">
-            <span className="flex items-center justify-between text-sm text-(--ink-soft)">
+            <span className="flex items-center justify-between text-sm text-(--text-soft)">
               Conversation turns
-              <span className="ledger-face text-(--ink)">{turns}</span>
+              <span className="meta-face text-(--text)">{turns}</span>
             </span>
             <input
               type="range"
@@ -165,11 +165,11 @@ export function StateMachinePlayground({
             />
           </label>
 
-          <div className="mt-6  border border-(--rule) bg-(--paper-sunk) p-4">
-            <div className="flex items-center gap-2 text-sm text-(--ink)">
+          <div className="mt-6 rounded-[10px] border border-(--line) bg-(--surface) p-4">
+            <div className="flex items-center gap-2 text-sm text-(--text)">
               Assistant behavior
             </div>
-            <p className="mb-0 mt-3 text-sm leading-7 text-(--ink-soft)">
+            <p className="mb-0 mt-3 text-sm leading-7 text-(--text-soft)">
               {mode === "history"
                 ? "The model rereads the whole chat, infers what has already happened, then guesses the next best question."
                 : "The backend gives the model the current facts, the missing field, and a narrow job: produce the next useful turn."}
@@ -189,20 +189,20 @@ export function StateMachinePlayground({
                   className={clsx(
                     "flex min-h-14 items-center justify-between gap-3  border px-4 py-3",
                     isComplete
-                      ? "border-(--ink) bg-(--paper)"
+                      ? "border-(--text) bg-(--bg)"
                       : isActive
-                        ? "border-(--ink) bg-(--paper)"
-                        : "border-(--rule) bg-(--paper)",
+                        ? "border-(--text) bg-(--bg)"
+                        : "border-(--line) bg-(--bg)",
                   )}
                 >
                   <div>
                     <p
-                      className="m-0 text-sm text-(--ink)"
+                      className="m-0 text-sm text-(--text)"
                       style={{ fontWeight: 600 }}
                     >
                       {field.label}
                     </p>
-                    <p className="m-0 mt-1 text-sm text-(--ink-soft)">
+                    <p className="m-0 mt-1 text-sm text-(--text-soft)">
                       {isComplete
                         ? field.value
                         : isActive
@@ -211,7 +211,7 @@ export function StateMachinePlayground({
                     </p>
                   </div>
                   {isComplete ? (
-                    <span className="ledger-face text-[0.8125rem] text-(--ink)">
+                    <span className="meta-face text-[0.8125rem] text-(--text)">
                       done
                     </span>
                   ) : null}
@@ -220,8 +220,8 @@ export function StateMachinePlayground({
             })}
           </div>
 
-          <div className="mt-5  border border-(--rule) bg-(--paper-sunk) p-4">
-            <p className="m-0 ledger-face text-[0.8125rem] text-(--pencil)">
+          <div className="mt-5 rounded-[10px] border border-(--line) bg-(--surface) p-4">
+            <p className="m-0 meta-face text-[0.8125rem] text-(--muted)">
               Structured Output
             </p>
             {/* biome-ignore lint/a11y/useSemanticElements: a <pre> scroll container cannot be a <section>; role="region" names it for AT */}
@@ -229,7 +229,7 @@ export function StateMachinePlayground({
               role="region"
               aria-label="State output" // biome-ignore lint/a11y/noNoninteractiveTabindex: horizontally-scrollable region must be keyboard-focusable (WCAG 2.1.1)
               tabIndex={0}
-              className="m-0 mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.82rem] leading-6 text-(--ink)"
+              className="m-0 mt-3 overflow-x-auto whitespace-pre-wrap break-words font-mono text-[0.82rem] leading-6 text-(--text)"
             >
               {JSON.stringify(
                 {
@@ -258,7 +258,7 @@ export function StateMachinePlayground({
             <button
               type="button"
               onClick={collectNextField}
-              className="inline-flex min-h-11 items-center gap-2  border border-(--ink) bg-(--paper) px-4 text-sm text-(--ink) hover:border-(--ink)"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-(--text) bg-(--bg) px-4 text-sm text-(--text) hover:border-(--text)"
             >
               {completedFields.length === fields.length
                 ? "Reset flow"
@@ -270,7 +270,7 @@ export function StateMachinePlayground({
                 setCompletedFields(["goal"]);
                 setTurns(6);
               }}
-              className="inline-flex min-h-11 items-center gap-2  border border-(--rule) bg-(--paper) px-4 text-sm text-(--ink-soft) hover:text-(--ink)"
+              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-(--line) bg-(--bg) px-4 text-sm text-(--text-soft) hover:text-(--text)"
             >
               Replay
             </button>
@@ -283,11 +283,9 @@ export function StateMachinePlayground({
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="border border-(--rule) bg-(--paper-sunk) px-4 py-3">
-      <p className="m-0 ledger-face text-[0.8125rem] text-(--pencil)">
-        {label}
-      </p>
-      <p className="m-0 mt-2 text-xl text-(--ink)" style={{ fontWeight: 600 }}>
+    <div className="border border-(--line) bg-(--surface) px-4 py-3">
+      <p className="m-0 meta-face text-[0.8125rem] text-(--muted)">{label}</p>
+      <p className="m-0 mt-2 text-xl text-(--text)" style={{ fontWeight: 600 }}>
         {value}
       </p>
     </div>

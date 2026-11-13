@@ -5,28 +5,28 @@ primary_target: "app/blog"
 related_targets: ["app/blog/[...slug]/page.tsx","app/blog/topics/[topic]/page.tsx"]
 ---
 
-# Surface brief: blog (index, entry pages, account pages, 404/error)
+# Surface brief: blog (index, posts, topic pages, 404/error)
 
 Scope: `/blog`, `/blog/[...slug]`, `/blog/topics/[topic]`, not-found and error states, OG card. Visitor mode: Read.
 
-Audience/job: working engineers and tech leads reading one argument closely, deciding whether Igor is worth following. Success: they finish an entry, remember whose book it was, subscribe by feed.
+Audience/job: working engineers and tech leads reading one argument closely, deciding whether Igor is worth following. Success: they finish an essay, remember whose it was, subscribe by feed.
 
-Constraints: blog-only scope; dated URLs and topic URLs stable; feeds, llms, md routes untouched; strict CSP (self-hosted fonts only); open-licensed fonts; existing MDX components must keep rendering.
+Constraints: blog-only scope; dated URLs and topic URLs stable; feeds, llms, md routes untouched; strict CSP (self-hosted fonts only); existing MDX components must keep rendering. User asks (2026-11-12): minimal and fresh, original, with the vibe of the portfolio at igorcodes.dev; best practices; theme toggle with dark as the default; no seasonal scenes (the portfolio's seasons stay on the portfolio).
 
-Chosen direction: The Day-Book (ledger), user re-chose the rolled assigned card after the Memo build shipped (sketch: `.impeccable/mocks/decision/assigned.html`). Memorable moment: the red double margin rule running down every entry, with the reader's place ticked in the margin contents and finished entries ticked in the ledger.
+Chosen direction: Writing log, the lead of the second surface hand; the user asked to see the strongest option built rather than pick from sketches (sketch: `.impeccable/mocks/decision/log.html`). Memorable moment: the index reads as a clean, hand-kept log of essays with the newest date lit in cyan; on posts the contents hang in the left margin and a cyan tick follows the section being read.
 
-Unresolved: site name (sketch reads "Day-Book of Igor"; `lib/site.ts` holds it); external profile links (none).
+Unresolved: site name ("Igor writes" in `lib/site.ts`); whether to link the portfolio (igorcodes.dev) from the blog; external profile links (none).
 
 ## Direction contract
 
-THESIS: The blog is one engineer's bound day-book: every post is an entry posted to accounts (topics), dated in a ruled margin, numbered by folio. It refuses the dev-blog default of hero banner, card grid, topic chips, and neon dark chrome.
+THESIS: The blog is a narrow, hand-kept writing log in the portfolio's world: one row per essay, dated in mono, titled in Wotfard, on near-black. It refuses the dev-blog default of hero banner, card grid, tag chips, and neon glow, and it refuses the previous costume directions (ledger, memo).
 
-OWN-WORLD: Ledger paper (#e6ecdc) ruled in green (#8fae95), blue-black ink (#1a2230), red margin rules and ticks (#b3311f), dark green book cloth (#203a2f) with a gilt-bordered label (#c9b98a) as masthead and footer boards. Night theme is the cloth itself: green-black ground, cream ink, gilt and lighter red. Source Serif 4 for titles and prose; Archivo (condensed widths) for column heads, dates, accounts, folios and numbers; JetBrains Mono only for code. Structure by ruled lines and the red double margin rule; no shadows, rounded cards, or decorative icons.
+OWN-WORLD: Near-black ground #0a0a0a, text #e5e5e5 with bright #fafafa titles, gray #9d9d9d secondary, hairlines #1f1f1f/#333, one cyan #00d9ff used only for meaning (newest date, links, current section, focus). Light theme is the portfolio's cream #f6f1e8 with teal #006a80. Wotfard for every word read; Dank Mono, lowercase, for dates, column labels, counts, and code. Hairline rules, 10px radius on blocks, pill buttons; no shadows, glows, gradients, or icons beyond the theme toggle.
 
-STORY: The reader opens a book with a label, scans a ruled ledger of entries (date, particulars, accounts, folio, minutes), opens one, reads a calm column beside the margin rule with the place kept in the contents column, and closes on brought-forward / carried-forward entries and the feeds.
+STORY: The reader lands on one plain sentence about who writes here, scans the log (date, essay and claim, topics and minutes), opens an essay, reads a calm 42rem column with contents kept in the margin, and finishes on the signature line, previous/next essays, and the feeds.
 
-FIRST VIEWPORT: Index: full-width cloth band with the gilt label "Day-Book of Igor" left and nav right (Entries, Accounts, Feed, Night); intro aligned to the particulars column; ledger table with caps column heads, date column ending in a red double rule, serif entry titles (~30px) with abstracts, account list, folio and minutes; three blank ruled rows; Accounts column at right with counts and the tick key. Entry page: same band and column heads, date in the margin, large serif title and lede in particulars, accounts/folio/minutes at right, then body. Primary action is the first entry title.
+FIRST VIEWPORT: Index at 1440: 48rem centered column; "Igor writes" left and Writing/Topics/RSS plus a round theme toggle right; h1 "Writing from a working engineer." at ~46px with a gray intro; the log head (date / essay / topics) over hairline rows, newest date cyan, titles 22px, claims gray, topics stacked right in mono. Post: mono date line (date cyan), title ~52px, gray lede, mono topic links, then prose; contents hung in the left margin from 80rem. Primary action is the first essay title.
 
-FORM: Accounting day-book / ledger; the rolled assigned direction from the decision round, adopted by user choice over the shipped Memo pick. seed:6eabc550ee6542b6. Signature interaction: on entry pages the right column holds a sticky contents list that ticks each section in red as the reader passes it and sets the current one in bold (a sticky cloth bar with a contents disclosure below 68rem); reaching the end ticks the entry as read in the ledger (localStorage). Motion grammar: instant swaps, no transitions.
+FORM: Writing log (changelog written by a person), dealt lead of the surface re-roll; ranked fifth of my seven grounded structures. seed:4db1be5dad65a809. Signature interaction: hovering a log row lights its date cyan and sweeps a cyan underline under the title; on posts the margin contents marks the current section with a cyan tick as the reader scrolls (a disclosure under the title below 80rem). Motion grammar: short exponential ease-out (160–320ms) on color and underline only; theme switch fades colors over 280ms; reduced motion removes all of it.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance

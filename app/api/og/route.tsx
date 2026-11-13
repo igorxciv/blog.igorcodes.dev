@@ -1,14 +1,9 @@
 import { ImageResponse } from "next/og";
-import {
-  formatLedgerDate,
-  formatTopic,
-  getFolioNumbers,
-  getVolumeLabel,
-} from "@/lib/daybook";
 import { OG_SIZE, OgCard, type OgCardProps, ogCardText } from "@/lib/og-card";
 import { loadOgFonts } from "@/lib/og-fonts";
-import { getAllPosts, getPostBySlug } from "@/lib/server/posts";
+import { getPostBySlug } from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
+import { formatIsoDate, formatTopic } from "@/lib/writing";
 
 export const runtime = "nodejs";
 
@@ -21,7 +16,7 @@ async function renderCard(props: OgCardProps) {
   const text = ogCardText(props);
   return new ImageResponse(<OgCard {...props} />, {
     ...OG_SIZE,
-    fonts: await loadOgFonts(text.serif, text.ledger),
+    fonts: await loadOgFonts(text.sans, text.mono),
     headers: { "Cache-Control": OG_CACHE_CONTROL },
   });
 }
@@ -40,23 +35,14 @@ export async function GET(request: Request) {
     return new Response("Not Found", { status: 404 });
   }
 
-  const posts = await getAllPosts();
-  const folio = getFolioNumbers(posts).get(post.slug);
-  const date = formatLedgerDate(post.date);
-
   return renderCard({
-    bookName: siteConfig.name,
-    volume: getVolumeLabel(posts) ?? "Vol. I",
-    dateLines: [date.day, date.year],
+    meta: [
+      formatIsoDate(post.date),
+      ...(post.readingTime ? [`${post.readingTime} min read`] : []),
+    ],
     title: post.title,
     description:
-      post.description ?? `Read the full entry on ${siteConfig.domain}.`,
-    foot: [
-      { label: "Account", value: post.topics.map(formatTopic).join(", ") },
-      { label: "Fo.", value: folio ? String(folio) : "–" },
-      ...(post.readingTime
-        ? [{ label: "Min.", value: String(post.readingTime) }]
-        : []),
-    ],
+      post.description ?? `Read the full essay on ${siteConfig.domain}.`,
+    foot: post.topics.map((topic) => formatTopic(topic).toLowerCase()),
   });
 }

@@ -70,7 +70,7 @@ describe("buildLlmsIndex", () => {
       post({ slug: "2026/01/01/a", title: "Post A", description: "First." }),
     ]);
 
-    expect(index).toContain("# Day-Book of Igor");
+    expect(index).toContain("# Igor writes");
     expect(index).toContain("/llms-full.txt");
     expect(index).toContain(
       "- [Post A](https://blog.igorcodes.dev/blog/2026/01/01/a): First. — Markdown: https://blog.igorcodes.dev/api/md/2026/01/01/a",

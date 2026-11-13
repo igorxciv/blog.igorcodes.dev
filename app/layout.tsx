@@ -9,7 +9,7 @@ import {
   LIGHT_THEME_COLOR,
   THEME_STORAGE_KEY,
 } from "@/lib/theme";
-import { archivo, jetbrainsMono, sourceSerif } from "./fonts";
+import { dankMono, wotfard, wotfardItalic } from "./fonts";
 
 // Configurable per-environment; the script only loads when an ID is provided
 // (so local dev stays analytics-free). See .env.example.
@@ -18,29 +18,23 @@ const UMAMI_SCRIPT_URL =
   process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL ??
   "https://cloud.umami.is/script.js";
 
-// Applies a stored theme override before first paint. No stored value means
-// "follow the system": CSS handles that on its own, so this only pins.
+// Dark is the default. A reader who switched to light keeps it: this runs
+// before first paint so the page never flashes dark first.
 const themeInitScript = `
   (() => {
     try {
-      const stored = window.localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)});
-      if (stored !== "light" && stored !== "dark") return;
-      const root = document.documentElement;
-      root.dataset.theme = stored;
-      const color = stored === "light" ? ${JSON.stringify(LIGHT_THEME_COLOR)} : ${JSON.stringify(DARK_THEME_COLOR)};
+      if (window.localStorage.getItem(${JSON.stringify(THEME_STORAGE_KEY)}) !== "light") return;
+      document.documentElement.dataset.theme = "light";
       for (const meta of document.querySelectorAll('meta[name="theme-color"]')) {
-        meta.setAttribute("content", color);
+        meta.setAttribute("content", ${JSON.stringify(LIGHT_THEME_COLOR)});
       }
     } catch {}
   })();
 `;
 
 export const viewport: Viewport = {
-  colorScheme: "light dark",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: LIGHT_THEME_COLOR },
-    { media: "(prefers-color-scheme: dark)", color: DARK_THEME_COLOR },
-  ],
+  colorScheme: "dark",
+  themeColor: DARK_THEME_COLOR,
 };
 
 export const metadata: Metadata = {
@@ -65,7 +59,7 @@ export const metadata: Metadata = {
   creator: siteConfig.author.name,
   publisher: siteConfig.author.name,
   keywords: [
-    "engineering day-book",
+    "engineering essays",
     "software architecture",
     "technical debt",
     "AI and learning",
@@ -108,7 +102,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sourceSerif.variable} ${archivo.variable} ${jetbrainsMono.variable}`}
+      className={`${wotfard.variable} ${wotfardItalic.variable} ${dankMono.variable}`}
       suppressHydrationWarning
     >
       <body>

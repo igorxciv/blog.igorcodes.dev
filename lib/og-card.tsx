@@ -1,97 +1,51 @@
 // Shared 1200x630 share card used by the static /opengraph-image and the
-// dynamic /api/og route: a day-book page. The cloth band with the gilt label
-// across the top, then one ruled ledger row: the date in the margin closed by
-// the red double rule, the title and abstract as the particulars, and the
-// accounts, folio, and minutes along the foot.
+// dynamic /api/og route. The site in miniature: the wordmark, the title large,
+// its claim in gray, and one mono line along the foot (date in cyan, minutes,
+// topics) with the domain, on the near-black ground.
 export const OG_SIZE = { width: 1200, height: 630 };
 
-const PAPER = "#e6ecdc";
-const INK = "#1a2230";
-const INK_SOFT = "#3b4552";
-const PENCIL = "#535f58";
-const RULE = "#8fae95";
-const HEAD = "#203a2f";
-const RED = "#b3311f";
-const CLOTH = "#203a2f";
-const CLOTH_INK = "#efe6c8";
-const GILT = "#c9b98a";
-const SERIF = '"Source Serif 4", Georgia, serif';
-const LEDGER = '"Archivo", "Arial Narrow", sans-serif';
-
-const DATE_COL = 190;
+const BG = "#0a0a0a";
+const TEXT = "#fafafa";
+const MUTED = "#9d9d9d";
+const FAINT = "#7d7d7d";
+const LINE = "#262626";
+const ACCENT = "#00d9ff";
+const SANS = '"Figtree", "Avenir Next", sans-serif';
+const MONO = '"JetBrains Mono", monospace';
 
 export type OgCardProps = {
-  /** Label line under the book's name, e.g. "Vol. I · 2026". */
-  volume: string;
-  /** Date margin: day-month and year, or a short label for the index card. */
-  dateLines: [string, string];
+  /** Date line items, the first drawn in cyan: e.g. ["2026-05-12", "9 min read"]. */
+  meta: string[];
   title: string;
   description: string;
-  /** The foot of the row: accounts, folio, minutes, as label/value pairs. */
-  foot: { label: string; value: string }[];
-  bookName: string;
+  /** Lowercase labels along the foot, e.g. the post's topics. */
+  foot: string[];
 };
 
+const DESCRIPTION_LIMIT = 132;
+
+/** Cuts at a word boundary and attaches the ellipsis to the last word. */
+export function truncateDescription(text: string, limit = DESCRIPTION_LIMIT) {
+  if (text.length <= limit) {
+    return text;
+  }
+  const cut = text.slice(0, limit + 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  const head = (
+    lastSpace > 0 ? cut.slice(0, lastSpace) : text.slice(0, limit)
+  ).replace(/[\s,;:.\-–—]+$/u, "");
+  return `${head}…`;
+}
+
 /** All text drawn in each face, used to subset the fonts. */
-export function ogCardText({
-  volume,
-  dateLines,
-  title,
-  description,
-  foot,
-  bookName,
-}: OgCardProps) {
+export function ogCardText({ meta, title, description, foot }: OgCardProps) {
   return {
-    serif: `${bookName}${title}${description}`,
-    ledger: [
-      volume.toUpperCase(),
-      ...dateLines,
-      "DATEPARTICULARS",
-      ...foot.map((item) => `${item.label.toUpperCase()}${item.value}`),
-    ].join(""),
+    sans: `Igor writes…${title}${description}`,
+    mono: [...meta, ...foot, "blog.igorcodes.dev·"].join(""),
   };
 }
 
-function ColumnHead({ children }: { children: string }) {
-  return (
-    <span
-      style={{
-        fontFamily: LEDGER,
-        fontSize: 17,
-        fontWeight: 700,
-        letterSpacing: "0.12em",
-        textTransform: "uppercase",
-        color: HEAD,
-      }}
-    >
-      {children}
-    </span>
-  );
-}
-
-/** The red double rule closing the date margin: two red lines with paper between. */
-function DoubleRule() {
-  return (
-    <div
-      style={{
-        display: "flex",
-        width: 7,
-        alignSelf: "stretch",
-        borderLeft: `2px solid ${RED}`,
-        borderRight: `2px solid ${RED}`,
-      }}
-    />
-  );
-}
-
-export function OgCard({
-  volume,
-  dateLines,
-  title,
-  description,
-  foot,
-  bookName,
-}: OgCardProps) {
+export function OgCard({ meta, title, description, foot }: OgCardProps) {
   return (
     <div
       style={{
@@ -99,160 +53,91 @@ export function OgCard({
         height: "100%",
         width: "100%",
         flexDirection: "column",
-        background: PAPER,
-        color: INK,
-        fontFamily: SERIF,
+        padding: "64px 80px 56px",
+        background: BG,
+        color: TEXT,
+        fontFamily: SANS,
       }}
     >
       <div
         style={{
           display: "flex",
-          alignItems: "center",
-          height: 150,
-          padding: "0 64px",
-          background: CLOTH,
-          borderBottom: `5px solid ${RED}`,
+          justifyContent: "space-between",
+          alignItems: "baseline",
+        }}
+      >
+        <div style={{ display: "flex", gap: 10, fontSize: 30 }}>
+          <span style={{ fontWeight: 700 }}>Igor</span>
+          <span style={{ color: MUTED }}>writes</span>
+        </div>
+        <span style={{ fontFamily: MONO, fontSize: 22, color: FAINT }}>
+          blog.igorcodes.dev
+        </span>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          marginTop: 84,
         }}
       >
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 8,
-            padding: "16px 32px 14px",
-            border: `2px solid ${GILT}`,
+            fontSize: title.length > 52 ? 58 : 68,
+            fontWeight: 700,
+            lineHeight: 1.08,
+            letterSpacing: "-0.025em",
+            textWrap: "balance",
           }}
         >
-          <span
-            style={{
-              fontSize: 46,
-              fontWeight: 600,
-              lineHeight: 1,
-              color: CLOTH_INK,
-            }}
-          >
-            {bookName}
-          </span>
-          <span
-            style={{
-              fontFamily: LEDGER,
-              fontSize: 16,
-              fontWeight: 700,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: GILT,
-            }}
-          >
-            {volume}
-          </span>
+          {title}
+        </div>
+        <div
+          style={{
+            display: "block",
+            marginTop: 22,
+            maxWidth: 940,
+            fontSize: 28,
+            lineHeight: 1.45,
+            color: MUTED,
+          }}
+        >
+          {truncateDescription(description)}
         </div>
       </div>
 
       <div
         style={{
           display: "flex",
-          margin: "34px 64px 0",
-          borderTop: `3px solid ${HEAD}`,
-          borderBottom: `1.5px solid ${HEAD}`,
+          marginTop: "auto",
+          paddingTop: 26,
+          borderTop: `1px solid ${LINE}`,
+          fontFamily: MONO,
+          fontSize: 22,
+          color: MUTED,
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            width: DATE_COL,
-            padding: "10px 18px",
-          }}
-        >
-          <ColumnHead>Date</ColumnHead>
-        </div>
-        <DoubleRule />
-        <div style={{ display: "flex", padding: "10px 28px" }}>
-          <ColumnHead>Particulars</ColumnHead>
-        </div>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          flex: 1,
-          margin: "0 64px 44px",
-          borderBottom: `1.5px solid ${RULE}`,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            width: DATE_COL,
-            padding: "30px 18px",
-            fontFamily: LEDGER,
-            fontSize: 24,
-            lineHeight: 1.3,
-          }}
-        >
-          <span>{dateLines[0]}</span>
-          <span style={{ color: PENCIL, fontSize: 20 }}>{dateLines[1]}</span>
-        </div>
-        <DoubleRule />
-        <div
-          style={{
-            display: "flex",
-            flex: 1,
-            flexDirection: "column",
-            padding: "24px 0 22px 28px",
-          }}
-        >
-          <div
-            style={{
-              fontSize: title.length > 48 ? 54 : 64,
-              fontWeight: 600,
-              lineHeight: 1.08,
-              letterSpacing: "-0.015em",
-              textWrap: "balance",
-            }}
-          >
-            {title}
-          </div>
-          <div
-            style={{
-              display: "block",
-              marginTop: 16,
-              fontSize: 26,
-              lineHeight: 1.4,
-              color: INK_SOFT,
-              lineClamp: 2,
-            }}
-          >
-            {description}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              gap: 36,
-              marginTop: "auto",
-              fontFamily: LEDGER,
-              fontSize: 20,
-              color: HEAD,
-            }}
-          >
-            {foot.map((item) => (
-              <span key={item.label} style={{ display: "flex", gap: 10 }}>
-                <span
-                  style={{
-                    color: PENCIL,
-                    fontWeight: 700,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    fontSize: 16,
-                    paddingTop: 3,
-                  }}
-                >
-                  {item.label}
-                </span>
-                <span>{item.value}</span>
-              </span>
-            ))}
-          </div>
+        <div style={{ display: "flex", gap: 18 }}>
+          {meta.map((item, index) => (
+            <span
+              key={item}
+              style={{
+                display: "flex",
+                gap: 18,
+                color: index === 0 ? ACCENT : MUTED,
+              }}
+            >
+              {index > 0 ? <span style={{ color: FAINT }}>·</span> : null}
+              {item}
+            </span>
+          ))}
+          {foot.length > 0 ? (
+            <span style={{ display: "flex", gap: 18 }}>
+              <span style={{ color: FAINT }}>·</span>
+              {foot.join("  ")}
+            </span>
+          ) : null}
         </div>
       </div>
     </div>

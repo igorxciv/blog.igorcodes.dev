@@ -142,7 +142,17 @@ Git hooks are installed automatically via the `prepare` script (`lefthook instal
 
 ## Fonts
 
-Source Serif 4 (prose and titles), Archivo (the ledger apparatus: column heads, dates, accounts, folios), and JetBrains Mono (code) are open-licensed (SIL OFL). `app/fonts.ts` loads them with `next/font/google`, which downloads and self-hosts them at build time, so the CSP's `font-src 'self'` still holds and no font files live in the repo.
+Wotfard (every word read, shared with igorcodes.dev) and Dank Mono (dates, labels, code) are commercial and non-redistributable, so their `.woff2` files are **not** committed. `app/fonts/` is gitignored, and the build supplies the files at build time. `app/_tools/fetch-fonts.mjs` runs first in `pnpm build` and is idempotent:
+
+- **Files already on disk** (local dev with your own licensed copies): it does nothing and needs no credentials.
+- **On Vercel**: `app/fonts/` starts empty and a connected Blob store injects `BLOB_READ_WRITE_TOKEN`; the script downloads the missing files from Vercel Blob (with a one-retry-per-file and a `.next/cache/fonts/` cross-build cache) so `next/font/local` can resolve them during the build.
+- **Token-less machines** (contributors, CI without the secret): run with `FONTS_FALLBACK=1`. Bundled open-licensed OFL woff2 files under `app/_tools/fallback-fonts/` are copied in place of the missing licensed fonts, so every path resolves and the build never breaks. Typography is temporarily generic. (When not running on Vercel, fallback mode is used automatically if the token is absent.)
+
+Uploading fonts is a one-time (or on-font-change) step: place the licensed `.woff2` under `app/fonts/` and run `pnpm fonts:upload` to push them into the Blob store. The expected file list is defined in `app/_tools/fonts-manifest.mjs`.
+
+```bash
+FONTS_FALLBACK=1 pnpm build   # build with no token and empty app/fonts/
+```
 
 ## Environment
 

@@ -33,13 +33,14 @@ Thesis-driven, opinionated essays from one practicing engineer, written in a hum
 - Frontmatter schema (`lib/server/posts/schema.ts`): title, description, date, topics, tags, published, optional featured and readingTime. Drafts show only in development.
 - Blog-only scope: no about, projects, resume, or other product routes (AGENTS.md).
 - Strict CSP is set in `next.config.ts`; Umami analytics is allowed through it. Any new third-party origin requires a CSP change.
-- Fonts: the current paid fonts (Wotfard, Dank Mono) may be replaced. Open-licensed fonts are acceptable.
+- Fonts: Wotfard and Dank Mono (licensed, shared with the portfolio at igorcodes.dev), supplied at build time from Vercel Blob; never committed.
 - Existing MDX components (Callout, VisualCard/VisualGrid, ProcessFlow, TableBlock, PromptBlock, PostImage, StateMachinePlayground) are used by current posts; they can be restyled or redesigned but posts must keep rendering.
-- Open decisions: the site name (the Day-Book design ships as "Day-Book of Igor", set in `lib/site.ts`; earlier names were "Engineering Notes" and "Engineering Memos"); whether to link out to any external profiles (none confirmed).
+- Open decisions: the site name (ships as "Igor writes", set in `lib/site.ts`; earlier names were "Engineering Notes", "Engineering Memos" and "Day-Book of Igor"); whether to link out to the portfolio (igorcodes.dev) or any external profiles (none confirmed).
 
 ## Brand Commitments
 
 - Author is presented as "Igor" only. No surname, no photo.
+- Visual family with the portfolio at igorcodes.dev: minimal and fresh, near-black ground, dark theme by default with a light theme in the toggle. The portfolio's seasonal scenes stay on the portfolio, not the blog.
 - Voice (binding, from `docs/writing-style.md`): human, practical, slightly opinionated, short punchy sentences, honest trade-offs; no corporate tone, hype, or generic AI filler.
 
 ## Evidence on Hand
