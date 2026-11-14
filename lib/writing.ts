@@ -50,34 +50,9 @@ export function getAdjacentPosts<T extends PostSummary>(
   };
 }
 
-const MONTHS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
 /** "2026-05-12T09:00:00Z" -> "2026-05-12": the calendar date, as the log prints it. */
 export function formatIsoDate(value: string): string {
   return /^\d{4}-\d{2}-\d{2}/.exec(value)?.[0] ?? value;
-}
-
-/** "2026-05-12" -> "12 May 2026", for prose ("Written by Igor, 12 May 2026"). */
-export function formatLongDate(value: string): string {
-  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value);
-  const month = match ? MONTHS[Number(match[2]) - 1] : undefined;
-  if (!match?.[1] || !match[3] || !month) {
-    return value;
-  }
-  return `${Number(match[3])} ${month} ${match[1]}`;
 }
 
 /** "Problem: one sentence" from "1. Problem: one sentence"; used for stable heading ids. */

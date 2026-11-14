@@ -8,7 +8,6 @@ import {
 } from "@/lib/seo";
 import { getAllPosts, getAllTopics } from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
-import { formatIsoDate } from "@/lib/writing";
 
 const BLOG_DESCRIPTION = siteConfig.description;
 
@@ -35,18 +34,10 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function lastUpdated(posts: { date: string; updated?: string }[]) {
-  return posts
-    .map((post) => formatIsoDate(post.updated ?? post.date))
-    .sort()
-    .at(-1);
-}
-
 export default async function BlogPage() {
   const [posts, topics] = await Promise.all([getAllPosts(), getAllTopics()]);
   const blogJsonLd = buildBlogJsonLd(posts);
   const collectionPageJsonLd = buildCollectionPageJsonLd(posts);
-  const updated = lastUpdated(posts);
 
   return (
     <>
@@ -67,23 +58,12 @@ export default async function BlogPage() {
           <p>{siteConfig.intro}</p>
         </header>
         {posts.length > 0 ? (
-          <>
-            <PostLog posts={posts} label="All essays, newest first" />
-            <p className="log-foot">
-              {posts.length} {posts.length === 1 ? "essay" : "essays"}
-              {updated ? (
-                <>
-                  {" "}
-                  · updated <time dateTime={updated}>{updated}</time>
-                </>
-              ) : null}
-            </p>
-          </>
+          <PostLog posts={posts} label="All essays, newest first" />
         ) : (
           <p className="page-empty">The first essay is on its way.</p>
         )}
         {topics.length > 0 ? (
-          <TopicList posts={posts} topics={topics} current={null} />
+          <TopicList topics={topics} current={null} />
         ) : null}
       </div>
     </>

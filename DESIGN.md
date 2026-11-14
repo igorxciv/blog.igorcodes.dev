@@ -88,11 +88,6 @@ typography:
     fontSize: "0.875rem"
     fontWeight: 400
     lineHeight: 1.4
-  count:
-    fontFamily: "Dank Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
-    fontSize: "0.75rem"
-    fontWeight: 400
-    fontFeature: "tnum"
   date:
     fontFamily: "Dank Mono, ui-monospace, SFMono-Regular, Menlo, monospace"
     fontSize: "0.9375rem"
@@ -142,8 +137,6 @@ components:
   nav-link:
     textColor: "{colors.muted}"
     typography: "{typography.body-ui}"
-  nav-link-current:
-    textColor: "{colors.text-strong}"
   log-row:
     textColor: "{colors.text-strong}"
     typography: "{typography.title}"
@@ -178,7 +171,7 @@ components:
 
 **Creative North Star: "The Working Log"**
 
-The blog is a narrow, hand-kept writing log: one row per essay, dated in mono, titled in Wotfard, on a near-black ground. It is a sibling of igorcodes.dev, sharing its ground, its type, its cyan, and its cream-and-teal light theme, so a reader moving between the two never feels they changed houses. Everything a person reads is set in Wotfard; everything that is apparatus (dates, column names, counts, figure numbers, code) is set in Dank Mono, in lowercase, the way a log names its columns.
+The blog is a narrow, hand-kept writing log: one row per essay, dated in mono, titled in Wotfard, on a near-black ground. It is a sibling of igorcodes.dev, sharing its ground, its type, its cyan, and its cream-and-teal light theme, so a reader moving between the two never feels they changed houses. Everything a person reads is set in Wotfard; everything that is apparatus (dates, minutes, figure numbers, code) is set in Dank Mono, in lowercase, the way a log records its entries.
 
 Density is low and the column is narrow (48rem, prose at 42rem). Structure comes from hairline rules and the alignment of a three-column log, never from cards, banners, chips, or glow. Color is almost entirely neutral; one accent appears only where it carries meaning. Motion is short, exponential ease-out on color and on one underline sweep, and it disappears entirely under reduced motion.
 
@@ -208,10 +201,10 @@ A near-neutral ground with a single cold accent; the light theme swaps the gray 
 - **Raised Chip** (`surface-raised`): pill buttons, the theme toggle, inline code.
 - **Reading Gray** (`text`): body copy.
 - **Title White** (`text-strong`): headings, log titles, strong text, link text in prose, hover state of quieter links.
-- **Soft Gray** (`text-soft`): ledes, blockquotes, table cells, topic links, the footer name.
-- **Secondary Gray** (`muted`): intro and claim text, navigation, column labels, captions, dates at rest.
-- **Faint Gray** (`faint`): minutes and topics metadata, list markers, the domain, "fig. n" and "table n" labels, separator dots.
-- **Hairline** (`line`) and **Strong Hairline** (`line-strong`): row dividers and block borders; the strong hairline sits under column heads, around buttons, and as the resting link underline.
+- **Soft Gray** (`text-soft`): ledes, blockquotes, table cells, topic links.
+- **Secondary Gray** (`muted`): intro and claim text, navigation, captions, dates at rest.
+- **Faint Gray** (`faint`): minutes and topics metadata, list markers, "fig. n" and "table n" labels, separator dots.
+- **Hairline** (`line`) and **Strong Hairline** (`line-strong`): row dividers and block borders; the strong hairline caps the writing log, sits around buttons, and is the resting link underline.
 - **Portfolio Cream** (`light-bg`) and its warm family (`light-surface`, `light-surface-raised`, `light-text` through `light-line-strong`): the same roles, one for one, in the light theme.
 
 ### Named Rules
@@ -240,8 +233,7 @@ A near-neutral ground with a single cold accent; the light theme swaps the gray 
 - **Body small** (400, 16px, 1.55): log claims, table cells, panel text, flow steps.
 - **Date** (Dank Mono 400, 15px, tabular figures; 13px below 40rem): log dates in ISO form.
 - **Meta** (Dank Mono 400, 14px): the post meta line and post-contents links at wide sizes.
-- **Count** (Dank Mono 400, 12px, tabular figures): topic counts.
-- **Label** (Dank Mono 400, 13px, lowercase, no tracking): column heads, table heads, callout and flow labels, footer, minutes, figure and table numbers, the post meta line (14px).
+- **Label** (Dank Mono 400, 13px, lowercase, no tracking): section labels, table heads, callout and flow labels, minutes, figure and table numbers, the post meta line (14px).
 - **Code** (Dank Mono 400, 15px in blocks, 0.875em inline): code, with Shiki dual themes.
 
 Weights in use are 400 and 600; headings and strong text never go heavier than 600.
@@ -253,13 +245,16 @@ Weights in use are 400 and 600; headings and strong text never go heavier than 6
 
 ## Layout
 
-A single centered column of 48rem, inset by a fluid edge of 20–48px. Prose and post headers hold a 42rem measure inside it. The header puts the wordmark left and navigation plus the theme toggle right, wrapping on narrow screens.
+A single centered column of 48rem, inset by a fluid edge of 20–48px. Prose and post headers hold a 42rem measure inside it. The header puts the wordmark left and the RSS link plus the theme toggle right, wrapping on narrow screens. There is no site footer; a page ends with generous space below its last element.
 
-The writing log is a three-column grid: date (7.25rem), essay title and one-line claim (flexible), topics and minutes (8.5rem, right-aligned, stacked), with a 1.75rem gutter and 1.5rem row padding. Below 40rem the column heads disappear, a strong hairline caps the list, and each row becomes a stack of date, title, claim, and a wrapping meta line.
+The writing log is a three-column grid: date (7.25rem), essay title and one-line claim (flexible), topics and minutes (8.5rem, right-aligned, stacked), with a 1.75rem gutter and 1.5rem row padding, capped by a strong hairline. It has no column heads: the shape of a row says what each part is. Below 40rem each row becomes a stack of date, title, claim, and a wrapping meta line.
 
 Posts become a three-track grid from 80rem: the contents hang in a sticky left margin (up to 15rem, right-aligned against the column with a 3.5rem gap) while the article keeps the center 48rem. Below 80rem the contents become a disclosure under the title, bounded by hairlines.
 
-Vertical rhythm is generous and stepped: about 2.25–2.5rem around blocks inside prose, 3.5rem above prose h2, 4–6rem between page-level regions (topics, post end, footer).
+Vertical rhythm is generous and stepped: about 2.25–2.5rem around blocks inside prose, 3.5rem above prose h2, 4–6rem between page-level regions (topics, post end).
+
+### Named Rules
+**The Say-It-Once Rule.** Each fact and each link appears once per page. The wordmark is the way home, so the nav has no "Writing" link; the date is in the post header, so the post end does not repeat it; RSS is in the header, so no page repeats it below. Counts and totals ("2 essays", "1 of 2", "10 sections") are not shown; at this scale they describe the archive's size, not its content. Machine-readable surfaces (JSON Feed, llms.txt, Markdown mirrors) are advertised through `<link rel="alternate">` and conventional paths, not visible links.
 
 ## Elevation & Depth
 
@@ -283,19 +278,19 @@ Quiet and round, never filled with the accent.
 
 ### Links
 - **Resting:** inherit color with a 1px underline at a 0.22em offset in the strong hairline; in prose the text is title white and the underline is the accent line.
-- **Hover:** text brightens and the underline turns accent, transitioning color over 160ms. Navigation, footer, and topic links rest with a transparent underline that appears on hover.
+- **Hover:** text brightens and the underline turns accent, transitioning color over 160ms. Navigation and topic links rest with a transparent underline that appears on hover.
 
 ### Navigation
-Wordmark "Igor writes" with the name in title white at 600 and the verb in secondary gray; the verb turns accent on hover. Writing, Topics, and RSS sit right in 15px secondary gray; the current page is title white with an accent underline.
+Wordmark "Igor writes" with the name in title white at 600 and the verb in secondary gray; the verb turns accent on hover. The wordmark links home. RSS sits right in 15px secondary gray, beside the theme toggle; nothing else.
 
 ### Writing Log (signature)
-The index's spine. Column heads ("date / essay / topics") in lowercase mono over a strong hairline, then one row per essay divided by hairlines. The newest row's date is accent; others rest in secondary gray. The whole row is the link: hovering it lights the date accent (220ms) and sweeps a 1px accent underline under the title from left to right (320ms). Topic links sit above the row link in faint mono and turn accent on hover. Keyboard focus outlines the whole row. Drafts show a lowercase accent "draft".
+The index's spine. A strong hairline, then one row per essay divided by hairlines. The newest row's date is accent; others rest in secondary gray. The whole row is the link: hovering it lights the date accent (220ms) and sweeps a 1px accent underline under the title from left to right (320ms). Topic links sit above the row link in faint mono and turn accent on hover. Keyboard focus outlines the whole row. Drafts show a lowercase accent "draft".
 
 ### Post Contents
 A list of h2 and h3 anchors (h3 indented 1rem) in 15px secondary gray. The current section turns title white and gains a 12px accent tick in the margin as the reader scrolls. From 80rem it hangs sticky in the left margin with its summary label fixed open; below that it is a details disclosure with a rotating chevron drawn from two hairline borders.
 
 ### Topics
-A wrapping row of soft-gray topic links, each followed by a faint mono count; the current topic is accent with an accent-line underline. No chips, no fills.
+A wrapping row of soft-gray topic links under a lowercase "topics" label; the current topic is accent with an accent-line underline. No chips, no fills.
 
 ### Prose Blocks
 - **Code block:** recessed panel, hairline border, 10px corners, 15px Dank Mono, Shiki dual theme swapped by the theme attribute.
@@ -308,7 +303,10 @@ A wrapping row of soft-gray topic links, each followed by a faint mono count; th
 - **Blockquote:** soft-gray text behind a 1px strong hairline on the left.
 
 ### Post End
-A hairline, the signature line in secondary gray, previous and next essays as 18px title-white links with faint mono dates, then the feeds line.
+A hairline, then previous and next essays as 18px title-white links with faint mono dates. Nothing else; when there is no other essay, the post simply ends.
+
+### Post Meta
+One mono line under the lede: the date in accent, "updated" and its date when the essay was revised, then minutes. No icons, no section count (the contents already show the sections).
 
 ### Share Card and Icon
 The 1200x630 share card is the site in miniature on the near-black ground: the wordmark, the title large and bold, the claim in secondary gray, and a mono foot line with the date in cyan, separated by faint dots over a hairline. Because Satori cannot read woff2, it stands in Figtree for Wotfard and JetBrains Mono for Dank Mono. The icon is a sibling of the igorcodes.dev mark: a near-black rounded tile in a cyan ring, holding a cyan text caret and two rounded lines of writing.
@@ -320,7 +318,7 @@ Color and underline only: 160ms on link and button color, 220ms on log dates and
 
 ### Do:
 - **Do** keep every page in the 48rem column and every run of prose at the 42rem measure.
-- **Do** set dates, column heads, counts, minutes, figure numbers, and code in lowercase Dank Mono, and everything read in Wotfard at 400 or 600.
+- **Do** set dates, minutes, figure numbers, and code in lowercase Dank Mono, and everything read in Wotfard at 400 or 600.
 - **Do** spend the accent only on newest, current, hovered, and focused states, in both themes.
 - **Do** separate with 1px hairlines and one-step tonal changes; give content blocks the 10px corner and buttons the full pill.
 - **Do** keep motion to color and the underline sweep at 160–320ms ease-out, and let reduced motion remove it.
@@ -330,6 +328,7 @@ Color and underline only: 160ms on link and button color, 220ms on log dates and
 - **Don't** add hero banners, card grids, tag chips, or neon glow.
 - **Don't** use shadows, glows, or gradient surfaces.
 - **Don't** add icons beyond the theme toggle.
+- **Don't** repeat a link or a fact on the same page, or show counts and totals.
 - **Don't** follow the system color-scheme preference.
 - **Don't** set mono labels in uppercase or with letter-spacing.
 - **Don't** use the accent as a fill, background, or heading color.

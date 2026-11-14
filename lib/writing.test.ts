@@ -3,7 +3,6 @@ import { type PostSummary } from "@/lib/types/posts";
 import {
   extractSections,
   formatIsoDate,
-  formatLongDate,
   formatTopic,
   getAdjacentPosts,
   slugifyHeading,
@@ -50,12 +49,6 @@ describe("dates", () => {
     expect(formatIsoDate("2026-05-12")).toBe("2026-05-12");
     expect(formatIsoDate("2026-05-12T09:00:00Z")).toBe("2026-05-12");
     expect(formatIsoDate("soon")).toBe("soon");
-  });
-
-  it("writes a long date for prose", () => {
-    expect(formatLongDate("2026-04-04")).toBe("4 Apr 2026");
-    expect(formatLongDate("2026-12-31T23:00:00Z")).toBe("31 Dec 2026");
-    expect(formatLongDate("soon")).toBe("soon");
   });
 });
 
