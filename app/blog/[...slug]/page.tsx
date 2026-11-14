@@ -17,7 +17,6 @@ import { siteConfig } from "@/lib/site";
 import {
   extractSections,
   formatIsoDate,
-  formatLongDate,
   formatTopic,
   getAdjacentPosts,
 } from "@/lib/writing";
@@ -105,28 +104,6 @@ function topicHref(topic: string) {
   return `/blog/topics/${encodeURIComponent(topic)}`;
 }
 
-function MetaIcon({ path }: { path: string }) {
-  return (
-    <svg
-      className="meta-icon"
-      viewBox="0 0 16 16"
-      width="15"
-      height="15"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <path
-        d={path}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 type AdjacentPost = { slug: string; title: string; date: string } | null;
 
 function AdjacentLink({ label, post }: { label: string; post: AdjacentPost }) {
@@ -158,8 +135,6 @@ export default async function BlogPostPage({ params }: PostPageProps) {
   const { previous, next } = getAdjacentPosts(posts, post.slug);
   const sections = extractSections(post.body);
   const hasContents = sections.length > 1;
-  const sectionCount = sections.filter((section) => section.depth === 2).length;
-  const isoDate = formatIsoDate(post.date);
 
   return (
     <>
@@ -193,25 +168,19 @@ export default async function BlogPostPage({ params }: PostPageProps) {
           {post.description ? (
             <p className="post-lede">{post.description}</p>
           ) : null}
-          <div className="post-meta">
-            <span>
-              <MetaIcon path="M2.5 3.5h11v10h-11zM2.5 6.5h11M5.5 2v3M10.5 2v3" />
-              <time dateTime={post.date}>{isoDate}</time>
-            </span>
-            {post.readingTime ? (
+          <p className="post-meta">
+            <time dateTime={post.date}>{formatIsoDate(post.date)}</time>
+            {post.updated ? (
               <span>
-                <MetaIcon path="M8 2.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 0 0 0-11zM8 5v3l2 1.5" />
-                {post.readingTime} min read
+                updated{" "}
+                <time dateTime={post.updated}>
+                  {formatIsoDate(post.updated)}
+                </time>
               </span>
             ) : null}
-            {sectionCount > 1 ? (
-              <span>
-                <MetaIcon path="M2.5 4h11M2.5 8h11M2.5 12h7" />
-                {sectionCount} sections
-              </span>
-            ) : null}
+            {post.readingTime ? <span>{post.readingTime} min read</span> : null}
             {post.published ? null : <span>draft</span>}
-          </div>
+          </p>
         </header>
 
         {hasContents ? <PostContents sections={sections} /> : null}
@@ -229,34 +198,16 @@ export default async function BlogPostPage({ params }: PostPageProps) {
           />
         </div>
 
-        <footer className="post-end">
-          <p className="post-signed">
-            Written by {siteConfig.author.name},{" "}
-            <time dateTime={post.date}>{formatLongDate(post.date)}</time>
-            {post.updated ? (
-              <>
-                ; updated{" "}
-                <time dateTime={post.updated}>
-                  {formatLongDate(post.updated)}
-                </time>
-              </>
-            ) : null}
-            .
-          </p>
-          {previous || next ? (
+        {previous || next ? (
+          <footer className="post-end">
             <nav aria-label="More essays">
               <ul className="post-adjacent">
                 <AdjacentLink label="Previous" post={previous} />
                 <AdjacentLink label="Next" post={next} />
               </ul>
             </nav>
-          ) : null}
-          <p className="post-feeds">
-            New essays arrive by <a href="/rss.xml">RSS</a> or{" "}
-            <a href="/feed.json">JSON Feed</a>. This essay is also available{" "}
-            <a href={postMarkdownPath(post.slug)}>as Markdown</a>.
-          </p>
-        </footer>
+          </footer>
+        ) : null}
       </article>
     </>
   );

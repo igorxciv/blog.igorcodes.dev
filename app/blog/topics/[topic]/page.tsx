@@ -1,5 +1,4 @@
 import { type Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PostLog } from "@/components/blog/post-log";
 import { TopicList } from "@/components/blog/topic-list";
@@ -79,14 +78,9 @@ export default async function TopicPage({ params }: TopicPageProps) {
       <div className="page">
         <header className="page-intro">
           <h1>{label}</h1>
-          <p>
-            {filtered.length} of {posts.length}{" "}
-            {posts.length === 1 ? "essay" : "essays"} touch on {label}.{" "}
-            <Link href="/blog">See all writing</Link>.
-          </p>
         </header>
         <PostLog posts={filtered} label={`Essays on ${label}, newest first`} />
-        <TopicList posts={posts} topics={topics} current={decodedTopic} />
+        <TopicList topics={topics} current={decodedTopic} />
       </div>
     </>
   );
