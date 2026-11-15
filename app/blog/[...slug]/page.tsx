@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode, { type Options } from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
+import { PageTransition } from "@/components/blog/page-transition";
 import { PostContents } from "@/components/blog/post-contents";
+import { PostTitleTransition } from "@/components/blog/post-title-transition";
 import { postMarkdownPath } from "@/lib/llms";
 import { remarkTextFences } from "@/lib/mdx/remark-text-fences";
 import {
@@ -14,6 +16,7 @@ import {
 } from "@/lib/seo";
 import { getAllPosts, getPostBySlug } from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
+import { NAV_BACK, NAV_FORWARD } from "@/lib/view-transitions";
 import {
   extractSections,
   formatIsoDate,
@@ -129,7 +132,15 @@ function MetaIcon({ path }: { path: string }) {
 
 type AdjacentPost = { slug: string; title: string; date: string } | null;
 
-function AdjacentLink({ label, post }: { label: string; post: AdjacentPost }) {
+function AdjacentLink({
+  label,
+  post,
+  direction,
+}: {
+  label: string;
+  post: AdjacentPost;
+  direction: typeof NAV_BACK | typeof NAV_FORWARD;
+}) {
   if (!post) {
     return null;
   }
@@ -137,7 +148,9 @@ function AdjacentLink({ label, post }: { label: string; post: AdjacentPost }) {
   return (
     <li>
       <span className="section-label">{label}</span>
-      <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+      <Link href={`/blog/${post.slug}`} transitionTypes={[direction]}>
+        {post.title}
+      </Link>
       <time dateTime={post.date}>{date}</time>
     </li>
   );
@@ -172,92 +185,107 @@ export default async function BlogPostPage({ params }: PostPageProps) {
         dangerouslySetInnerHTML={{ __html: jsonLdString(breadcrumbJsonLd) }}
       />
 
-      <article
-        className="post"
-        data-contents={hasContents ? "true" : "false"}
-        aria-labelledby="post-title"
-      >
-        <header className="post-header">
-          {post.topics.length > 0 ? (
-            <ul className="post-kicker" aria-label="Topics">
-              {post.topics.map((topic) => (
-                <li key={topic}>
-                  <Link href={topicHref(topic)}>
-                    {formatTopic(topic).toLowerCase()}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-          <h1 id="post-title">{post.title}</h1>
-          {post.description ? (
-            <p className="post-lede">{post.description}</p>
-          ) : null}
-          <div className="post-meta">
-            <span>
-              <MetaIcon path="M2.5 3.5h11v10h-11zM2.5 6.5h11M5.5 2v3M10.5 2v3" />
-              <time dateTime={post.date}>{isoDate}</time>
-            </span>
-            {post.readingTime ? (
-              <span>
-                <MetaIcon path="M8 2.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 0 0 0-11zM8 5v3l2 1.5" />
-                {post.readingTime} min read
-              </span>
-            ) : null}
-            {sectionCount > 1 ? (
-              <span>
-                <MetaIcon path="M2.5 4h11M2.5 8h11M2.5 12h7" />
-                {sectionCount} sections
-              </span>
-            ) : null}
-            {post.published ? null : <span>draft</span>}
-          </div>
-        </header>
-
-        {hasContents ? <PostContents sections={sections} /> : null}
-
-        <div className="prose">
-          <MDXRemote
-            source={post.body}
-            components={postMdxComponents}
-            options={{
-              mdxOptions: {
-                remarkPlugins: [remarkTextFences, remarkGfm],
-                rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
-              },
-            }}
-          />
-        </div>
-
-        <footer className="post-end">
-          <p className="post-signed">
-            Written by {siteConfig.author.name},{" "}
-            <time dateTime={post.date}>{formatLongDate(post.date)}</time>
-            {post.updated ? (
-              <>
-                ; updated{" "}
-                <time dateTime={post.updated}>
-                  {formatLongDate(post.updated)}
-                </time>
-              </>
-            ) : null}
-            .
-          </p>
-          {previous || next ? (
-            <nav aria-label="More essays">
-              <ul className="post-adjacent">
-                <AdjacentLink label="Previous" post={previous} />
-                <AdjacentLink label="Next" post={next} />
+      <PageTransition>
+        <article
+          className="post"
+          data-contents={hasContents ? "true" : "false"}
+          aria-labelledby="post-title"
+        >
+          <header className="post-header">
+            {post.topics.length > 0 ? (
+              <ul className="post-kicker" aria-label="Topics">
+                {post.topics.map((topic) => (
+                  <li key={topic}>
+                    <Link
+                      href={topicHref(topic)}
+                      transitionTypes={[NAV_FORWARD]}
+                    >
+                      {formatTopic(topic).toLowerCase()}
+                    </Link>
+                  </li>
+                ))}
               </ul>
-            </nav>
-          ) : null}
-          <p className="post-feeds">
-            New essays arrive by <a href="/rss.xml">RSS</a> or{" "}
-            <a href="/feed.json">JSON Feed</a>. This essay is also available{" "}
-            <a href={postMarkdownPath(post.slug)}>as Markdown</a>.
-          </p>
-        </footer>
-      </article>
+            ) : null}
+            <PostTitleTransition slug={post.slug}>
+              <h1 id="post-title">{post.title}</h1>
+            </PostTitleTransition>
+            {post.description ? (
+              <p className="post-lede">{post.description}</p>
+            ) : null}
+            <div className="post-meta">
+              <span>
+                <MetaIcon path="M2.5 3.5h11v10h-11zM2.5 6.5h11M5.5 2v3M10.5 2v3" />
+                <time dateTime={post.date}>{isoDate}</time>
+              </span>
+              {post.readingTime ? (
+                <span>
+                  <MetaIcon path="M8 2.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 0 0 0-11zM8 5v3l2 1.5" />
+                  {post.readingTime} min read
+                </span>
+              ) : null}
+              {sectionCount > 1 ? (
+                <span>
+                  <MetaIcon path="M2.5 4h11M2.5 8h11M2.5 12h7" />
+                  {sectionCount} sections
+                </span>
+              ) : null}
+              {post.published ? null : <span>draft</span>}
+            </div>
+          </header>
+
+          {hasContents ? <PostContents sections={sections} /> : null}
+
+          <div className="prose">
+            <MDXRemote
+              source={post.body}
+              components={postMdxComponents}
+              options={{
+                mdxOptions: {
+                  remarkPlugins: [remarkTextFences, remarkGfm],
+                  rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
+                },
+              }}
+            />
+          </div>
+
+          <footer className="post-end">
+            <p className="post-signed">
+              Written by {siteConfig.author.name},{" "}
+              <time dateTime={post.date}>{formatLongDate(post.date)}</time>
+              {post.updated ? (
+                <>
+                  ; updated{" "}
+                  <time dateTime={post.updated}>
+                    {formatLongDate(post.updated)}
+                  </time>
+                </>
+              ) : null}
+              .
+            </p>
+            {previous || next ? (
+              <nav aria-label="More essays">
+                <ul className="post-adjacent">
+                  <AdjacentLink
+                    label="Previous"
+                    post={previous}
+                    direction={NAV_BACK}
+                  />
+                  <AdjacentLink
+                    label="Next"
+                    post={next}
+                    direction={NAV_FORWARD}
+                  />
+                </ul>
+              </nav>
+            ) : null}
+            <p className="post-feeds">
+              New essays arrive by <a href="/rss.xml">RSS</a> or{" "}
+              <a href="/feed.json">JSON Feed</a>. This essay is also available{" "}
+              <a href={postMarkdownPath(post.slug)}>as Markdown</a>.
+            </p>
+          </footer>
+        </article>
+      </PageTransition>
     </>
   );
 }

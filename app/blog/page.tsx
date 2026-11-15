@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import { PageTransition } from "@/components/blog/page-transition";
 import { PostLog } from "@/components/blog/post-log";
 import { TopicList } from "@/components/blog/topic-list";
 import {
@@ -61,31 +62,33 @@ export default async function BlogPage() {
         }}
       />
 
-      <div className="page">
-        <header className="page-intro">
-          <h1>{siteConfig.tagline}</h1>
-          <p>{siteConfig.intro}</p>
-        </header>
-        {posts.length > 0 ? (
-          <>
-            <PostLog posts={posts} label="All essays, newest first" />
-            <p className="log-foot">
-              {posts.length} {posts.length === 1 ? "essay" : "essays"}
-              {updated ? (
-                <>
-                  {" "}
-                  · updated <time dateTime={updated}>{updated}</time>
-                </>
-              ) : null}
-            </p>
-          </>
-        ) : (
-          <p className="page-empty">The first essay is on its way.</p>
-        )}
-        {topics.length > 0 ? (
-          <TopicList posts={posts} topics={topics} current={null} />
-        ) : null}
-      </div>
+      <PageTransition>
+        <div className="page">
+          <header className="page-intro">
+            <h1>{siteConfig.tagline}</h1>
+            <p>{siteConfig.intro}</p>
+          </header>
+          {posts.length > 0 ? (
+            <>
+              <PostLog posts={posts} label="All essays, newest first" />
+              <p className="log-foot">
+                {posts.length} {posts.length === 1 ? "essay" : "essays"}
+                {updated ? (
+                  <>
+                    {" "}
+                    · updated <time dateTime={updated}>{updated}</time>
+                  </>
+                ) : null}
+              </p>
+            </>
+          ) : (
+            <p className="page-empty">The first essay is on its way.</p>
+          )}
+          {topics.length > 0 ? (
+            <TopicList posts={posts} topics={topics} current={null} />
+          ) : null}
+        </div>
+      </PageTransition>
     </>
   );
 }

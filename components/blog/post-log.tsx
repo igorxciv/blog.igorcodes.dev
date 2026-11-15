@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { PostTitleTransition } from "@/components/blog/post-title-transition";
 import { type PostSummary } from "@/lib/types/posts";
+import { NAV_FORWARD } from "@/lib/view-transitions";
 import { formatIsoDate, formatTopic } from "@/lib/writing";
 
 type PostLogProps = {
@@ -32,9 +34,16 @@ export function PostLog({ posts, label }: PostLogProps) {
               {formatIsoDate(post.date)}
             </time>
             <div className="log-main">
-              <h2 className="log-title">
-                <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-              </h2>
+              <PostTitleTransition slug={post.slug}>
+                <h2 className="log-title">
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    transitionTypes={[NAV_FORWARD]}
+                  >
+                    {post.title}
+                  </Link>
+                </h2>
+              </PostTitleTransition>
               {post.description ? (
                 <p className="log-claim">{post.description}</p>
               ) : null}
@@ -44,7 +53,11 @@ export function PostLog({ posts, label }: PostLogProps) {
                 <span className="log-topics">
                   <span className="sr-only">Topics: </span>
                   {post.topics.map((topic) => (
-                    <Link key={topic} href={topicHref(topic)}>
+                    <Link
+                      key={topic}
+                      href={topicHref(topic)}
+                      transitionTypes={[NAV_FORWARD]}
+                    >
                       {formatTopic(topic).toLowerCase()}
                     </Link>
                   ))}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { type ReactNode } from "react";
 import { SiteNav } from "@/components/blog/site-nav";
 import { siteConfig } from "@/lib/site";
+import { NAV_BACK } from "@/lib/view-transitions";
 
 type SiteShellProps = {
   children: ReactNode;
@@ -16,7 +17,7 @@ export function SiteShell({ children }: SiteShellProps) {
       </a>
 
       <header className="site-header">
-        <Link href="/blog" className="wordmark">
+        <Link href="/blog" className="wordmark" transitionTypes={[NAV_BACK]}>
           <span className="wordmark-name">Igor</span>{" "}
           <span className="wordmark-verb">writes</span>
         </Link>

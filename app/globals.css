@@ -292,12 +292,20 @@ h3 {
   cursor: pointer;
   transition:
     color 0.16s var(--ease-out),
-    border-color 0.16s var(--ease-out);
+    border-color 0.16s var(--ease-out),
+    scale 0.16s var(--ease-out);
 }
 
 .theme-toggle:hover {
   border-color: var(--accent-line);
   color: var(--text-strong);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .theme-toggle:active {
+    scale: 0.9;
+    transition-duration: 0.06s;
+  }
 }
 
 .theme-icon {
@@ -321,6 +329,21 @@ h3 {
 
 :root[data-theme="light"] .theme-when-light {
   display: inline;
+}
+
+/* The icon for the next theme turns in while the new theme is revealed. */
+@media (prefers-reduced-motion: no-preference) {
+  :root:active-view-transition-type(theme-switch) .theme-icon {
+    animation: icon-turn 0.5s var(--ease-out) both;
+  }
+}
+
+@keyframes icon-turn {
+  from {
+    opacity: 0;
+    rotate: -90deg;
+    scale: 0.5;
+  }
 }
 
 .site-footer {
@@ -422,11 +445,22 @@ h3 {
   background: var(--surface-raised);
   color: var(--text);
   cursor: pointer;
+  transition:
+    color 0.16s var(--ease-out),
+    border-color 0.16s var(--ease-out),
+    scale 0.16s var(--ease-out);
 }
 
 .text-button:hover {
   border-color: var(--accent-line);
   color: var(--text-strong);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .text-button:active {
+    scale: 0.96;
+    transition-duration: 0.06s;
+  }
 }
 
 .page-empty {
@@ -488,6 +522,7 @@ h3 {
 }
 
 .log-title {
+  inline-size: fit-content;
   margin: 0;
   color: var(--text-strong);
   font-size: 1.375rem;
@@ -735,7 +770,16 @@ h3 {
   translate: 0 -1px;
 }
 
+/* A press lands the lift. */
+.post-kicker a:active {
+  translate: none;
+  transition-duration: 0.06s;
+}
+
 .post-header h1 {
+  /* Matches .log-title: both hug their text, so the shared title morph between
+     them keeps its aspect ratio instead of stretching. */
+  inline-size: fit-content;
   margin: 0;
   color: var(--text-strong);
   font-size: clamp(2.25rem, 1.3rem + 3.6vw, 3.5rem);
@@ -780,26 +824,58 @@ h3 {
   color: var(--accent);
 }
 
-/* Entrance: the header settles in once on load. */
+/* Entrance: the page settles in once on a fresh load. After a client
+   navigation <html data-navigated> is set and the page transition animates
+   the page instead (see hooks/useClientNavigationMarker.ts). */
 @media (prefers-reduced-motion: no-preference) {
-  .post-header > * {
-    animation: rise 0.7s var(--ease-out) both;
-  }
+  :root:not([data-navigated]) {
+    .post-header > *,
+    .page-intro > *,
+    .log-row:nth-child(-n + 6) {
+      animation: rise 0.7s var(--ease-out) both;
+    }
 
-  .post-header > :nth-child(2) {
-    animation-delay: 60ms;
-  }
+    .post-header > :nth-child(2),
+    .page-intro > :nth-child(2) {
+      animation-delay: 60ms;
+    }
 
-  .post-header > :nth-child(3) {
-    animation-delay: 120ms;
-  }
+    .post-header > :nth-child(3) {
+      animation-delay: 120ms;
+    }
 
-  .post-header > :nth-child(4) {
-    animation-delay: 180ms;
-  }
+    .post-header > :nth-child(4) {
+      animation-delay: 180ms;
+    }
 
-  .post-header::before {
-    animation: fade 1.2s var(--ease-out) both;
+    /* The first rows of the log follow the intro, one beat apart. */
+    .log-row:nth-child(1) {
+      animation-delay: 140ms;
+    }
+
+    .log-row:nth-child(2) {
+      animation-delay: 190ms;
+    }
+
+    .log-row:nth-child(3) {
+      animation-delay: 240ms;
+    }
+
+    .log-row:nth-child(4) {
+      animation-delay: 290ms;
+    }
+
+    .log-row:nth-child(5) {
+      animation-delay: 340ms;
+    }
+
+    .log-row:nth-child(6) {
+      animation-delay: 390ms;
+    }
+
+    .post-header::before {
+      animation: fade 1.2s var(--ease-out) both;
+    }
   }
 }
 
@@ -859,6 +935,33 @@ h3 {
 
 .toc summary:hover {
   color: var(--text-strong);
+}
+
+/* The narrow-screen disclosure eases open and shut where the browser can
+   animate to `auto` height; elsewhere it opens instantly. On wide screens the
+   contents are always open and must not animate in on load. */
+@media (max-width: 79.99rem) and (prefers-reduced-motion: no-preference) {
+  @supports (interpolate-size: allow-keywords) {
+    .toc details {
+      interpolate-size: allow-keywords;
+    }
+
+    .toc details::details-content {
+      block-size: 0;
+      overflow-y: clip;
+      opacity: 0;
+      transition:
+        block-size 0.3s var(--ease-out),
+        opacity 0.2s var(--ease-out),
+        content-visibility 0.3s;
+      transition-behavior: allow-discrete;
+    }
+
+    .toc details[open]::details-content {
+      block-size: auto;
+      opacity: 1;
+    }
+  }
 }
 
 .toc ol {
@@ -2159,6 +2262,12 @@ ul.post-adjacent > li:focus-within {
   border-color: var(--accent-line);
 }
 
+/* A press lands the lift. */
+ul.post-adjacent > li:has(a:active) {
+  translate: none;
+  transition-duration: 0.06s;
+}
+
 .post-adjacent li:only-child {
   grid-column: 1 / -1;
 }
@@ -2199,6 +2308,167 @@ ul.post-adjacent > li:focus-within {
 @media (max-width: 39.99rem) {
   .post-adjacent {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Page transitions ---------- */
+
+/*
+ * Client navigations run in a view transition (next.config.ts). Each page's
+ * content is wrapped in <PageTransition>, which tags the leaving page
+ * `.page-exit*` and the arriving one `.page-enter*`; the suffix is the link's
+ * direction (lib/view-transitions.ts). Under reduced motion pages only
+ * cross-fade; the movement is added under no-preference.
+ */
+
+/* The header and footer hold still; only the page content moves. Normal
+   blending keeps the two opaque root snapshots from adding up to a flash. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(.page-exit),
+::view-transition-old(.page-exit-forward),
+::view-transition-old(.page-exit-back) {
+  animation: page-fade-out 0.15s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+/* The new page starts as the old one is mostly gone, so they never muddle. */
+::view-transition-new(.page-enter),
+::view-transition-new(.page-enter-forward),
+::view-transition-new(.page-enter-back) {
+  animation: page-fade-in 0.32s var(--ease-out) 0.06s both;
+}
+
+/* The post title travels between the log row and the essay heading. */
+::view-transition-group(.post-title) {
+  animation-duration: 0.42s;
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-old(.post-title),
+::view-transition-new(.post-title) {
+  animation-duration: 0.3s;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* No direction (browser back, plain links): a short settle upward. */
+  ::view-transition-old(.page-exit) {
+    animation-name: page-out-up;
+  }
+
+  ::view-transition-new(.page-enter) {
+    animation-name: page-in-up;
+  }
+
+  /* Forward: the next page comes in from the right. */
+  ::view-transition-old(.page-exit-forward) {
+    animation-name: page-out-left;
+  }
+
+  ::view-transition-new(.page-enter-forward) {
+    animation-name: page-in-right;
+  }
+
+  /* Back: the previous page returns from the left. */
+  ::view-transition-old(.page-exit-back) {
+    animation-name: page-out-right;
+  }
+
+  ::view-transition-new(.page-enter-back) {
+    animation-name: page-in-left;
+  }
+}
+
+/* Reduced motion: the title cross-fades in place instead of travelling. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(.post-title) {
+    animation: none;
+  }
+}
+
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes page-out-up {
+  to {
+    opacity: 0;
+    translate: 0 -6px;
+  }
+}
+
+@keyframes page-in-up {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+@keyframes page-out-left {
+  to {
+    opacity: 0;
+    translate: -16px 0;
+  }
+}
+
+@keyframes page-in-right {
+  from {
+    opacity: 0;
+    translate: 20px 0;
+  }
+}
+
+@keyframes page-out-right {
+  to {
+    opacity: 0;
+    translate: 16px 0;
+  }
+}
+
+@keyframes page-in-left {
+  from {
+    opacity: 0;
+    translate: -20px 0;
+  }
+}
+
+/*
+ * Theme switch: the new theme grows as a circle from the toggle. hooks/useTheme.ts
+ * sets --reveal-x/y/r and starts the transition with the `theme-switch` type,
+ * and skips it under reduced motion, where the body's colour cross-fade runs.
+ */
+:root:active-view-transition-type(theme-switch)::view-transition-new(root) {
+  animation: theme-reveal 0.55s var(--ease-out) both;
+}
+
+/* Inside the reveal the colours change at once; easing them too would smear
+   the new theme while the circle grows. At (0,2,0) this outranks every
+   `transition` declaration above. */
+:root:active-view-transition-type(theme-switch),
+:root:active-view-transition-type(theme-switch) *,
+:root:active-view-transition-type(theme-switch) *::before,
+:root:active-view-transition-type(theme-switch) *::after {
+  transition: none;
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--reveal-x) var(--reveal-y));
+  }
+
+  to {
+    clip-path: circle(var(--reveal-r) at var(--reveal-x) var(--reveal-y));
   }
 }
 
