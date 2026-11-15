@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode, { type Options } from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
+import { PageTransition } from "@/components/blog/page-transition";
 import { PostContents } from "@/components/blog/post-contents";
+import { PostTitleTransition } from "@/components/blog/post-title-transition";
 import { postMarkdownPath } from "@/lib/llms";
 import { remarkTextFences } from "@/lib/mdx/remark-text-fences";
 import {
@@ -14,6 +16,7 @@ import {
 } from "@/lib/seo";
 import { getAllPosts, getPostBySlug } from "@/lib/server/posts";
 import { siteConfig } from "@/lib/site";
+import { NAV_BACK, NAV_FORWARD } from "@/lib/view-transitions";
 import {
   extractSections,
   formatIsoDate,
@@ -106,7 +109,15 @@ function topicHref(topic: string) {
 
 type AdjacentPost = { slug: string; title: string; date: string } | null;
 
-function AdjacentLink({ label, post }: { label: string; post: AdjacentPost }) {
+function AdjacentLink({
+  label,
+  post,
+  direction,
+}: {
+  label: string;
+  post: AdjacentPost;
+  direction: typeof NAV_BACK | typeof NAV_FORWARD;
+}) {
   if (!post) {
     return null;
   }
@@ -114,7 +125,9 @@ function AdjacentLink({ label, post }: { label: string; post: AdjacentPost }) {
   return (
     <li>
       <span className="section-label">{label}</span>
-      <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+      <Link href={`/blog/${post.slug}`} transitionTypes={[direction]}>
+        {post.title}
+      </Link>
       <time dateTime={post.date}>{date}</time>
     </li>
   );
@@ -147,68 +160,85 @@ export default async function BlogPostPage({ params }: PostPageProps) {
         dangerouslySetInnerHTML={{ __html: jsonLdString(breadcrumbJsonLd) }}
       />
 
-      <article
-        className="post"
-        data-contents={hasContents ? "true" : "false"}
-        aria-labelledby="post-title"
-      >
-        <header className="post-header">
-          {post.topics.length > 0 ? (
-            <ul className="post-kicker" aria-label="Topics">
-              {post.topics.map((topic) => (
-                <li key={topic}>
-                  <Link href={topicHref(topic)}>
-                    {formatTopic(topic).toLowerCase()}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
-          <h1 id="post-title">{post.title}</h1>
-          {post.description ? (
-            <p className="post-lede">{post.description}</p>
-          ) : null}
-          <p className="post-meta">
-            <time dateTime={post.date}>{formatIsoDate(post.date)}</time>
-            {post.updated ? (
-              <span>
-                updated{" "}
-                <time dateTime={post.updated}>
-                  {formatIsoDate(post.updated)}
-                </time>
-              </span>
-            ) : null}
-            {post.readingTime ? <span>{post.readingTime} min read</span> : null}
-            {post.published ? null : <span>draft</span>}
-          </p>
-        </header>
-
-        {hasContents ? <PostContents sections={sections} /> : null}
-
-        <div className="prose">
-          <MDXRemote
-            source={post.body}
-            components={postMdxComponents}
-            options={{
-              mdxOptions: {
-                remarkPlugins: [remarkTextFences, remarkGfm],
-                rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
-              },
-            }}
-          />
-        </div>
-
-        {previous || next ? (
-          <footer className="post-end">
-            <nav aria-label="More essays">
-              <ul className="post-adjacent">
-                <AdjacentLink label="Previous" post={previous} />
-                <AdjacentLink label="Next" post={next} />
+      <PageTransition>
+        <article
+          className="post"
+          data-contents={hasContents ? "true" : "false"}
+          aria-labelledby="post-title"
+        >
+          <header className="post-header">
+            {post.topics.length > 0 ? (
+              <ul className="post-kicker" aria-label="Topics">
+                {post.topics.map((topic) => (
+                  <li key={topic}>
+                    <Link
+                      href={topicHref(topic)}
+                      transitionTypes={[NAV_FORWARD]}
+                    >
+                      {formatTopic(topic).toLowerCase()}
+                    </Link>
+                  </li>
+                ))}
               </ul>
-            </nav>
-          </footer>
-        ) : null}
-      </article>
+            ) : null}
+            <PostTitleTransition slug={post.slug}>
+              <h1 id="post-title">{post.title}</h1>
+            </PostTitleTransition>
+            {post.description ? (
+              <p className="post-lede">{post.description}</p>
+            ) : null}
+            <p className="post-meta">
+              <time dateTime={post.date}>{formatIsoDate(post.date)}</time>
+              {post.updated ? (
+                <span>
+                  updated{" "}
+                  <time dateTime={post.updated}>
+                    {formatIsoDate(post.updated)}
+                  </time>
+                </span>
+              ) : null}
+              {post.readingTime ? (
+                <span>{post.readingTime} min read</span>
+              ) : null}
+              {post.published ? null : <span>draft</span>}
+            </p>
+          </header>
+
+          {hasContents ? <PostContents sections={sections} /> : null}
+
+          <div className="prose">
+            <MDXRemote
+              source={post.body}
+              components={postMdxComponents}
+              options={{
+                mdxOptions: {
+                  remarkPlugins: [remarkTextFences, remarkGfm],
+                  rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
+                },
+              }}
+            />
+          </div>
+
+          {previous || next ? (
+            <footer className="post-end">
+              <nav aria-label="More essays">
+                <ul className="post-adjacent">
+                  <AdjacentLink
+                    label="Previous"
+                    post={previous}
+                    direction={NAV_BACK}
+                  />
+                  <AdjacentLink
+                    label="Next"
+                    post={next}
+                    direction={NAV_FORWARD}
+                  />
+                </ul>
+              </nav>
+            </footer>
+          ) : null}
+        </article>
+      </PageTransition>
     </>
   );
 }

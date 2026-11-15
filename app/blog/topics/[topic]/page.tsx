@@ -1,5 +1,6 @@
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PageTransition } from "@/components/blog/page-transition";
 import { PostLog } from "@/components/blog/post-log";
 import { TopicList } from "@/components/blog/topic-list";
 import { buildCollectionPageJsonLd, jsonLdString } from "@/lib/seo";
@@ -75,13 +76,18 @@ export default async function TopicPage({ params }: TopicPageProps) {
         }}
       />
 
-      <div className="page">
-        <header className="page-intro">
-          <h1>{label}</h1>
-        </header>
-        <PostLog posts={filtered} label={`Essays on ${label}, newest first`} />
-        <TopicList topics={topics} current={decodedTopic} />
-      </div>
+      <PageTransition>
+        <div className="page">
+          <header className="page-intro">
+            <h1>{label}</h1>
+          </header>
+          <PostLog
+            posts={filtered}
+            label={`Essays on ${label}, newest first`}
+          />
+          <TopicList topics={topics} current={decodedTopic} />
+        </div>
+      </PageTransition>
     </>
   );
 }

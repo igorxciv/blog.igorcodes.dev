@@ -46,6 +46,12 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx"],
+  experimental: {
+    // Runs client navigations inside the View Transitions API so React's
+    // <ViewTransition> can animate pages (components/blog/page-transition.tsx).
+    // Browsers without the API navigate instantly, as before.
+    viewTransition: true,
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

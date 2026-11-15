@@ -10,7 +10,18 @@ export function ThemeToggle() {
   const { toggleTheme } = useTheme();
 
   return (
-    <button type="button" className="theme-toggle" onClick={toggleTheme}>
+    <button
+      type="button"
+      className="theme-toggle"
+      onClick={(event) => {
+        // The reveal grows from the button's centre, also for keyboard presses.
+        const box = event.currentTarget.getBoundingClientRect();
+        toggleTheme({
+          x: box.left + box.width / 2,
+          y: box.top + box.height / 2,
+        });
+      }}
+    >
       <svg
         className="theme-icon theme-icon-sun"
         viewBox="0 0 24 24"
