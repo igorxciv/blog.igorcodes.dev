@@ -1,20 +1,22 @@
 import Link from "next/link";
 import { type ReactNode } from "react";
+import { NavigationMarker } from "@/components/blog/navigation-marker";
 import { SiteNav } from "@/components/blog/site-nav";
-import { siteConfig } from "@/lib/site";
 import { NAV_BACK } from "@/lib/view-transitions";
 
 type SiteShellProps = {
   children: ReactNode;
 };
 
-/** One narrow column for every page: the name and links on top, feeds at the foot. */
+/** One narrow column for every page: the name and links on top, then the page. */
 export function SiteShell({ children }: SiteShellProps) {
   return (
     <>
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
+
+      <NavigationMarker />
 
       <header className="site-header">
         <Link href="/blog" className="wordmark" transitionTypes={[NAV_BACK]}>
@@ -27,18 +29,6 @@ export function SiteShell({ children }: SiteShellProps) {
       <main id="main-content" tabIndex={-1}>
         {children}
       </main>
-
-      <footer className="site-footer">
-        <p>
-          <span className="site-footer-name">{siteConfig.name}</span>
-          <span className="site-footer-domain">{siteConfig.domain}</span>
-        </p>
-        <p>
-          <a href="/rss.xml">RSS</a>
-          <a href="/feed.json">JSON Feed</a>
-          <a href="/llms.txt">llms.txt</a>
-        </p>
-      </footer>
     </>
   );
 }

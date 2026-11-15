@@ -16,17 +16,12 @@ function topicHref(topic: string) {
 
 /**
  * The writing log: one row per essay, newest first. Date, then the title and
- * its one-line claim, then topics and minutes. The column heads are visual
- * only; each row carries its own labels for assistive tech.
+ * its one-line claim, then topics and minutes. No column heads: the shape of
+ * each row says what it is, and each row labels itself for assistive tech.
  */
 export function PostLog({ posts, label }: PostLogProps) {
   return (
     <div className="log">
-      <div className="log-head" aria-hidden="true">
-        <span>date</span>
-        <span>essay</span>
-        <span>topics</span>
-      </div>
       <ol className="log-list" aria-label={label}>
         {posts.map((post) => (
           <li key={post.slug} className="log-row">
